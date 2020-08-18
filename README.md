@@ -1,4 +1,4 @@
 # aghHoborski
 Software for 'Hoborski Day' tournament (science quiz)
 
-BSc Diploma project by Konrad.Malski@fis.agh.edu.pl
+B.Sc. Diploma project (2020/2021) by Konrad.Malski@fis.agh.edu.pl
