@@ -8,7 +8,7 @@ const app = express();
 const server = http.Server(app);
 const io = socket(http);
 
-const port = process.env.PORT || 4040;
+const port = process.env.SERVER_PORT || 2222;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
