@@ -7,9 +7,10 @@ on:
 
 env:
   PM2_HOME: /opt/inz/.pm2/
-  NODE_ENV: production
-  # CLIENT_PORT: 3333
-  SERVER_PORT: 2222
+  CLIENT_PORT: 3030
+  CLIENT_DIST: /opt/inz/aghHoborski/client
+  SERVER_PORT: 2020
+  SERVER_DIST: /opt/inz/aghHoborski/server
 
 jobs:
   setup-workspace:
@@ -18,16 +19,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        # with:
-        #   path: /opt/inz/aghHoborski
-        # not pulling correctly repository
 
   build-server:
     needs: [setup-workspace]
     runs-on: self-hosted
     defaults:
       run:
-        working-directory: /opt/inz/aghHoborski/server
+        working-directory: server
 
     steps:
       - name: Use Node.js
@@ -38,17 +36,20 @@ jobs:
       - name: Update packages
         run: |
           npm ci
+          pm2 stop hoborski-server
 
-      - name: Run server
+      - name: Deploy server
         run: |
-          pm2 restart hoborski-server
+          rm -rf $SERVER_DIST
+          cp -r ../server/ $SERVER_DIST
+          pm2 start hoborski-server
 
   build-client:
-    needs: [build-server]
+    needs: [setup-workspace]
     runs-on: self-hosted
     defaults:
       run:
-        working-directory: /opt/inz/aghHoborski/client
+        working-directory: client
 
     steps:
       - name: Use Node.js
@@ -56,10 +57,12 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Update packages
-        run: |
-          npm ci
-
       - name: Build client
         run: |
+          npm ci
           npm run build
+
+      - name: Deploy client
+        run: |
+          rm -rf $CLIENT_DIST
+          cp -r dist/ $CLIENT_DIST
