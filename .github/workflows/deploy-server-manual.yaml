@@ -1,25 +1,37 @@
-name: Deploy on push
+name: Server manual deploy
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build
+        default: master
+        required: true
+      # tests:
+      #   description: To run tests or not
+      #   default: true
+      #   required: true
+      server-port:
+        description: Port to start server
+        default: 2222
+        required: true
 
 env:
   PM2_HOME: /opt/inz/.pm2/
-  CLIENT_DIST: /opt/inz/aghHoborski/client
   SERVER_DIST: /opt/inz/aghHoborski/server
-  SERVER_PORT: 2222
+  SERVER_PORT: ${{ github.event.inputs.server-port }}
 
 jobs:
   setup-workspace:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout
+      - name: Checkout to specified branch
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
-  build-server:
+  build:
     needs: [setup-workspace]
     runs-on: self-hosted
     defaults:
@@ -42,26 +54,3 @@ jobs:
           rm -rf $SERVER_DIST
           cp -r ../server/ $SERVER_DIST
           pm2 start hoborski-server
-
-  build-client:
-    needs: [setup-workspace]
-    runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: client
-
-    steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-
-      - name: Build client
-        run: |
-          npm ci
-          npm run build
-
-      - name: Deploy client
-        run: |
-          rm -rf $CLIENT_DIST
-          cp -r dist/ $CLIENT_DIST

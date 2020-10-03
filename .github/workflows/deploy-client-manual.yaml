@@ -1,0 +1,45 @@
+name: Client manual deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to build
+        default: master
+        required: true
+
+env:
+  CLIENT_DIST: /opt/inz/aghHoborski/client
+
+jobs:
+  setup-workspace:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout to specified branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+  build:
+    needs: [setup-workspace]
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: client
+
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Build client
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy client
+        run: |
+          rm -rf $CLIENT_DIST
+          cp -r dist/ $CLIENT_DIST
