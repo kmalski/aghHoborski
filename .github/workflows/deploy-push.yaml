@@ -1,4 +1,4 @@
-name: Deploy on push
+name: '[MAIN] Deploy on push'
 
 on:
   push:
