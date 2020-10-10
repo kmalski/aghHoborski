@@ -10,10 +10,7 @@ Aplikacja powinna posiadać trzy widoki:
 - licznik czasu w trakcie odpowiedzi
 - licznik czasu w trakcie licytacji (pozostały czas na decyzję po ostatniej kwocie)
 2) Graczy
-- wszystkie elementy dostępne dla widzów
-- w przypadku gry 1:1 wybranie odpowiedniej opcji (eliminacja kategorii oraz wybór kategorii)
-- klasycznie kwoty licytacji wpisywane były przez osobę obsługującą, jeśli w grę wchodzi forma online to warto zastanowić się nad możliwością licytacji przez graczy. Np. dodatkowe pola, gdzie gracze wpisują kwotę licytacji na tych zwykłych zasadach (kto wpisze wyższą kwotę, kto wpisze pierwszy taką samą kwotę)
-- prośba o podpowiedź, miejsce na wpisanie kwoty za nią, akceptacja oferty od prowadzącego
+- na początek identyczny do ekranu widza
 3) Osoby obsługującej / administratora
 - korekta stanu kont (do tej pory często zdarzały się błędy w licytacji)
 - pominięcie pytania
@@ -24,3 +21,7 @@ Aplikacja powinna posiadać trzy widoki:
 - importowanie pytań (kilka obsługiwanych formatów, były z tym problemy)
 
 Teleturniej do tej pory przeprowadzany był w następujący sposób. Każda z drużyn otrzymywała laptopa z widokiem obserwującego bez możliwości interakcji. Ten sam widok wyświetlany był projektem na sali. Operator teleturnieju siedział pośród widzów i słuchając prowadzącego podbijał kwoty licytacji danej drużyny, wyświetlał pytania, resetował liczniki, eliminował kategorie itd. Niestety zdarzało się bardzo wiele błędów: niejasne licytacje, błędy drużyn w licytacji, problemy z cofaniem kwot (co nie było do końca możliwe) przez co konieczne było mówienie widzom, że wyświetlana kwota jest niepoprawna.
+
+Opcjonalnie do zrobienia w przyszłości lub gdy wystarczy czasu:
+- podbicie wersji Vue do Vue 3 (w zależności czy użyte biblioteki rozpoczną wsparcie dla najnowszej wersji)
+- dodanie opcji licytacji przez graczy, co za tym idzie dodatkowe pola, możliwość wpisywania kwot, wybór odpowiedzi, eliminacja kategorii w grze 1:1, obsługa podpowiedzi

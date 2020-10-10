@@ -9,7 +9,6 @@ env:
   PM2_HOME: /opt/inz/.pm2/
   CLIENT_DIST: /opt/inz/aghHoborski/client
   SERVER_DIST: /opt/inz/aghHoborski/server
-  SERVER_PORT: 2222
 
 jobs:
   setup-workspace:
