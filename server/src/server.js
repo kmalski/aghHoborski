@@ -18,7 +18,7 @@ const rooms = require('./socket/rooms');
 const io = socket(server, { path: '/game', serveClient: false });
 
 io.on('connect', socket => {
-  console.log('New user connected');
+  console.log(`New user connected: ${socket.id}`);
   rooms.listen(io, socket);
 });
 

@@ -25,4 +25,5 @@ Teleturniej do tej pory przeprowadzany był w następujący sposób. Każda z dr
 Opcjonalnie do zrobienia w przyszłości lub gdy wystarczy czasu:
 - podbicie wersji Vue do Vue 3 (w zależności czy użyte biblioteki rozpoczną wsparcie dla najnowszej wersji)
 - dostowanie do wersji mobilnej przeglądarki
+- dodanie bazy danych i możliwość odtworzenia stanu niezakończonej gry
 - dodanie opcji licytacji przez graczy, co za tym idzie dodatkowe pola, możliwość wpisywania kwot, wybór odpowiedzi, eliminacja kategorii w grze 1:1, obsługa podpowiedzi
