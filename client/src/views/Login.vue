@@ -1,21 +1,21 @@
 <template>
-  <div class="home">
+  <div class="login">
     <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
       {{ warningMsg }}
     </b-alert>
     <app-status-icon />
     <app-logo class="split__left"></app-logo>
-    <spectator-form class="split__right"></spectator-form>
+    <admin-form class="split__right"></admin-form>
   </div>
 </template>
 
 <script>
 import Logo from '@/components/shared/Logo.vue';
 import StatusIcon from '@/components/shared/StatusIcon.vue';
-import SpectatorForm from '@/components/home/SpectatorForm.vue';
+import AdminForm from '@/components/login/AdminForm.vue';
 
 export default {
-  name: 'Home',
+  name: 'Login',
   data: function() {
     return {
       warningMsg: '',
@@ -31,7 +31,7 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppLogo: Logo,
-    SpectatorForm
+    AdminForm
   }
 };
 </script>
@@ -39,7 +39,7 @@ export default {
 <style scoped lang="scss">
 @import '../scss/main.scss';
 
-.home {
+.login {
   @extend .split;
 }
 </style>

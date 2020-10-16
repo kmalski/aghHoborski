@@ -11,9 +11,14 @@ const routes = [
     component: Home
   },
   {
-    path: '/:room/administrator',
-    name: 'Administrator',
-    component: () => import('../views/Administrator.vue')
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/:room/admin',
+    name: 'Admin',
+    component: () => import('../views/Admin.vue')
   },
   {
     path: '/:room/spectator',
