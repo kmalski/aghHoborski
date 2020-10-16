@@ -14,12 +14,15 @@ app.use(express.static('public'));
 app.use(cors());
 
 const rooms = require('./socket/rooms');
-
 const io = socket(server, { path: '/game', serveClient: false });
 
 io.on('connect', socket => {
   console.log(`New user connected: ${socket.id}`);
   rooms.listen(io, socket);
+});
+
+app.use((req, res, next) => {
+  res.status(404).render('404');
 });
 
 server.listen(port, () => {

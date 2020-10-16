@@ -4,6 +4,10 @@ import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
+function lazyLoad(view) {
+  return () => import(`@/views/${view}.vue`);
+}
+
 const routes = [
   {
     path: '/',
@@ -13,18 +17,19 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login.vue')
+    component: lazyLoad('Login')
   },
   {
     path: '/:room/admin',
     name: 'Admin',
-    component: () => import('../views/Admin.vue')
+    component: lazyLoad('Admin')
   },
   {
     path: '/:room/spectator',
     name: 'Spectator',
-    component: () => import('../views/Spectator.vue')
-  }
+    component: lazyLoad('Spectator')
+  },
+  { path: '*', name: 'NotFound', component: lazyLoad('NotFound') }
 ];
 
 const router = new VueRouter({

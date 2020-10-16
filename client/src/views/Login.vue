@@ -1,12 +1,12 @@
 <template>
-  <div class="login">
+  <section class="login">
     <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
       {{ warningMsg }}
     </b-alert>
     <app-status-icon />
     <app-logo class="split__left"></app-logo>
     <admin-form class="split__right"></admin-form>
-  </div>
+  </section>
 </template>
 
 <script>
