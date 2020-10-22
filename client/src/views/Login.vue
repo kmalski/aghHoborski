@@ -5,7 +5,7 @@
     </b-alert>
     <app-status-icon />
     <app-logo class="split__left"></app-logo>
-    <admin-form class="split__right"></admin-form>
+    <app-admin-form class="split__right"></app-admin-form>
   </section>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppLogo: Logo,
-    AdminForm
+    AppAdminForm: AdminForm
   }
 };
 </script>

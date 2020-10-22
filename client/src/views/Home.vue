@@ -5,7 +5,7 @@
     </b-alert>
     <app-status-icon />
     <app-logo class="split__left"></app-logo>
-    <spectator-form class="split__right"></spectator-form>
+    <app-spectator-form class="split__right"></app-spectator-form>
   </section>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppLogo: Logo,
-    SpectatorForm
+    AppSpectatorForm: SpectatorForm
   }
 };
 </script>

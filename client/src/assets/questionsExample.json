@@ -1,0 +1,787 @@
+{
+  "categories": [
+    {
+      "name": "Pilka nozna",
+      "questions": [
+        {
+          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?",
+          "hints": ["1972", "1960", "1952", "1976"]
+        },
+        {
+          "content": "Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?",
+          "hints": ["Jerzy Engel", "Janusz Wójcik", "Paweł Janas", "Zbigniew Boniek"]
+        },
+        {
+          "content": "Jaki wynik w dwumeczu osiągnęła Legia Warszawa w Lidze Mistrzów w sezonie 2016/17 rywalizując z Realem Madryt?",
+          "hints": ["4-8", "1-5", "3-3", "2-6"]
+        },
+        {
+          "content": "Która drużyna jest najbardziej utytułowanym klubem w Anglii (łączna liczba trofeów)?",
+          "hints": ["Manchester United", "Liverpool FC", "Arsenal Londym", "Chelsea Londyn"]
+        },
+        {
+          "content": "Który z polskich piłkarzy zaliczył najwięcej występów w polskiej reprezentacji?",
+          "hints": ["Michał Żewłakow", "Grzegorz Lato", "Jakub Błaszczykowski", "Robert Lewandowski"]
+        },
+        {
+          "content": "W jakiej piłkarskiej lidze gra klub Utrecht?",
+          "hints": ["holenderskiej", "francuskiej", "belgijskiej", "szwajcarskiej"]
+        },
+        {
+          "content": "Inter Mediolan, Real Madryt, FC Barcelona, PSV Eindhoven, AC Milan. Kto występował w tych wszystkich klubach?",
+          "hints": ["Ronaldo", "Zlatan Ibrahimovic", "Johan Cruyf ", "Marco van Basten"]
+        },
+        {
+          "content": "Która drużyna najwięcej razy (5) wygrała Ligę Europy (poprzednio Puchar UEFA)?",
+          "hints": ["Sevilla FC", "Juventus Turyn", "Real Madryt", "Inter Mediolan"]
+        },
+        {
+          "content": "Reprezentacja jakiego państwa jest obecnym mistrzem świata w piłce nożnej?",
+          "hints": ["Niemiec", "Argentyny", "Brazylii", "Włoch"]
+        },
+        {
+          "content": "Kto był pierwszym zwycięzcą Złotej Piłki?",
+          "hints": ["Stanley Matthews", "Ferenc Puskas", "Alfredi di Stefano", "Raymond Kopaszewski"]
+        }
+      ]
+    },
+    {
+      "name": "Biologia",
+      "questions": [
+        {
+          "content": "W którym wieku została wymyślona nazwa dziedziny nauki \"biologia\"?",
+          "hints": ["XIX", "XV", "XIII", "XVII"]
+        },
+        {
+          "content": "Jaki nukleotyd łączy się z tyminą?",
+          "hints": ["adenina", "cytozyna ", "guanina", "uracyl"]
+        },
+        {
+          "content": "W jaki sposób rozmnażają się drożdże?",
+          "hints": ["przez pączkowanie", "przez regenerację", "poprzez zarodniki", "poprzez podział komórki"]
+        },
+        {
+          "content": "Ile u człowieka występuje nerwów rdzeniowych?",
+          "hints": ["31 par", "39 par", "65 par", "44 pary"]
+        },
+        {
+          "content": "Jak nazywa się najmniejsza jednostka budulcowa i funkcjonalna organizmu?",
+          "hints": ["komórka", "bakteria", "mitochondrium", "nerw"]
+        },
+        {
+          "content": "Do jakiego królestwa należą organizmy nieposiadające jądra komórkowego?",
+          "hints": ["bakterii", "roślin", "grzybów", "protistów"]
+        },
+        {
+          "content": "Ile chromosomów ma człowiek?",
+          "hints": ["46", "32", "23", "16"]
+        },
+        {
+          "content": "Który organ w ciele człowieka jest największy?",
+          "hints": ["skóra", "jelito grube", "jelito cienkie", "płuca"]
+        },
+        {
+          "content": "Jaka tkanka, wchodzaca w skład zespołu tkanek przewodzących, transportuje substancje odżywcze wytworzone w procesie fotosyntezy?",
+          "hints": ["łyko", "drewno", "miazga", "skórka"]
+        }
+      ]
+    },
+    {
+      "name": "Gramatyka i ortografia",
+      "questions": [
+        {
+          "content": "Ile przypadków jest w języku polskim?",
+          "hints": ["7", "6", "5", "8"]
+        },
+        {
+          "content": "Jak nazywają się nieodmienne częśći mowy (jest ich 5)?",
+          "hints": [
+            "Przysłówek, przyimek, partykuła, spójnik, wykrzyknik",
+            "Przysłówek, spójnik, partykuła, czasownik, przymiotnik",
+            "rzeczownik, przysłówek, wykrzyknik, zaimek, liczebnik",
+            "Przysłówek, przyimek, partykuła, czasownik, rzeczownik"
+          ]
+        },
+        {
+          "content": "Ile jest trybów mowy w języku polskim?",
+          "hints": ["3", "2", "1", "5"]
+        },
+        {
+          "content": "Która część mowy odpowiada na pytanie \"co się z nim dzieje?\"?",
+          "hints": ["czasownik", "rzeczownik", "zaimek", "przysłówek"]
+        },
+        {
+          "content": "Która część mowy jako jedyna odmienia się przez osoby?",
+          "hints": ["czasownik", "rzeczownik", "przyimek", "zaimek"]
+        },
+        {
+          "content": "Jak nazywamy wyrazy należące do jednej rodziny wyrazów?",
+          "hints": ["wyrazy pokrewne", "synonimy", "homonimy", "antonimy"]
+        },
+        {
+          "content": "Jak brzmi przymiotnik utworzony od nazwy “Zawichost”?",
+          "hints": ["zawichojski", "zawichstowski", "zawichowszczański", "zawichowski"]
+        },
+        {
+          "content": "Jak brzmi celownik liczby pojedynczej wyrażenia: “złote serce”?",
+          "hints": ["złotemu sercu", "złotego serca", "złote serce", "złotym sercem"]
+        }
+      ]
+    },
+    {
+      "name": "Mity i dzieje starozytne",
+      "questions": [
+        {
+          "content": "Kto był królem podziemi w mitologii greckiej?",
+          "hints": ["Hades", "Zeus", "Achilles", "Uranos"]
+        },
+        {
+          "content": "Ile plag zostało zesłanych na Egipt przez Boga Jahwe?",
+          "hints": ["10", "7", "12", "15"]
+        },
+        {
+          "content": "Bogiem czego w mitologii rzymskiej był Jowisz?",
+          "hints": ["nieba", "wojny", "ziemi", "mórz i oceanów"]
+        },
+        {
+          "content": "Kto wyruszył po Eurydykę do Hadesu?",
+          "hints": ["Orfeusz", "Herkules", "Palmignion", "Cefeusz"]
+        },
+        {
+          "content": "Kto wyruszył na wyprawę po Złote Runo?",
+          "hints": ["Jazon", "Morfeusz", "Scytian", "Orpteniusz"]
+        },
+        {
+          "content": "Jaki heros brał udział w podboju Troi?",
+          "hints": ["Achillles", "Apollo", "Misfonides", "Midas"]
+        },
+        {
+          "content": "Jak nazywa się muza z mitologii greckiej będąca opiekunką astronomii?",
+          "hints": ["Urania", "Talia", "Plutonia", "Kaliope"]
+        },
+        {
+          "content": "Jak nazywamy rodzaj grobowca spotykanego w starożytnym Egipcie, mającego kształt ściętego ostrosłupa na prostokątnym planie?",
+          "hints": ["Mastaba", "Sfinks", "Piramida", "Kirmira"]
+        },
+        {
+          "content": "Jaki ustrój panował jako pierwszy w Starożytnym Rzymie?",
+          "hints": ["królestwo", "cesarstwo", "republika", "oligarchia"]
+        },
+        {
+          "content": "Jak nazywał się pierwszy cesarz rzymski?",
+          "hints": ["Oktawian August", "Juliusz Cezar", "Tyberiusz", "Klaudiusz"]
+        }
+      ]
+    },
+    {
+      "name": "Filozofia i religie",
+      "questions": [
+        {
+          "content": "Kto wstąpił do grona apostołów po samobójczej śmierci Judasza Iskarioty?",
+          "hints": ["Maciej", "Andrzej", "Józef", "nikt"]
+        },
+        {
+          "content": "Do czego służy puryfikaterz?",
+          "hints": ["do czyszczenia naczyń liturgicznych", "do podpalania świec", "jako talerzyk", "jako mały obrusik"]
+        },
+        {
+          "content": "Czego symbolem jest Koło Dharmy?",
+          "hints": ["buddyzmu", "judaizmu", "hinduizmu", "katolicyzmu"]
+        },
+        {
+          "content": "Która doktryna filozoficzna zakładała, że źródłem poznania są bodźce dostarczane przez zmysły?",
+          "hints": ["empiryzm", "hedonizm", "egzystencjalizm", "racjonalizm"]
+        },
+        {
+          "content": "Kim jest Jezus według Koranu?",
+          "hints": ["prorokiem Boga", "fałszywym Mesjaszem", "uzurpatorem", "Koran o nim nie wspomina"]
+        },
+        {
+          "content": "Jak nazywa się święta księga islamu?",
+          "hints": ["Koran", "Tanach", "Tora", "Weda"]
+        },
+        {
+          "content": "Jak nazywa się miejscowość, w której został wskrzeszony Łazarz?",
+          "hints": ["Betania", "Betlejem", "Kana", "Nazaret"]
+        },
+        {
+          "content": "W którym wieku żył I tworzył Józef Bocheński, polski logik I filozof chrześcijański?",
+          "hints": ["XX", "XIX", "XVIII", "XVII"]
+        },
+        {
+          "content": "Jakie jest najważniejsze dzieło napisane przez Sokratesa?",
+          "hints": ["nie napisał żadnego dzieła", "Republika", "Nauka Logiki", "Krytyka Czystego Rozumu"]
+        }
+      ]
+    },
+    {
+      "name": "Film polski",
+      "questions": [
+        {
+          "content": "Jaki brzmi pseudonim Marcina Opałki w filmach \"Pitbull. Nowe porządki\" oraz \"Pitbull. Niebezpieczne kobiety\" granego przez Tomasza Oświecińskiego?",
+          "hints": ["Strachu ", "Stachu ", "Zeus ", "Posejdon"]
+        },
+        {
+          "content": "Który Polski bohater krzyczał do Niemca \"palce\", a ten usłyszał \"panzer\"?",
+          "hints": ["Franciszek Dolas", "Grzegorz Brzęczyszczykiewicz", "Alojzy Stonoga", "Stanisław Anioł"]
+        },
+        {
+          "content": "Kto jest reżyserem filmu \"Seksmisja\"?",
+          "hints": ["Juliusz Machulski", "Andrzej Wajda", "Roman Polański", "Stanisław Bareja"]
+        },
+        {
+          "content": "Jak brzmi nazwisko reżysera filmu pt. “Matka Królów”?",
+          "hints": ["Janusz Zaorski", "Kazimierz Kutz", "Wojciech Jerzy Has", "Krzysztof Zanussi"]
+        },
+        {
+          "content": "Który aktor odegrał rolę Maksymiliana “Maksa” Paradysa w “Seksmisji”?",
+          "hints": ["Jerzy Stuhr", "Olgierd Łukaszewicz", "Janusz Michałowski", "Wiesław Michnikowski"]
+        },
+        {
+          "content": "Kto zagrał Jacka Soplicę w \"Panu Tadeuszu\" Andrzeja Wajdy?",
+          "hints": ["Bogusław Linda", "Michał Żebrowski", "Daniel Olbrychski", "Marek Kondrat"]
+        }
+      ]
+    },
+    {
+      "name": "Film światowy",
+      "questions": [
+        {
+          "content": "Którym z kolei Jamesem Bondem był Pierce Brosnan?",
+          "hints": ["piątym", "drugim", "szóstym", "siódmym"]
+        },
+        {
+          "content": "Z którego roku pochodzi film promowany przez ten plakat? ",
+          "FileName": "bat.jpg",
+          "hints": ["1989", "1990", "1987", "1995"]
+        },
+        {
+          "content": "Kogo grał Morgan Freeman w filmie \"Evan Wszechmogący\"?",
+          "hints": ["Boga", "Zabójcę ", "Rapera", "Żyda"]
+        },
+        {
+          "content": "Ilu braci stracił na wojnie \"Szeregowiec Ryan\"?",
+          "hints": ["3", "2", "1", "4"]
+        },
+        {
+          "content": "Kto grał Matyldę w filmie \"Leon Zawodowiec\"?",
+          "hints": ["Natalie Portman", "Penélope Cruz", "Angelina Jolie", "Sandra Bullock"]
+        },
+        {
+          "content": "Kto grał brata postaci granej przez Johnny'ego Deppa w filmie \"Co gryzie Gilberta Grape'a\"?",
+          "hints": ["Leonardo DiCaprio", "George Clooney", "Brad Pitt", "Matt Damon"]
+        }
+      ]
+    },
+    {
+      "name": "Seriale",
+      "questions": [
+        {
+          "content": "Jak nazywa się odtwórczyni roli Daenerys Targaryen w serialu \"Gra o Tron\"?",
+          "hints": ["Emilia Clarke", "Emma Watson ", "Emma Stone", "Emily Ratajkowski"]
+        },
+        {
+          "content": "Jak nazywa się serial, w którym występuje Millie Bobby Brown?",
+          "FileName": "el.jpg",
+          "hints": ["Stranger things", "Belfer", "1987", "Narcos"]
+        },
+        {
+          "content": "Główny bohater serialu \"Breaking bad\" jest nauczycielem. Jakiego przedmiotu uczy?",
+          "hints": ["chemii", "fizyki", "matematyki", "angielskiego"]
+        },
+        {
+          "content": "W jakim mieście toczy się akcja serialu \"Californication\"?",
+          "hints": ["w Los Angeles", "w Nowym Jorku", "w Las Vegas", "San Diego"]
+        }
+      ]
+    },
+    {
+      "name": "Literatura polska",
+      "questions": [
+        {
+          "content": "Ile \"Trenów\" napisał Jan Kochanowski do swojej zmarłej córki Urszulki?",
+          "hints": ["19", "18", "20", "21"]
+        },
+        {
+          "content": "Kto napisał \"Cudzoziemkę\"?",
+          "hints": ["Maria Kuncewiczowa", "Zofia Nałkowska", "Eliza Orzeszkowa", "Maria Konopnicka"]
+        },
+        {
+          "content": "Z którego wiersza Adama Mickiewicza pochodzi cytat: \"Miej serce i patrzaj w serce\"?",
+          "hints": ["Romantyczność", "Niepewność", "Powrót taty", "Lilie"]
+        },
+        {
+          "content": "Jak brzmi nazwisko autorki powieści pt. “Jezioro osobliwości”?",
+          "hints": ["Krystyna Siesicka", "Maria Kownacka", "Janina Porazińska", "Monika Bolly"]
+        }
+      ]
+    },
+    {
+      "name": "Literatura światowa",
+      "questions": [
+        {
+          "content": "Jaka choroba jest tytułem jednej z powieści Alberta Camusa?",
+          "hints": ["dżuma", "malaria", "gruźlica", "tyfus"]
+        },
+        {
+          "content": "Z ilu kręgów składało się Piekło w \"Boskiej komedii\" Dantego?",
+          "hints": ["9", "7", "10", "5"]
+        },
+        {
+          "content": "Jaką cechę charakterystyczną miała tytułowa bohaterka powieści \"Ania z Zielonego Wzgórza\"?",
+          "hints": ["rude włosy", "nieprzeciętny wzrost", "czarne oczy", "kulała na jedną nogę"]
+        },
+        {
+          "content": "Jak nazywał się skwer, na którym zaczyna się akcja \"Mistrza i Małgorzaty\" Bułhakowa?",
+          "hints": ["Patriarsze Prudy", "Kolomynskoje", "Ostankino", "Czistyje Prudy"]
+        },
+        {
+          "content": "Na jaką rybę poluje główny bohater \"Starego człowieka i morza\"?",
+          "hints": ["marlina", "halibuta", "jesiotra", "łososia"]
+        },
+        {
+          "content": "Jakiej narodowości był prozaik I dramaturg Friedrich Dürrenmatt?",
+          "hints": ["Szwajcar", "Duńczyk", "Niemiec", "Austriak"]
+        }
+      ]
+    },
+    {
+      "name": "Historia sztuki",
+      "questions": [
+        {
+          "content": "Jaka wiadomość smuci Stańczyka na znanym obrazie Jana Matejki z 1862 roku?",
+          "FileName": "o2.jpg",
+          "hints": [
+            "o utracie Smoleńska na rzecz Rosji",
+            "o śmierci Władysława Warneńczyka pod Warną",
+            "o przegranej z Tatarami bitwie pod Sokalem ",
+            "o przegranej husarii pod Żółtymi Wodami"
+          ]
+        },
+        {
+          "content": "Gdzie przez 369 lat od powstania stał “Dawid” Michała Anioła, pierwszy nagi posąg od czasów starożytnych?",
+          "FileName": "o3.jpg",
+          "hints": [
+            "Na Piazza della Signoria we Florencji",
+            "W Muzeum Pio-Clementino Muzeum Watykańskiego",
+            "W Muzeum Chiaramonti Muzeum Watykańskiego",
+            "Na szczycie Schodów Hiszpańskich w Rzymie"
+          ]
+        },
+        {
+          "content": "Który obraz przypisywany Rafaelowi Santiemu, zakupiony przez Czartoryskich i zaginiony w 1945 roku, znajdował się w Krakowie?",
+          "hints": ["Portret młodzieńca", "Portret Juliusza II", "Madonna ze szczygłem", "Przemienienie Pańskie"]
+        },
+        {
+          "content": "Hans Holbein był nadwornym malarzem jakiego europejskiego króla?",
+          "hints": ["Henryka VIII", "Króla Słońce", "Maksymiliana II", "Zygmunta II Augusta"]
+        },
+        {
+          "content": "Jak nazywamy motyw dekoracyjno-symboliczny, złożony najczęściej z broni białej i uzbrojenia ochronnego, ułożonych w pionie i symetrycznie?",
+          "hints": ["panoplium", "ryzalit", "bukranion", "feston"]
+        },
+        {
+          "content": "Czym nienaturalnym w wyglądzie charakteryzował się asyryjski lamassu, przedstawiający skrzydlatego byka o ludzkiej twarzy?",
+          "hints": ["Pięć nóg", "Rogi kozicy", "Szyja żyrafy", "Ogon skorpiona"]
+        },
+        {
+          "content": "W którym wieku powstała burleska?",
+          "hints": ["XVIII", "XV", "XI", "XXI"]
+        },
+        {
+          "content": "Od czego pochodzi nazwa stylu gotyk?",
+          "hints": [
+            "od gotów (barbarzynców)",
+            "od nazwiska Johanna Wolfganga von Goethe",
+            "od angielskiego słowa God (Bóg)",
+            "od nazwy serii gier Gothic"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Świat polityki",
+      "questions": [
+        {
+          "content": "Ile lat trwała prezydentura Aleksandra Kwaśniewsiego?",
+          "hints": ["10", "8", "12", "6"]
+        },
+        {
+          "content": "Kto w latach 1998-2005 był Kanclerzem Niemiec?",
+          "hints": ["Gerhard Schröder", "Angela Merkel", "Helmut Kohl", "Helmut Schmidt"]
+        },
+        {
+          "content": "Kto był pierwszym premierem Polski po przemianach w 1989 r.?",
+          "hints": ["Tadeusz Mazowiecki", "Wojciech Jaruzelski", "Jan Krzysztof Bielecki", "Jan Olszewski"]
+        },
+        {
+          "content": "W jakich latach Kazimierz Marcinkiewicz pełnił funkcję Prezesa Rady Ministrów?",
+          "hints": ["2005-2006", "2004-2005", "2006-2007", "2007-2008"]
+        },
+        {
+          "content": "Którym z kolei prezydentem III Rzeczpospolitej jest Andrzej Duda?",
+          "hints": ["piątym", "czwartym", "szóstym", "siódmym"]
+        },
+        {
+          "content": "W którym mieście dokonało się oficjalne rozwiązanie Układu Warszawskiego?",
+          "hints": ["Praga", "Moskwa", "Berlin", "Warszawa"]
+        }
+      ]
+    },
+    {
+      "name": "Ciekawostki",
+      "questions": [
+        {
+          "content": "Jak nazywa się instrument widoczny na obrazku?",
+          "FileName": "c5.jpg",
+          "hints": ["cytra", "kitara", "gęśle", "gitara"]
+        },
+        {
+          "content": "Do czego służy przyrząd na obrazku?",
+          "FileName": "c1.jpg",
+          "hints": ["pomiaru temperatury", "ozdoby", "zabawy przez dzieci", "pomiaru wilgotności"]
+        },
+        {
+          "content": "Hiszpański osioł widoczny na zdjęciu służył do...?",
+          "FileName": "c2.JPG",
+          "hints": ["tortur", "zabaw erotycznych", "gotowania", "kucia mieczy"]
+        },
+        {
+          "content": "Jak nazywa się widoczny na obrazku przedmiot?",
+          "FileName": "c4.jpg",
+          "hints": ["cep", "młot", "obuch", "pałka"]
+        }
+      ]
+    },
+    {
+      "name": "Historia Polski",
+      "questions": [
+        {
+          "content": "W którym roku nastąpił pierwszy rozbiór Polski?",
+          "hints": ["1772", "1773", "1673", "1672"]
+        },
+        {
+          "content": "Siły, będące pod czyim dowództwem, rozgromił Jan III Sobieski w bitwie pod Wiedniem?",
+          "hints": ["Kara Mustafy", "Mahmeda IV", "Tuhaj-beja", "Sulejmana Wspaniałego"]
+        },
+        {
+          "content": "Kto był ostatnim królem Polski?",
+          "hints": ["Stanisław August Poniatowski", "Jan III Sobieski", "August III Sas", "Zygmunt III Waza"]
+        },
+        {
+          "content": "Jaka jest data dzienna wybuchu powstania warszawskiego?",
+          "hints": ["1 VIII", "1 IX", "15 VIII", "11 XI"]
+        },
+        {
+          "content": "Panowanie którego władcy zakończyło okres rozbicia dzielnicowego w Polsce?",
+          "hints": ["Władysława Łokietka", "Kazimierza Wielkiego", "Kazimierza Odnowiciela", "Bolesława Krzywoustego"]
+        },
+        {
+          "content": "W którym roku zawieszono Dzwon Zygmunt na Wawelu?",
+          "hints": ["1521", "1551", "1531", "1541"]
+        },
+        {
+          "content": "Jakie miasto zostało przyłączone do Polski dzięki pozorowanej akcji buntu gen. Lucjana Żeligowskiego w 1920 r.?",
+          "hints": ["Wilno", "Ryga", "Smoleńsk", "Lwów"]
+        },
+        {
+          "content": "W którym wieku powstała popularna pieśń patriotyczna “Boże, coś Polskę”?",
+          "hints": ["XIX", "XX", "XVIII", "XVII"]
+        },
+        {
+          "content": "Który król, wywodzący się z rodziny magnackiej, panował w Polsce w l. 1669-1673?",
+          "hints": ["Michał Korybut Wiśniowiecki", "Jan II Kazimierz Waza", "Władysław IV Waza", "Jan III Sobieski"]
+        }
+      ]
+    },
+    {
+      "name": "Historia powszechna",
+      "questions": [
+        {
+          "content": "Jaki król stacił głowę w wyniku Wielkiej Rewolucji Francuskiej?",
+          "hints": ["Ludwik XVI", "Ludwik XVII", "Ludwik XV", "Ludwik XVIII"]
+        },
+        {
+          "content": "Ile tez ogłosił w 1517 roku Marcin Luter?",
+          "hints": ["95", "98", "108", "101"]
+        },
+        {
+          "content": "W którym roku wybuchła I Wojna Światowa?",
+          "hints": ["1914", "1918", "1905", "1939"]
+        },
+        {
+          "content": "Data upadku Rzymu wyznacza najczęściej koniec starożytności. W którym roku miało miejsce to wydarzenie?",
+          "hints": ["476 r. n. e. ", "493 r. n. e.", "493 r. p. n. e.", "476 r. p. n. e. "]
+        },
+        {
+          "content": "Jakie miasto było stolicą Cesarstwa Karola Wielkiego?",
+          "hints": ["Akwizgram", "Verdun", "Rzym", "Moguncja"]
+        },
+        {
+          "content": "W jakim mieście 1 grudnia 1943 odbyła się konferencja Wielkiej Trójki?",
+          "hints": ["w Teheranie", "w Jałcie", "w Poczdamie", "w Sewastopolu"]
+        },
+        {
+          "content": "W którym wieku Rzym przestał być stolicą państwa papieskiego I został stolicją zjednoczonych Włoch?",
+          "hints": ["XIX", "XVIII", "XVII", "XVI"]
+        },
+        {
+          "content": "Przeciwko któremu państwu była wymierzona blokada kontynentalna, wprowadzona przez Napoleona?",
+          "hints": ["Wielkiej Brytanii", "Rosji", "Danii", "Austrii"]
+        }
+      ]
+    },
+    {
+      "name": "Przysłowia",
+      "questions": [
+        {
+          "content": "Uzupełnij przysłowie: czasem […] się zlituje, że człek niby wiosnę czuje; ale czasem tak się […], że człek prawie nie wytrzyma",
+          "hints": ["luty, zżyma", "styczeń, trzyma", "luty, trzyma", "marzec, trzyma"]
+        },
+        {
+          "content": "Uzupełnij przysłowie: dla dwóch […] za mało miejsca na jednym […]",
+          "hints": ["kogutów, gnoju", "liliputów, kurniku", "kogutów, kurniku", "liliputów, gnoju"]
+        },
+        {
+          "content": "Uzupełnij przysłowie: gdy pająk w […] przychodzi, to za sobą deszcz przywodzi, gdy swą pajęczynę snuje, bliską burzę czuje",
+          "hints": ["lipcu", "lecie", "sierpniu", "wiosnę"]
+        },
+        {
+          "content": "Kogo według przysłowia trzeba bić żeby mu wątroba nie gniła?",
+          "hints": ["babę", "chłopa", "księdza", "teściową"]
+        },
+        {
+          "content": "W jaki dzień tygodnia ścieli przysłowowemu indykowi głowę?",
+          "hints": ["sobotę", "niedziela", "piątek", "wtorek"]
+        },
+        {
+          "content": "Uzupełnij przysłowie: \"Agnieszka łaskawa [...] skowronka z rękawa\"",
+          "hints": ["puszcza", "uwalnia", "ratuje", "wyciąga"]
+        },
+        {
+          "content": "Z czym według przysłowia wstaje ten, kto kładzie się z psami?",
+          "hints": ["pchłami", "marzeniami", "nagniotkami", "boleściami"]
+        },
+        {
+          "content": "Dokończ przysłowie: \"dobra psu i mucha, kiedy [...]\"",
+          "hints": ["sama wleci do brzucha", "sama za uchem nie grucha", "siedzi na grzechocie", "lata w samolocie"]
+        },
+        {
+          "content": "W którego Świętego wspomnienie ma spaść deszcz w myśl tego przysłowia : \"gdy w [...] deszcz spadnie, lekka zima będzie snadnie\"",
+          "hints": ["Michała", "Tarsycjusza", "Teodora", "Marcina"]
+        },
+        {
+          "content": "Uzupełnij przysłowie : co Anglik [...], Francuz [...], a Niemiec doma nakrupi, wszystko to głupi Polak [...]",
+          "hints": [
+            "zmyśli skréśli kupi",
+            "zmyśli skreśli zdupi",
+            "zmajstruje zepsuje odkupi",
+            "zepsuje zmyśli zakreśli"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Muzyka klasyczna",
+      "questions": [
+        {
+          "content": "Ile klawiszy ma typowy współczesny fortepian?",
+          "hints": ["88", "89", "84", "78"]
+        },
+        {
+          "content": "Jak oznaczamy w muzyce określenie dynamiczne fortissimo?",
+          "hints": ["ff", "ft", "fs", "f"]
+        },
+        {
+          "content": "Określenie allegro odnosi się do jakiego rodzaju tempa?",
+          "hints": ["wolne", "żywe", "umiarkowane", "szybkie"]
+        },
+        {
+          "content": "Której symfonii Ludwig van Beethoven nie skończył komponować?",
+          "hints": ["X ", "IX", "XI", "VIII"]
+        },
+        {
+          "content": "“Dziadek do Orzechów\" jest jaką formą muzyczną? ",
+          "hints": ["balet", "opera", "sonata", "wariacja"]
+        },
+        {
+          "content": "Do czego w muzyce służy kalafonia? ",
+          "hints": [
+            "do nacierania włosia smyczków",
+            "do konserwacji fortepianu",
+            "do wyrobu instrumentów",
+            "do przechowywania instrumentów"
+          ]
+        },
+        {
+          "content": "Znany utwór Igora Strawińskiego to święto czego? ",
+          "hints": ["wiosny", "ojczyzny", "niepodległości", "zwycięstwa"]
+        },
+        {
+          "content": "Z którego kraju pochodził siedemnastrowieczny kompozytor Henry Purcell?",
+          "hints": ["Anglia", "Francja", "Niemcy", "Szwajcaria"]
+        }
+      ]
+    },
+    {
+      "name": "Sztuka kulinarna",
+      "questions": [
+        {
+          "content": "Skąd do Polski trafiła marchew?",
+          "hints": ["z Włoch", "z Niemiec", "z Francji", "z Turcji"]
+        },
+        {
+          "content": "Jaki kwas powstaje podczas kiszenia kapusty lub ogórków?",
+          "hints": ["kwas mlekowy", "kwas askorbinowy", "kwa mrówkowy", "kwas octowy"]
+        },
+        {
+          "content": "Jaki kraj jest ojczyzną potrawy o nazwie paella?",
+          "hints": ["Hiszpania", "Francja", "Włochy", "Portugalia"]
+        },
+        {
+          "content": "W co zawijane są sajgonki, znane danie kuchni wietnamskiej?",
+          "hints": ["w papier ryżowy", "w kapustę pekińską", "w papier z glonów morskich", "w papier sojowy"]
+        },
+        {
+          "content": "Z jakiego mleka produkowany jest ser feta?",
+          "hints": ["owczego", "sojowego", "dowolnego", "krowiego"]
+        },
+        {
+          "content": "Czego nie może jeść chory na celiakię?",
+          "hints": ["glutenu", "laktozy", "gorczycy", "cukru"]
+        },
+        {
+          "content": "Skąd pochodzi serek tofu?",
+          "hints": ["z Chin", "z Indii", "z Indonezji", "z Japonii"]
+        },
+        {
+          "content": "Skąd pochodzi ser Cheddar?",
+          "hints": ["z Anglii", "z Francji", "ze Szwajcarii", "z Holandii"]
+        },
+        {
+          "content": "Jak brzmi nazwa kaszy lub mączki wytwarzanej z bulw manioku?",
+          "hints": ["tapioka", "tarhonya", "tarator", "tahina"]
+        }
+      ]
+    },
+    {
+      "name": "Geografia",
+      "questions": [
+        {
+          "content": "Jakie jezioro jest największe na świecie?",
+          "hints": ["Morze Kaspijskie", "Jezioro Wiktorii", "Bajkał", "Jezioro Górne"]
+        },
+        {
+          "content": "Ile łącznie szczytów liczy Korona Gór Polski?",
+          "hints": ["28", "22", "26", "30"]
+        },
+        {
+          "content": "Jaka jest najwyższa góra na świecie biorąc pod uwagę jej wysokość od podnóża po szczyt?",
+          "hints": ["wulkan Mauna Kea", "Mount Everest", "K2", "Elbrus"]
+        },
+        {
+          "content": "Jak nazywa się największe pasmo górskie we wschodniej części Stanów Zjednoczonych?",
+          "hints": ["Apallachy", "Góry Białe", "Góry Zielone", "Adirondack"]
+        },
+        {
+          "content": "Przez ile państw przebiega pasmo gór Karpaty?",
+          "hints": ["8", "10", "2", "5"]
+        },
+        {
+          "content": "Która pustynia jest największa na świecie?",
+          "hints": ["Sahara", "Pustynia Gobi", "Wielka Pustynia Piaszczysta", "Wielka Pustynia Wiktorii"]
+        },
+        {
+          "content": "Jak nazywa się najmniejsze państwo na świecie? ",
+          "hints": ["Watykan", "Monako", "Luksemburg", "San Marino"]
+        },
+        {
+          "content": "W którym województwie leży Babiogórski Park Narodowy?",
+          "hints": ["w śląskim", "w małopolskim", "w podkarpackim", "w świętokrzyskim"]
+        }
+      ]
+    },
+    {
+      "name": "Motoryzacja",
+      "questions": [
+        {
+          "content": "Kto uruchomił pierwszą wielkoseryjną produkcję samochodów?",
+          "hints": ["Henry Ford", "Karl Benz", "Vincenzo Lancia", "August Horch"]
+        },
+        {
+          "content": "Jaką energią jest zasilany samochód marki Tesla?",
+          "hints": ["elektryczną", "spalinową", "słoneczną", "jądrową"]
+        },
+        {
+          "content": "Jak nazywa się polska firma produkująca min autobusy miejskie, posiadająca główną siedzibę w Bolechowie-Osiedlu?",
+          "hints": ["Solaris", "Newag", "Autosan", "MAN"]
+        },
+        {
+          "content": "Gdzie w samochodzie wykorzystywany jest układ ABS?",
+          "hints": ["w hamulcach", "w sprzęgle", "w silniku", "w skrzyni biegów"]
+        },
+        {
+          "content": "Która firma wyprodukowała następujące modele samochodów: Supra, Hilux, Verso, Auris?",
+          "hints": ["Toyota", "Audi", "Peugeout", "Skoda"]
+        },
+        {
+          "content": "Jaką inną nazwą określa się Fiata 125p?",
+          "hints": ["Duży Fiat", "Kaszlak", "Maluch", "Gazik"]
+        },
+        {
+          "content": "Jak inaczej nazywa się silnik wysokoprężny (samozapłonowy)?",
+          "hints": ["silnik Diesla", "silnik Wankla", "silnik wysokoprężny", "silnik spalinowy"]
+        },
+        {
+          "content": "Gdzie miała główną siedzibę polska firma WSK produkująca motocykle?",
+          "hints": ["w Świdniku", "w Krakowie", "w Łodzi", "w Bydgoszczy"]
+        },
+        {
+          "content": "Z jakiego kraju pochodzi marka SAAB?",
+          "hints": ["ze Szwecji", "z Finlandii", "z Austrii", "z Norwegii"]
+        },
+        {
+          "content": "W którym kraju produkowano samochody ciężarowe Kraz?",
+          "hints": ["ZSRR", "Bułgaria", "Rumunia", "Jugosławia"]
+        }
+      ]
+    },
+    {
+      "name": "Sport",
+      "questions": [
+        {
+          "content": "Kto jest najbardziej utytułowanym kierowcą w historii rajdów WRC?",
+          "hints": ["Sébastien Loeb", "Sébastien Ogier", "Colin McRae", "Carlos Sainz"]
+        },
+        {
+          "content": "Kto wygrał najwięcej etapów wyścigu kolarskiego Tour de France? ",
+          "hints": ["Eddy Merckx", "Lance Armstrong", "Bernard Hinault", "Mark Cavendish"]
+        },
+        {
+          "content": "Jaki skrót nosi największa zawodowa liga futbolu amerykańskiego?",
+          "hints": ["NFL", "NHL", "NBA", "MLS"]
+        },
+        {
+          "content": "W jakim sporcie jeździ się na koniu na trawiastym boisku i strzela się białą piłką do bramki przeciwnika?",
+          "hints": ["w polo", "w woltyżerce", "w hippice", "w reiningu"]
+        },
+        {
+          "content": "Na jakim torze odbył się pierwszy wyścig Formuły 1?",
+          "hints": ["Silverstone", "Monza", "Hungaroring", "Nurburgring"]
+        },
+        {
+          "content": "W jakim mieście odbędą się Zimowe Igrzyska Olimpijskie w 2018 roku?",
+          "hints": ["w Pjongczangu", "w Monachium", "w Tokio", "w Soczi"]
+        },
+        {
+          "content": "Jakie polskie miasto jest gospodarzem corocznych zawodów z cyklu Pucharu Świata w skokach narciarskich na skoczni im. Stanisława Marusarza?",
+          "hints": ["Zakopane", "Wisła", "Szczyrk", "Poronin"]
+        },
+        {
+          "content": "Ilu łącznie zawodników przebywa na parkiecie podczas meczu koszykarskiego?",
+          "hints": ["10", "6", "8", "12"]
+        }
+      ]
+    }
+  ]
+}
