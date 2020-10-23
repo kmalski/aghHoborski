@@ -13,12 +13,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-const rooms = require('./socket/rooms');
-const io = socket(server, { path: '/game', serveClient: false });
+const room = require('./sockets/room');
+const io = socket(server, { serveClient: false });
 
 io.on('connect', socket => {
   console.log(`New user connected: ${socket.id}`);
-  rooms.listen(io, socket);
+  room.listen(io, socket);
 });
 
 app.use((req, res, next) => {

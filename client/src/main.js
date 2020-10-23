@@ -8,7 +8,6 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 const serverAddress = process.env.VUE_APP_SERVER_ADDRESS || 'https://awantura-server.malski.pl';
 const io = socket(serverAddress, {
-  path: '/game',
   transports: ['websocket']
 });
 

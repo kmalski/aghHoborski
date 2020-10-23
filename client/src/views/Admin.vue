@@ -11,6 +11,14 @@ export default {
     return {
       example: ''
     };
+  },
+  created() {
+    this.$socket.client.emit('adminGetState', { token: localStorage.awanturaToken });
+  },
+  sockets: {
+    unauthorized(msg) {
+      this.$router.push({ name: 'Login', params: { showAlert: true, msg } });
+    }
   }
 };
 </script>

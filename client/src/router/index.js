@@ -17,7 +17,8 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: lazyLoad('Login')
+    component: lazyLoad('Login'),
+    props: true
   },
   {
     path: '/:room/admin',

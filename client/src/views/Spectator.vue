@@ -18,6 +18,9 @@ export default {
       example: ''
     };
   },
+  created() {
+    this.$socket.client.emit('getState');
+  },
   components: {
     AppStatusIcon: StatusIcon,
     AppQuestionSection: QuestionSection,

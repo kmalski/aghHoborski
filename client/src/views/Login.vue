@@ -1,37 +1,51 @@
 <template>
   <section class="login">
     <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
-      {{ warningMsg }}
+      {{ msg }}
     </b-alert>
     <app-status-icon />
     <app-logo class="split__left"></app-logo>
-    <app-admin-form class="split__right"></app-admin-form>
+    <app-login-form class="split__right"></app-login-form>
   </section>
 </template>
 
 <script>
 import Logo from '@/components/shared/Logo.vue';
 import StatusIcon from '@/components/shared/StatusIcon.vue';
-import AdminForm from '@/components/login/AdminForm.vue';
+import LoginForm from '@/components/login/LoginForm.vue';
 
 export default {
   name: 'Login',
+  props: {
+    initialMsg: {
+      type: String,
+      defalut: ''
+    },
+    initialShowAlert: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: function() {
     return {
-      warningMsg: '',
-      showAlert: false
+      msg: this.initialMsg,
+      showAlert: this.initialShowAlert
     };
   },
   sockets: {
+    unauthorized(msg) {
+      this.msg = msg;
+      this.showAlert = true;
+    },
     warning(msg) {
-      this.warningMsg = msg;
+      this.msg = msg;
       this.showAlert = true;
     }
   },
   components: {
     AppStatusIcon: StatusIcon,
     AppLogo: Logo,
-    AppAdminForm: AdminForm
+    AppLoginForm: LoginForm
   }
 };
 </script>

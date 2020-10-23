@@ -1,7 +1,7 @@
 <template>
   <section class="home">
     <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
-      {{ warningMsg }}
+      {{ msg }}
     </b-alert>
     <app-status-icon />
     <app-logo class="split__left"></app-logo>
@@ -16,15 +16,25 @@ import SpectatorForm from '@/components/home/SpectatorForm.vue';
 
 export default {
   name: 'Home',
+  props: {
+    initialMsg: {
+      type: String,
+      defalut: ''
+    },
+    initialShowAlert: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: function() {
     return {
-      warningMsg: '',
-      showAlert: false
+      msg: this.initialMsg,
+      showAlert: this.initialShowAlert
     };
   },
   sockets: {
     warning(msg) {
-      this.warningMsg = msg;
+      this.msg = msg;
       this.showAlert = true;
     }
   },

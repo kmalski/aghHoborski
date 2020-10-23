@@ -1,5 +1,5 @@
 <template>
-  <div class="admin-form">
+  <div class="login-form">
     <b-form @submit.stop.prevent class="w-75">
       <b-form-group id="room-name-group">
         <b-form-input
@@ -41,7 +41,7 @@
 
 <script>
 export default {
-  name: 'AdminForm',
+  name: 'LoginForm',
   data: function() {
     return {
       room: {
@@ -73,14 +73,14 @@ export default {
   },
   sockets: {
     roomCreated(room) {
+      localStorage.awanturaToken = room.token;
+
       this.$router.push({ name: 'Admin', params: { room: room.name } });
     },
     roomJoined(room) {
+      localStorage.awanturaToken = room.token;
+
       this.$router.push({ name: 'Admin', params: { room: room.name } });
-    },
-    warning(msg) {
-      this.warningMsg = msg;
-      this.showAlert = true;
     }
   }
 };
