@@ -17,7 +17,7 @@ export default {
   },
   sockets: {
     unauthorized(msg) {
-      this.$router.push({ name: 'Login', params: { showAlert: true, msg } });
+      this.$router.push({ name: 'Login', params: { initialShowAlert: true, initialMsg: msg } });
     }
   }
 };

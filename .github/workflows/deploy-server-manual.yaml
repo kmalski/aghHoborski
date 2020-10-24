@@ -53,4 +53,4 @@ jobs:
         run: |
           rm -rf $SERVER_DIST
           cp -r ../server/ $SERVER_DIST
-          pm2 start hoborski-server
+          pm2 start hoborski-server --update-env
