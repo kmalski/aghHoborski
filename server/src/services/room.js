@@ -18,7 +18,7 @@ async function create(room, socket) {
     return socket.emit('warning', `Błędne dane.`);
   }
 
-  name = normalizeString(room.name);
+  const name = normalizeString(room.name);
   room.name = name;
 
   const foundRoom = await Room.findOne({ name });
@@ -42,7 +42,7 @@ function join(room, socket) {
     return socket.emit('warning', `Błędne dane.`);
   }
 
-  name = normalizeString(room.name);
+  const name = normalizeString(room.name);
   room.name = name;
 
   if (!activeRooms.some(e => e.name === name)) {
@@ -60,7 +60,7 @@ async function adminJoin(room, socket) {
     return socket.emit('warning', `Błędne dane.`);
   }
 
-  name = normalizeString(room.name);
+  const name = normalizeString(room.name);
   room.name = name;
 
   const foundRoom = await Room.findOne({ name });
@@ -86,15 +86,17 @@ function getState(room, socket) {
 }
 
 function adminGetState(room, socket) {
-  // TODO: compare also name
-  if (room.token == null) {
+  if (room.token == null || room.name == null) {
     return socket.emit('unauthorized', `Brak uprawnień.`);
   }
 
-  const foundRoom = activeRooms.find(e => e.token === room.token);
-
+  const name = normalizeString(room.name);
+  const foundRoom = activeRooms.find(e => e.name === room.name);
   if (foundRoom == null) {
     return socket.emit('unauthorized', `Pokój już nie jest aktywny.`);
+  }
+  if (foundRoom.token !== room.token) {
+    return socket.emit('unauthorized', `Brak uprawnień.`);
   }
 
   socket.room = foundRoom;

@@ -19,7 +19,7 @@ export default {
     };
   },
   created() {
-    this.$socket.client.emit('getState');
+    this.$socket.client.emit('getState', { name: this.$route.params.room });
   },
   components: {
     AppStatusIcon: StatusIcon,

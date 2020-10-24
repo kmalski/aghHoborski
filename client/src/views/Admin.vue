@@ -13,7 +13,7 @@ export default {
     };
   },
   created() {
-    this.$socket.client.emit('adminGetState', { token: localStorage.awanturaToken });
+    this.$socket.client.emit('adminGetState', { name: this.$route.params.room, token: localStorage.awanturaToken });
   },
   sockets: {
     unauthorized(msg) {

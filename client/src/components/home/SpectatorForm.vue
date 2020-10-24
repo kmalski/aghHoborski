@@ -1,6 +1,6 @@
 <template>
   <div class="spectator-form">
-    <b-form @submit.stop.prevent class="w-75">
+    <b-form @submit.stop.prevent="onSubmit" class="w-75">
       <b-form-group id="room-name-group">
         <b-form-input
           id="room-name"
@@ -15,7 +15,7 @@
         >
       </b-form-group>
 
-      <b-button block type="submit" variant="primary" @click="onSubmit">Dołącz</b-button>
+      <b-button block type="submit" variant="primary">Dołącz</b-button>
       <b-link to="/login" class="mt-2 d-block">Stwórz pokój lub dołącz jako administrator</b-link>
     </b-form>
   </div>
@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      if (this.room.name == null) this.room.name = '';
       if (this.nameValid) this.joinRoom();
     },
     joinRoom() {

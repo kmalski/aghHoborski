@@ -52,6 +52,8 @@ export default {
   },
   methods: {
     onSubmit(action) {
+      if (this.room.name == null) this.room.name = '';
+      if (this.room.password == null) this.room.password = '';
       if (this.nameValid && this.passwordValid) action();
     },
     joinRoom() {
@@ -86,8 +88,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.btn-width {
-  width: available;
-}
-</style>
+<style scoped lang="scss"></style>
