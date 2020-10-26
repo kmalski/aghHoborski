@@ -34,9 +34,12 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Build client
+      - name: Update dependencies
         run: |
           npm ci
+
+      - name: Build client
+        run: |
           npm run build
         env:
           NODE_ENV: production

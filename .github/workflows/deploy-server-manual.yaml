@@ -44,10 +44,15 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Build server
+      - name: Update dependencies
         run: |
           npm ci
+
+      - name: Build server
+        run: |
           npm run build
+        env:
+          NODE_ENV: production
 
       - name: Deploy server
         run: |
