@@ -4,20 +4,34 @@
   "description": "Server for the application for the \"Awantura o Nauke\" science quiz",
   "author": "Konrad Malski",
   "private": true,
+  "main": "src/server.ts",
   "scripts": {
-    "serve": "nodemon ./src/server.js",
+    "build": "rimraf build/ && tsc",
+    "prestart": "npm run build",
+    "start": "node build/server.js",
+    "serve": "tsnd --rs --respawn src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@typegoose/typegoose": "^7.4.1",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.10.9",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "@types/bcrypt": "^3.0.0",
+    "@types/cors": "^2.8.8",
+    "@types/express": "^4.17.8",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^14.14.2",
+    "@types/socket.io": "^2.1.11",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.0.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.1",

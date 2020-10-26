@@ -31,15 +31,16 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Update packages
+      - name: Build server
         run: |
           npm ci
-          pm2 stop hoborski-server
+          npm run build
 
       - name: Deploy server
         run: |
-          rm -rf $SERVER_DIST
-          cp -r ../server/ $SERVER_DIST
+          pm2 stop hoborski-server
+          rm -rf $SERVER_DIST/*
+          cp -r ../server/{build,node_modules,public} $SERVER_DIST
           pm2 start hoborski-server --update-env
 
   build-client:
