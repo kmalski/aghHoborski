@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "outDir": "./build",
+    "outDir": "build",
     "target": "ES6",
-    "module": "commonjs",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitReturns": false,
     "esModuleInterop": true
   },
-  "include": ["./src"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

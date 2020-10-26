@@ -15,21 +15,21 @@ async function create(room: RoomShared, socket: UserSocket) {
   }
 
   const name = room.name;
-  const foundRoom = await RoomModel.findOne({ name });
+  const dbRoom = await RoomModel.findOne({ name });
 
-  if (foundRoom) {
+  if (dbRoom) {
     return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
   }
 
   const hash = bcrypt.hashSync(room.password, saltRounds);
   await new RoomModel({ name, hash }).save();
 
-  const token = generateToken();
-  activeRooms.push({ name, token });
+  room.token = generateToken();
+  activeRooms.push(room);
 
   socket.room = room;
   socket.join(socket.room.name);
-  socket.emit(Outgoing.ROOM_CREATED, { msg: `Pokój o nazwie ${name} został utworzony.`, name, token });
+  socket.emit(Outgoing.ROOM_CREATED, { msg: `Pokój o nazwie ${name} został utworzony.`, name, token: room.token });
 }
 
 function join(room: RoomShared, socket: UserSocket) {
@@ -54,9 +54,9 @@ async function adminJoin(room: RoomShared, socket: UserSocket) {
   }
 
   const name = room.name;
-  const foundRoom = await RoomModel.findOne({ name });
+  const dbRoom = await RoomModel.findOne({ name });
 
-  if (!foundRoom || !bcrypt.compareSync(room.password, foundRoom.hash)) {
+  if (!dbRoom || !bcrypt.compareSync(room.password, dbRoom.hash)) {
     return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
   }
 
@@ -67,7 +67,7 @@ async function adminJoin(room: RoomShared, socket: UserSocket) {
     activeRooms.push(activeRoom);
   }
 
-  socket.room = room;
+  socket.room = activeRoom;
   socket.join(socket.room.name);
   socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: activeRoom.token });
 }

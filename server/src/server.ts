@@ -1,4 +1,4 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import http from 'http';
@@ -9,6 +9,8 @@ import mongoose from 'mongoose';
 import * as room from './sockets/room.socket';
 import { UserSocket } from './utils/socket.utils';
 import { Incoming } from './utils/event.constants';
+
+dotenv.config();
 
 const port = process.env.SERVER_PORT || 2222;
 const connectionString = process.env.MONGODB_URI;
@@ -23,7 +25,7 @@ app.use(cors());
 
 io.on(Incoming.CONNECT, (socket: UserSocket) => {
   console.log(`New user connected: ${socket.id}`);
-  
+
   room.listen(io, socket);
 });
 
@@ -34,7 +36,7 @@ app.use((_req: Request, res: Response, _next: NextFunction) => {
 mongoose
   .connect(connectionString, { useUnifiedTopology: true, useCreateIndex: true, useNewUrlParser: true })
   .then(() => {
-    server.listen(port, () => console.log(`Server listening at port ${port}`));
+    server.listen(port, () => console.log(`[INFO] Server listening at port ${port}`));
   })
   .catch((err: Error) => {
     console.log(err);

@@ -55,3 +55,5 @@ jobs:
           rm -rf $SERVER_DIST/*
           cp -r ../server/{build,node_modules,public} $SERVER_DIST
           pm2 start hoborski-server --update-env
+        env:
+          NODE_ENV: production

@@ -19,9 +19,7 @@ interface Room {
   token?: string;
 }
 
-interface RoomInternal extends Room {
-  hash?: string;
-}
+interface RoomInternal extends Room {}
 
 interface RoomShared extends Room {
   password?: string;
