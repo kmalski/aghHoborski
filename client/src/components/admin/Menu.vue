@@ -1,6 +1,6 @@
 <template>
   <section class="menu">
-    <h5>AWANTURA O NAUKE</h5>
+    <h5>AWANTURA O NAUKĘ</h5>
     <hr />
     <ul class="outer-ul">
       <li
@@ -22,7 +22,7 @@
         </ul>
       </li>
     </ul>
-    <b-button class="blue-shadow logut-btn" variant="primary" @click="logout">
+    <b-button class="blue-shadow menu__btn" variant="primary" @click="logout">
       Wyloguj
     </b-button>
   </section>
@@ -39,13 +39,16 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Zacznij licytacje'
+              name: 'Zacznij licytację'
             },
             {
-              name: 'Skończ licytację i daj podpowiedź'
+              name: 'Zakończ licytację: wybierz kategorię'
             },
             {
-              name: 'Skończ licytację i daj wygrać czarną skrzynkę'
+              name: 'Zakończ licytację: wygrano podpowiedź'
+            },
+            {
+              name: 'Zakończ licytację: wygrano czarną skrzynkę'
             }
           ]
         },
@@ -57,10 +60,10 @@ export default {
               name: 'Wygrali rundę'
             },
             {
-              name: 'Nachapali się zwycięstwem'
+              name: 'Przegrali rundę'
             },
             {
-              name: 'Przegrali rundę'
+              name: 'Rozpocznij nową rundę'
             }
           ]
         },
@@ -69,13 +72,10 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Pokaż podpowiedź'
+              name: 'Zużyj podpowiedź'
             },
             {
-              name: 'Zaoferuj podpowiedź'
-            },
-            {
-              name: 'Nie przyjmij podpowiedzi'
+              name: 'Rozpocznij licytację o podpowiedź'
             }
           ]
         },
@@ -108,57 +108,73 @@ export default {
 @import '../../scss/main.scss';
 
 .menu {
-  position: relative;
   left: 0;
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-around;
   text-align: left;
-  width: 15vw;
-  min-height: 100vh;
-  padding: 1rem;
+  width: 16vw;
+  height: 100vh;
+  padding: 1rem 0;
   background-color: $menu-background-color;
   color: $menu-font-color;
   font-size: 0.75rem;
 
-  hr {
-    border: 1px solid $menu-separator-color;
-    background: $menu-separator-color;
-    width: 100%;
-    margin: 1.5rem auto;
+  h5 {
+    padding: 0 1rem;
   }
 
-  li:hover {
-    background-color: $blue-button-color;
-    border-radius: 0.25rem;
-    cursor: pointer;
+  hr {
+    border: none;
+    border-bottom: 1px solid $menu-separator-color;
+    background: $menu-separator-color;
+    width: calc(100% - 2rem);
+    margin: 1.5rem 1rem;
   }
 
   .outer-ul {
     list-style-type: none;
-    padding: 0;
+    padding: 0 1rem;
     flex: 1 0;
+    overflow-y: auto;
 
     .outer-li {
-      padding: 0.3rem 0;
+      padding: 0.3rem 1rem;
       font-weight: bold;
+      width: calc(100% + 2rem);
+      transform: translateX(-1rem);
+
+      &:hover {
+        cursor: pointer;
+        background-color: $menu-section-color;
+      }
 
       .inner-ul {
         list-style-type: none;
         padding: 0 0.5rem;
 
         .inner-li {
-          padding: 0.4rem 0;
+          padding: 0.4rem 0.5rem;
           font-weight: normal;
+          width: calc(100% + 1rem);
+          transform: translateX(-0.5rem);
+
+          &:hover {
+            border-radius: 0.25rem;
+            cursor: pointer;
+            background-color: $blue-button-color;
+          }
         }
       }
     }
   }
 
-  .logut-btn {
-    @include base-btn(1rem, 100%);
+  &__btn {
+    @include base-btn(1rem, calc(100% - 2rem));
     bottom: 0;
     place-self: flex-end;
+    padding: 0.4rem;
+    transform: translateX(-1rem);
   }
 }
 </style>

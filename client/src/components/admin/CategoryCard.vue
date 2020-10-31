@@ -2,12 +2,7 @@
   <div class="category-card">
     <div class="card-row">
       <label>Kategoria</label>
-      <div class="category-pair">
-        <p>{{ category }}</p>
-        <b-button class="blue-shadow" variant="primary" @click="toggleCategory">
-          Kategoria
-        </b-button>
-      </div>
+      <p>{{ category }}</p>
     </div>
     <div class="card-row">
       <label>Pytanie</label>
@@ -16,7 +11,7 @@
     <div class="card-row">
       <label>Podpowiedź</label>
       <div class="hint-list">
-        <p v-for="hint in hints" :key="hint">{{ category }}</p>
+        <p v-for="hint in hints" :key="hint">{{ hint }}</p>
       </div>
     </div>
   </div>
@@ -33,9 +28,6 @@ export default {
                 pytanie pytanie pytanie pytanie pytanie ?`,
       hints: ['Podpowiedź1', 'Podpowiedź2', 'Podpowiedź3', 'Podpowiedź4']
     };
-  },
-  methods: {
-    toggleCategory() {}
   }
 };
 </script>
@@ -52,7 +44,11 @@ export default {
   justify-content: center;
   max-height: fit-content;
   max-width: 35vw;
-  margin: 1.5rem auto;
+  margin: auto;
+
+  label {
+    font-weight: 500;
+  }
 
   .card-row {
     display: grid;
@@ -72,14 +68,6 @@ export default {
       grid-area: 1 / 2 / 2 / 3;
     }
 
-    .category-pair {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-
     .hint-list {
       display: flex;
       flex-flow: row wrap;
@@ -88,32 +76,6 @@ export default {
         flex: 1 0 40%;
       }
     }
-  }
-
-  //   .card-row {
-  //     display: flex;
-  //     flex-flow: row wrap;
-  //     align-items: center;
-  //     text-align: center;
-  //     justify-content: space-between;
-  //     margin: 0.25rem 1rem;
-  //     width: 100%;
-
-  //     > :first-child {
-  //       flex: 1 0 30%;
-  //       align-self: flex-start;
-  //       text-align: left;
-  //     }
-
-  //     > :last-child {
-  //       flex: 3 0 30%;
-  //       align-self: flex-start;
-  //       text-align: left;
-  //     }
-  //   }
-
-  label {
-    font-weight: 500;
   }
 }
 </style>

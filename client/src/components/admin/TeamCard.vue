@@ -22,7 +22,7 @@
     </div>
     <div class="card-row">
       <label>Podpowiedzi</label>
-      <b-form-input disabled v-model="hintCount" />
+      <b-form-input v-model="hintCount" />
     </div>
     <div class="card-row">
       <label>Czarna skrzynka</label>
@@ -98,7 +98,7 @@ export default {
   justify-content: center;
   max-height: fit-content;
   max-width: 15vw;
-  margin: 1.5rem auto;
+  margin: auto;
 
   .team-name {
     font-weight: 500;
