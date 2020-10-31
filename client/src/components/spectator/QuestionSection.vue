@@ -19,7 +19,7 @@ import Separator from '@/components/shared/Separator.vue';
 
 export default {
   name: 'QuestionSection',
-  data: function() {
+  data() {
     return {
       question: {
         number: 0,

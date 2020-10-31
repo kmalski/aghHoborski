@@ -1,7 +1,13 @@
 @import "utils/_variables.scss";
 @import "utils/_mixins.scss";
-@import "base/_basic.scss";
-@import "base/_elements.scss";
+
+@import "components/_alert.scss";
+@import "components/_button.scss";
+@import "components/_card.scss";
+
+@import "layout/_border.scss";
+@import "layout/_display.scss";
+@import "layout/_font.scss";
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 @import 'node_modules/bootstrap-vue/src/index.scss';

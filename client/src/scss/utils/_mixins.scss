@@ -4,3 +4,21 @@
   grid-row-start: $row-start;
   grid-row-end: $row-end;
 }
+
+@mixin element-shadow($color: $button-primary-color) {
+  box-shadow: 0px 24px 48px -12px rgba($color, 0.35);
+}
+
+@mixin element-border($color) {
+  border-style: solid;
+  border-color: $color;
+  border-width: 1px;
+}
+
+@mixin base-btn($horizontal-padding, $width: max-content) {
+  padding: 0.1rem $horizontal-padding;
+  width: $width;
+  text-align: center;
+  align-items: center;
+  font-size: 0.7rem;
+}

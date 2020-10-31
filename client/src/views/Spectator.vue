@@ -13,7 +13,7 @@ import AuctionSection from '@/components/spectator/AuctionSection.vue';
 
 export default {
   name: 'Spectator',
-  data: function() {
+  data() {
     return {
       example: ''
     };

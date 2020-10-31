@@ -10,7 +10,8 @@
           :state="nameValid"
         ></b-form-input>
         <b-form-invalid-feedback id="room-name-feedback" :state="nameValid"
-          >Nazwa musi mieć co najmniej 3 znaki długości.</b-form-invalid-feedback
+          >Nazwa musi mieć co najmniej 3 znaki
+          długości.</b-form-invalid-feedback
         >
       </b-form-group>
 
@@ -23,14 +24,23 @@
           :state="passwordValid"
         ></b-form-input>
         <b-form-invalid-feedback id="room-name-feedback" :state="passwordValid"
-          >Hasło musi mieć co najmniej 5 znaków długości.</b-form-invalid-feedback
+          >Hasło musi mieć co najmniej 5 znaków
+          długości.</b-form-invalid-feedback
         >
       </b-form-group>
       <b-button-group class="w-100">
-        <b-button class="mr-1 rounded-right" type="submit" variant="primary" @click="onSubmit(joinRoom)"
+        <b-button
+          class="mr-1 rounded-right blue-shadow"
+          type="submit"
+          variant="primary"
+          @click="onSubmit(joinRoom)"
           >Dołącz</b-button
         >
-        <b-button class="ml-1 rounded-left" type="submit" variant="primary" @click="onSubmit(createRoom)"
+        <b-button
+          class="ml-1 rounded-left blue-shadow"
+          type="submit"
+          variant="primary"
+          @click="onSubmit(createRoom)"
           >Stwórz</b-button
         >
       </b-button-group>
@@ -42,7 +52,7 @@
 <script>
 export default {
   name: 'LoginForm',
-  data: function() {
+  data() {
     return {
       room: {
         name: null,

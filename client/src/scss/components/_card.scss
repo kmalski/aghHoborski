@@ -1,0 +1,34 @@
+.base-card {
+  @include element-shadow($card-shadow-color);
+
+  border-radius: 25px;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.8rem;
+  background-color: $card-background-color;
+
+  .square-btn {
+    @include base-btn(0.15rem);
+  }
+
+  .rectangle-btn {
+    @include base-btn(0.8rem, 4rem);
+  }
+
+  .rectangle-input {
+    padding: 0.1rem 0.15rem;
+    height: max-content;
+    min-width: 5ch;
+    max-width: 10ch;
+    text-align: center;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+
+  button {
+    @include base-btn(0.8rem);
+  }
+
+  input {
+    @extend .rectangle-input;
+  }
+}

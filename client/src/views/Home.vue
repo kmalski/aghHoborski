@@ -1,6 +1,11 @@
 <template>
   <section class="home">
-    <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
+    <b-alert
+      class="alert-position"
+      v-model="showAlert"
+      variant="warning"
+      dismissible
+    >
       {{ msg }}
     </b-alert>
     <app-status-icon />
@@ -26,7 +31,7 @@ export default {
       default: false
     }
   },
-  data: function() {
+  data() {
     return {
       msg: this.initialMsg,
       showAlert: this.initialShowAlert

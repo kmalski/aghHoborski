@@ -1,0 +1,19 @@
+.blue-border {
+  @include element-border($blue-card-color);
+}
+
+.green-border {
+  @include element-border($green-card-color);
+}
+
+.yellow-border {
+  @include element-border($yellow-card-color);
+}
+
+.red-border {
+  @include element-border($red-card-color);
+}
+
+.master-border {
+  @include element-border($master-card-color);
+}

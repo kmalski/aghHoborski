@@ -12,7 +12,7 @@ module.exports = {
       'warn',
       {
         singleQuote: true,
-        printWidth: 120
+        printWidth: 80
       }
     ],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

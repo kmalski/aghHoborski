@@ -32,7 +32,7 @@ import Amount from '@/components/shared/Amount.vue';
 
 export default {
   name: 'AuctionSection',
-  data: function() {
+  data() {
     return {
       amounts: {
         blue: 500,
