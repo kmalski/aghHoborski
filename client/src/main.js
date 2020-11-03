@@ -6,8 +6,7 @@ import socket from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
-const serverAddress =
-  process.env.VUE_APP_SERVER_ADDRESS || 'https://awantura-server.malski.pl';
+const serverAddress = process.env.VUE_APP_SERVER_ADDRESS || 'https://awantura-server.malski.pl';
 const io = socket(serverAddress, {
   transports: ['websocket']
 });

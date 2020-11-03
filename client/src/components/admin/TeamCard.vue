@@ -1,14 +1,8 @@
 <template>
   <div class="admin-card" :class="{ [variant + '-border']: isInGame }">
     <div class="card-row">
-      <label class="team-name" :class="[variant + '-font']">{{
-        teamName
-      }}</label>
-      <b-button
-        class="blue-shadow rectangle-btn"
-        :variant="buttonVariant"
-        @click="toggleInGame"
-      >
+      <label class="team-name" :class="[variant + '-font']">{{ teamName }}</label>
+      <b-button class="blue-shadow rectangle-btn" :variant="buttonVariant" @click="toggleInGame">
         {{ isInGame ? 'Gra' : 'Nie gra' }}
       </b-button>
     </div>
@@ -22,16 +16,11 @@
     </div>
     <div class="card-row">
       <label>Podpowiedzi</label>
-      <b-form-input v-model="hintCount" />
+      <b-form-input :disabled="!isInGame" v-model="hintCount" />
     </div>
     <div class="card-row">
       <label>Czarna skrzynka</label>
-      <b-button
-        :disabled="!isInGame"
-        class="blue-shadow square-btn"
-        variant="primary"
-        @click="toggleBlackBox"
-      >
+      <b-button :disabled="!isInGame" class="blue-shadow square-btn" variant="primary" @click="toggleBlackBox">
         <b-icon :icon="hasBlackBox ? 'check2' : 'x'"></b-icon>
       </b-button>
     </div>

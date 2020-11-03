@@ -1,4 +1,5 @@
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
+import { QuestionSetInternal, QuestionSetSchema } from './question.model';
 
 export { RoomModel, RoomShared, RoomInternal };
 
@@ -8,6 +9,9 @@ class RoomSchema {
 
   @prop()
   public hash!: string;
+
+  @prop({ ref: () => QuestionSetSchema })
+  public questions: Ref<QuestionSetSchema>;
 }
 
 const RoomModel = getModelForClass(RoomSchema, {
@@ -19,8 +23,13 @@ interface Room {
   token?: string;
 }
 
-interface RoomInternal extends Room {}
-
 interface RoomShared extends Room {
-  password?: string;
+  name: string;
+  readonly password?: string;
+}
+
+class RoomInternal implements Room {
+  public name: string;
+  public token?: string;
+  public questions?: QuestionSetInternal;
 }

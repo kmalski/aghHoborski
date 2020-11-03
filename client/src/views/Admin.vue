@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import CategoryCard from '../components/admin/CategoryCard';
-import OneOnOneCard from '../components/admin/OneOnOneCard';
-import ResetCard from '../components/admin/ResetCard';
-import HintCard from '../components/admin/HintCard';
-import TeamCard from '../components/admin/TeamCard';
-import Timer from '../components/admin/Timer';
-import Menu from '../components/admin/Menu';
+import CategoryCard from '@/components/admin/CategoryCard';
+import OneOnOneCard from '@/components/admin/OneOnOneCard';
+import ResetCard from '@/components/admin/ResetCard';
+import HintCard from '@/components/admin/HintCard';
+import TeamCard from '@/components/admin/TeamCard';
+import Timer from '@/components/admin/Timer';
+import Menu from '@/components/admin/Menu';
 
 export default {
   name: 'Admin',
@@ -44,12 +44,20 @@ export default {
       token: localStorage.awanturaToken
     });
   },
-  sockets: {
-    unauthorized(msg) {
+  methods: {
+    forceLogout(msg) {
       this.$router.push({
         name: 'Login',
         params: { initialShowAlert: true, initialMsg: msg }
       });
+    }
+  },
+  sockets: {
+    unauthorized(msg) {
+      this.forceLogout(msg);
+    },
+    warning(msg) {
+      this.forceLogout(msg);
     }
   },
   components: {

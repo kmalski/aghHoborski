@@ -1,11 +1,6 @@
 <template>
   <section class="home">
-    <b-alert
-      class="alert-position"
-      v-model="showAlert"
-      variant="warning"
-      dismissible
-    >
+    <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
       {{ msg }}
     </b-alert>
     <app-status-icon />

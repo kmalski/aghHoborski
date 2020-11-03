@@ -1,21 +1,8 @@
 <template>
   <div class="status-icon status-icon__position">
-    <b-icon
-      v-if="$socket.connected && !reconnecting"
-      icon="check-circle"
-      font-scale="1.5"
-    ></b-icon>
-    <b-icon
-      v-if="reconnecting"
-      icon="arrow-clockwise"
-      animation="spin"
-      font-scale="1.5"
-    ></b-icon>
-    <b-icon
-      v-if="!$socket.connected && !reconnecting"
-      icon="x-circle"
-      font-scale="1.5"
-    ></b-icon>
+    <b-icon v-if="$socket.connected && !reconnecting" icon="check-circle" font-scale="1.5"></b-icon>
+    <b-icon v-if="reconnecting" icon="arrow-clockwise" animation="spin" font-scale="1.5"></b-icon>
+    <b-icon v-if="!$socket.connected && !reconnecting" icon="x-circle" font-scale="1.5"></b-icon>
   </div>
 </template>
 

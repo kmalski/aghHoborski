@@ -11,17 +11,12 @@
           trim
         ></b-form-input>
         <b-form-invalid-feedback id="room-name-feedback" :state="nameValid"
-          >Nazwa musi mieć co najmniej 3 znaki
-          długości.</b-form-invalid-feedback
+          >Nazwa musi mieć co najmniej 3 znaki długości.</b-form-invalid-feedback
         >
       </b-form-group>
 
-      <b-button class="blue-shadow" block type="submit" variant="primary"
-        >Dołącz</b-button
-      >
-      <b-link to="/login" class="mt-2 d-block"
-        >Stwórz pokój lub dołącz jako administrator</b-link
-      >
+      <b-button class="blue-shadow" block type="submit" variant="primary">Dołącz</b-button>
+      <b-link to="/login" class="mt-2 d-block">Stwórz pokój lub dołącz jako administrator</b-link>
     </b-form>
   </div>
 </template>

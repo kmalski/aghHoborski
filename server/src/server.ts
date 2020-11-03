@@ -7,6 +7,7 @@ import path from 'path';
 import mongoose from 'mongoose';
 
 import * as room from './sockets/room.socket';
+import * as question from './sockets/question.socket';
 import { UserSocket } from './utils/socket.utils';
 import { Incoming } from './utils/event.constants';
 
@@ -26,6 +27,7 @@ app.use(cors());
 io.on(Incoming.CONNECT, (socket: UserSocket) => {
   console.log(`New user connected: ${socket.id}`);
 
+  question.listen(io, socket);
   room.listen(io, socket);
 });
 
@@ -34,7 +36,12 @@ app.use((_req: Request, res: Response, _next: NextFunction) => {
 });
 
 mongoose
-  .connect(connectionString, { useUnifiedTopology: true, useCreateIndex: true, useNewUrlParser: true })
+  .connect(connectionString, {
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useFindAndModify: false
+  })
   .then(() => {
     server.listen(port, () => console.log(`[INFO] Server listening at port ${port}`));
   })

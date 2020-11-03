@@ -2,12 +2,9 @@
   <div class="one-on-one-card">
     <label>Kategorie 1:1</label>
     <div class="categories">
-      <b-form-checkbox
-        v-for="category in categories"
-        :key="category"
-        :disabled="disabled"
-        >{{ category }}</b-form-checkbox
-      >
+      <b-form-checkbox v-for="category in categories" :key="category" :disabled="disabled">{{
+        category
+      }}</b-form-checkbox>
     </div>
   </div>
 </template>

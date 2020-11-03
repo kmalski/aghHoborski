@@ -3,22 +3,10 @@
     <label>Podpowiedź</label>
     <b-form-input :disabled="disabled" v-model="hintAmount" />
     <div>
-      <b-button
-        id="zz"
-        class="blue-shadow square-btn"
-        variant="primary"
-        :disabled="disabled"
-        @click="acceptAmount"
-      >
+      <b-button id="zz" class="blue-shadow square-btn" variant="primary" :disabled="disabled" @click="acceptAmount">
         <b-icon :icon="'check2'"></b-icon>
       </b-button>
-      <b-button
-        id="zz"
-        class="blue-shadow square-btn"
-        variant="primary"
-        :disabled="disabled"
-        @click="discardAmount"
-      >
+      <b-button id="zz" class="blue-shadow square-btn" variant="primary" :disabled="disabled" @click="discardAmount">
         <b-icon :icon="'x'"></b-icon>
       </b-button>
     </div>
@@ -72,6 +60,7 @@ export default {
 
   button {
     margin: auto 0.5rem;
+    max-height: 1.4rem;
   }
 }
 </style>

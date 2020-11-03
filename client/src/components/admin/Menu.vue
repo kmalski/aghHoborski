@@ -11,12 +11,7 @@
       >
         {{ category.name }}
         <ul class="inner-ul" v-show="category.isActive">
-          <li
-            v-for="action in category.actions"
-            :key="action.name"
-            class="inner-li"
-            @click.stop="dummy"
-          >
+          <li v-for="action in category.actions" :key="action.name" class="inner-li" @click.stop="action.action">
             {{ action.name }}
           </li>
         </ul>
@@ -25,30 +20,41 @@
     <b-button class="blue-shadow menu__btn" variant="primary" @click="logout">
       Wyloguj
     </b-button>
+    <app-question-uploader :id="uploaderId"></app-question-uploader>
+    <app-question-selector :id="selectorId"></app-question-selector>
   </section>
 </template>
 
 <script>
+import QuestionUploader from '@/components/admin/QuestionUploader';
+import QuestionSelector from '@/components/admin/QuestionSelector';
+
 export default {
   name: 'Menu',
   data() {
     return {
+      uploaderId: 'uploader',
+      selectorId: 'selector',
       actionCategories: [
         {
           name: 'Licytacja',
           isActive: false,
           actions: [
             {
-              name: 'Zacznij licytację'
+              name: 'Zacznij licytację',
+              action: this.dummy
             },
             {
-              name: 'Zakończ licytację: wybierz kategorię'
+              name: 'Zakończ licytację: wybierz kategorię',
+              action: this.dummy
             },
             {
-              name: 'Zakończ licytację: wygrano podpowiedź'
+              name: 'Zakończ licytację: wygrano podpowiedź',
+              action: this.dummy
             },
             {
-              name: 'Zakończ licytację: wygrano czarną skrzynkę'
+              name: 'Zakończ licytację: wygrano czarną skrzynkę',
+              action: this.dummy
             }
           ]
         },
@@ -57,13 +63,16 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Wygrali rundę'
+              name: 'Wygrali rundę',
+              action: this.dummy
             },
             {
-              name: 'Przegrali rundę'
+              name: 'Przegrali rundę',
+              action: this.dummy
             },
             {
-              name: 'Rozpocznij nową rundę'
+              name: 'Rozpocznij nową rundę',
+              action: this.dummy
             }
           ]
         },
@@ -72,10 +81,12 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Zużyj podpowiedź'
+              name: 'Zużyj podpowiedź',
+              action: this.dummy
             },
             {
-              name: 'Rozpocznij licytację o podpowiedź'
+              name: 'Rozpocznij licytację o podpowiedź',
+              action: this.dummy
             }
           ]
         },
@@ -84,10 +95,30 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Zacznij 1:1'
+              name: 'Zacznij 1:1',
+              action: this.dummy
             },
             {
-              name: 'Zacznij mistrzów'
+              name: 'Zacznij mistrzów',
+              action: this.dummy
+            }
+          ]
+        },
+        {
+          name: 'Ustawienia',
+          isActive: false,
+          actions: [
+            {
+              name: 'Dodaj własne pytania',
+              action: this.uploadQuestions
+            },
+            {
+              name: 'Wybierz pytania spośród istniejących',
+              action: this.getAllQuestions
+            },
+            {
+              name: 'Pokaż aktualne ustawienia gry',
+              action: this.showGameSettings
             }
           ]
         }
@@ -95,11 +126,22 @@ export default {
     };
   },
   methods: {
-    dummy() {},
+    uploadQuestions() {
+      this.$bvModal.show(this.uploaderId);
+    },
+    getAllQuestions() {
+      this.$bvModal.show(this.selectorId);
+    },
+    showGameSettings() {},
     logout() {
       this.$router.push({ name: 'Login' });
       localStorage.removeItem('awanturaToken');
-    }
+    },
+    dummy() {}
+  },
+  components: {
+    AppQuestionUploader: QuestionUploader,
+    AppQuestionSelector: QuestionSelector
   }
 };
 </script>
