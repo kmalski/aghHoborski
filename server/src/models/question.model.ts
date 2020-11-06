@@ -56,6 +56,7 @@ class QuestionInternal {
 class QuestionSetInternal {
   public name: string;
   public categories: Map<string, QuestionInternal[]>;
+  public currentQuestion: QuestionInternal;
 
   constructor(name: string, categories: CategorySchema[]) {
     this.name = name;
@@ -71,6 +72,11 @@ class QuestionSetInternal {
     const categories = this.categories.get(categoryName);
     const question = categories.find(quest => !quest.used);
     question.markUsed();
+    this.currentQuestion = question;
     return question;
+  }
+
+  public getCurrentQuestion() {
+    return this.currentQuestion;
   }
 }

@@ -3,19 +3,18 @@ import { RoomShared } from '../models/room.model';
 import { Incoming } from '../utils/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import { normalizeString } from '../utils';
-import { join, create, adminJoin, getState, adminGetState } from '../services/room.service';
+import { join, create, adminJoin, adminGetState } from '../services/room.service';
 
 export { listen };
 
 function listen(io: Server, socket: UserSocket) {
-  socket.on(Incoming.CREATE_ROOM, room => create(normalize(room), socket));
-  socket.on(Incoming.JOIN_ROOM, room => join(normalize(room), socket));
-  socket.on(Incoming.ADMIN_JOIN_ROOM, room => adminJoin(normalize(room), socket));
-  socket.on(Incoming.GET_STATE, room => getState(normalize(room), socket));
-  socket.on(Incoming.ADMIN_GET_STATE, room => adminGetState(normalize(room), socket));
+  socket.on(Incoming.CREATE_ROOM, roomData => create(normalize(roomData), socket));
+  socket.on(Incoming.JOIN_ROOM, roomData => join(normalize(roomData), socket));
+  socket.on(Incoming.ADMIN_JOIN_ROOM, roomData => adminJoin(normalize(roomData), socket));
+  socket.on(Incoming.ADMIN_GET_STATE, roomData => adminGetState(normalize(roomData), socket));
 }
 
-function normalize(room: RoomShared): RoomShared {
-  room.name = normalizeString(room.name);
-  return room;
+function normalize(roomData: RoomShared): RoomShared {
+  roomData.name = normalizeString(roomData.name);
+  return roomData;
 }

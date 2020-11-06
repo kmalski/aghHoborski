@@ -13,7 +13,11 @@ enum Outgoing {
   STATE = 'state',
 
   // questions
-  ALL_QUESTION_SETS = 'allQuestionSets'
+  ALL_QUESTION_SETS = 'allQuestionSets',
+
+  // game
+  BLACK_BOX_GRANTED = 'blackBoxGranted',
+  BLACK_BOX_REMOVED = 'blackBoxRemoved'
 }
 
 enum Incoming {
@@ -30,5 +34,9 @@ enum Incoming {
   // questions
   ADD_QUESTION_SET = 'addQuestionSet',
   GET_ALL_QUESTION_SETS = 'getAllQuestionSets',
-  CHANGE_QUESTION_SET = 'changeQuestionSet'
+  CHANGE_QUESTION_SET = 'changeQuestionSet',
+
+  // game
+  GRANT_BLACK_BOX = 'grantBlackBox',
+  REMOVE_BLACK_BOX = 'removeBlackBox'
 }

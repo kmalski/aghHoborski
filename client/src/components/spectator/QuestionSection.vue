@@ -38,6 +38,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../scss/main.scss';
+
 .question-section {
   display: flex;
   flex-direction: column;
@@ -47,6 +49,7 @@ export default {
   width: 90%;
   overflow: hidden;
   border-radius: 25px;
+  color: $font-color;
 }
 
 .question {
@@ -55,8 +58,7 @@ export default {
   font-size: 2rem;
 
   &__category {
-    background-color: whitesmoke;
-    color: black;
+    background-color: $neutral-color;
   }
 
   &__content {

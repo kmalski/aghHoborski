@@ -1,4 +1,4 @@
-export { normalizeString, generateToken, shuffle };
+export { normalizeString, generateToken, shuffle, mapMax };
 
 function normalizeString(str: string): string {
   if (str == null) return null;
@@ -21,4 +21,8 @@ function shuffle(array: any[]) {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+}
+
+function mapMax(map: Map<any, number>): [any, number] {
+  return [...map.entries()].reduce((x, y) => (x[1] > y[1] ? x : y));
 }

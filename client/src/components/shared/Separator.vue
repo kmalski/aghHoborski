@@ -11,18 +11,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../scss/main.scss';
+
 .separator {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: black;
+  background-color: $separator-background-color;
 
   * {
     text-align: center;
     margin: 0.25rem auto;
-    color: white;
+    color: $separator-font-color;
   }
 }
 </style>

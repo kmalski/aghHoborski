@@ -5,37 +5,37 @@ import { QuestionSetModel, QuestionSetInternal, QuestionSetShared } from '../mod
 
 export { addQuestionSet, getAllQuestionSets, changeQuestionSet };
 
-async function addQuestionSet(questionSet: QuestionSetShared, socket: UserSocket) {
-  const dbQuestionSet = await QuestionSetModel.findOne({ name: questionSet.name });
+async function addQuestionSet(questionData: QuestionSetShared, socket: UserSocket) {
+  const questionSet = await QuestionSetModel.findOne({ name: questionData.name });
 
-  if (dbQuestionSet) {
-    return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${questionSet.name} już istnieje.`);
+  if (questionSet) {
+    return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${questionData.name} już istnieje.`);
   }
 
-  const data = JSON.parse(questionSet.file);
-  const questions = await QuestionSetModel.create({ name: questionSet.name, categories: data.categories });
-  await questions.save();
+  const data = JSON.parse(questionData.file);
+  const questionSetDb = await QuestionSetModel.create({ name: questionData.name, categories: data.categories });
+  await questionSetDb.save();
 
-  await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions });
+  await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
-  socket.room.questions = new QuestionSetInternal(questionSet.name, data.categories);
+  socket.room.questions = new QuestionSetInternal(questionData.name, data.categories);
   socket.emit(Outgoing.SUCCESS);
 }
 
 async function getAllQuestionSets(socket: UserSocket) {
-  const questionSets = await QuestionSetModel.find().select('name createdAt -_id');
+  const questionSetDb = await QuestionSetModel.find().select('name createdAt -_id');
 
-  socket.emit(Outgoing.ALL_QUESTION_SETS, questionSets);
+  socket.emit(Outgoing.ALL_QUESTION_SETS, questionSetDb);
 }
 
-async function changeQuestionSet(questionSet: QuestionSetShared, socket: UserSocket) {
-  const dbQuestionSet = await QuestionSetModel.findOne({ name: questionSet.name });
-  if (!dbQuestionSet) {
-    return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${questionSet.name} nie istnieje.`);
+async function changeQuestionSet(questionData: QuestionSetShared, socket: UserSocket) {
+  const questionSetDb = await QuestionSetModel.findOne({ name: questionData.name });
+
+  if (!questionSetDb) {
+    return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${questionData.name} nie istnieje.`);
   }
+  await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
-  await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: dbQuestionSet });
-
-  socket.room.questions = new QuestionSetInternal(dbQuestionSet.name, dbQuestionSet.categories);
+  socket.room.questions = new QuestionSetInternal(questionSetDb.name, questionSetDb.categories);
   socket.emit(Outgoing.SUCCESS);
 }

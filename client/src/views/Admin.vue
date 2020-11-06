@@ -1,6 +1,5 @@
 <template>
   <section class="admin">
-    <app-status-icon />
     <app-menu></app-menu>
     <section class="admin__content">
       <app-timer></app-timer>
@@ -13,7 +12,7 @@
         <app-team-card team-name="Zieloni" variant="green"></app-team-card>
         <app-team-card team-name="Żółci" variant="yellow"></app-team-card>
         <app-team-card team-name="Czerwoni" variant="red"></app-team-card>
-        <app-team-card team-name="Mistrzowie" variant="master"></app-team-card>
+        <app-team-card team-name="Mistrzowie" variant="masters"></app-team-card>
       </div>
       <div class="admin__row to-left">
         <app-reset-card></app-reset-card>
@@ -21,6 +20,10 @@
         <app-bid-card :disabled="true"></app-bid-card>
       </div>
     </section>
+    <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
+      {{ msg }}
+    </b-alert>
+    <app-status-icon />
   </section>
 </template>
 
@@ -39,7 +42,8 @@ export default {
   name: 'Admin',
   data() {
     return {
-      example: ''
+      showAlert: false,
+      msg: ''
     };
   },
   created() {
@@ -61,7 +65,8 @@ export default {
       this.forceLogout(msg);
     },
     warning(msg) {
-      this.forceLogout(msg);
+      this.msg = msg;
+      this.showAlert = true;
     }
   },
   components: {
@@ -102,16 +107,6 @@ export default {
     flex-flow: row wrap;
     width: 100%;
     margin: 1rem auto;
-
-    // &__element {
-    //   display: flex;
-    //   flex-flow: column wrap;
-
-    //   * {
-    //     flex: 1 0 50%;
-    //     margin: 0.5rem;
-    //   }
-    // }
   }
 }
 </style>

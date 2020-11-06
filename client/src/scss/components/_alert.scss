@@ -1,5 +1,7 @@
 .alert-position {
   position: absolute !important;
   top: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
   width: 50%;
 }

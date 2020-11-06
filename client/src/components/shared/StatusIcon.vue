@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       reconnecting: false,
-      statusText: 'brak'
+      statusText: this.$socket.connected ? 'połączono' : 'rozłączono'
     };
   },
   sockets: {

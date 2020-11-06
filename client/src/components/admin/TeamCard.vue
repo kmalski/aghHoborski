@@ -39,7 +39,7 @@ export default {
       type: String,
       required: true,
       validator(value) {
-        return ['blue', 'green', 'yellow', 'red', 'master'].includes(value);
+        return ['blue', 'green', 'yellow', 'red', 'masters'].includes(value);
       }
     }
   },
@@ -69,7 +69,15 @@ export default {
       this.hasHint = !this.hasHint;
     },
     toggleBlackBox() {
-      this.hasBlackBox = !this.hasBlackBox;
+      if (this.hasBlackBox) {
+        this.$socket.client.emit('removeBlackBox', { teamName: this.variant }, confirmation => {
+          if (confirmation) this.hasBlackBox = false;
+        });
+      } else {
+        this.$socket.client.emit('grantBlackBox', { teamName: this.variant }, confirmation => {
+          if (confirmation) this.hasBlackBox = true;
+        });
+      }
     }
   }
 };

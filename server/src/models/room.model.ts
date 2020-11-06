@@ -1,5 +1,6 @@
 import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
 import { QuestionSetInternal, QuestionSetSchema } from './question.model';
+import { Game } from './game.model';
 import { generateToken } from '../utils';
 
 export { RoomModel, RoomShared, RoomInternal };
@@ -30,12 +31,14 @@ interface RoomShared extends Room {
 
 class RoomInternal implements Room {
   public name: string;
-  public token?: string;
+  public token: string;
+  public game: Game;
   public questions?: QuestionSetInternal;
 
   constructor(name: string) {
     this.name = name;
     this.token = generateToken();
+    this.game = new Game();
   }
 
   withToken() {
