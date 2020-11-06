@@ -73,6 +73,10 @@ export default {
             {
               name: 'Rozpocznij nową rundę',
               action: this.dummy
+            },
+            {
+              name: 'Pomiń pytanie',
+              action: this.dummy
             }
           ]
         },
@@ -109,11 +113,11 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Dodaj własne pytania',
+              name: 'Dodaj własną pule pytań',
               action: this.uploadQuestions
             },
             {
-              name: 'Wybierz pytania spośród istniejących',
+              name: 'Wybierz pule pytań spośród istniejących',
               action: this.getAllQuestions
             },
             {

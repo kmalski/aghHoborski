@@ -38,25 +38,7 @@ export default {
 @import '../../scss/main.scss';
 
 .hint-card {
-  @extend .base-card;
-
-  display: flex;
-  flex-flow: column wrap;
-  align-items: center;
-  justify-content: center;
-  max-height: fit-content;
-  max-width: 15vw;
-  margin: auto;
-
-  * {
-    margin: 0.2rem auto;
-  }
-
-  label {
-    text-align: left;
-    width: 100%;
-    font-weight: 500;
-  }
+  @extend .small-card;
 
   button {
     margin: auto 0.5rem;

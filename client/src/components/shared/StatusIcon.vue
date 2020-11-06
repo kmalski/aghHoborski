@@ -1,5 +1,9 @@
 <template>
-  <div class="status-icon status-icon__position">
+  <div
+    v-b-tooltip.hover
+    :title="`Status połączenia z serwerem (${statusText})`"
+    class="status-icon status-icon__position"
+  >
     <b-icon v-if="$socket.connected && !reconnecting" icon="check-circle" font-scale="1.5"></b-icon>
     <b-icon v-if="reconnecting" icon="arrow-clockwise" animation="spin" font-scale="1.5"></b-icon>
     <b-icon v-if="!$socket.connected && !reconnecting" icon="x-circle" font-scale="1.5"></b-icon>
@@ -11,17 +15,21 @@ export default {
   name: 'StatusIcon',
   data() {
     return {
-      reconnecting: false
+      reconnecting: false,
+      statusText: 'brak'
     };
   },
   sockets: {
     connect() {
+      this.statusText = 'połączono';
       this.reconnecting = false;
     },
     reconnecting() {
+      this.statusText = 'próba odnowienia';
       this.reconnecting = true;
     },
     disconnect() {
+      this.statusText = 'rozłączono';
       this.reconnecting = false;
     }
   }

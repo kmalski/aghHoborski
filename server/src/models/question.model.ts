@@ -1,6 +1,7 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
+import { shuffle } from '../utils';
 
-export { QuestionSetModel, QuestionSetSchema, QuestionSetInternal, QuestionSetShared };
+export { QuestionSetModel, QuestionSetSchema, QuestionSetInternal, QuestionSetShared, QuestionInternal };
 
 class QuestionSchema {
   @prop()
@@ -30,25 +31,46 @@ const QuestionSetModel = getModelForClass(QuestionSetSchema, {
   schemaOptions: { collection: 'questions', timestamps: true }
 });
 
-class QuestionInternal {
-  public content!: string;
-
-  public hints!: string[];
-}
-
-class CategoryInternal {
-  public name!: string;
-
-  public questions!: QuestionInternal[];
-}
-
-class QuestionSetInternal {
-  public name!: string;
-
-  public categories!: CategoryInternal[];
-}
-
 interface QuestionSetShared {
   name: string;
   file?: any;
+}
+
+class QuestionInternal {
+  public content: string;
+  public hints: string[];
+  public answer: string;
+  public used: boolean = false;
+
+  constructor(content: string, hints: string[]) {
+    this.content = content;
+    this.answer = hints[0];
+    this.hints = shuffle(hints);
+  }
+
+  public markUsed() {
+    this.used = true;
+  }
+}
+
+class QuestionSetInternal {
+  public name: string;
+  public categories: Map<string, QuestionInternal[]>;
+
+  constructor(name: string, categories: CategorySchema[]) {
+    this.name = name;
+    this.categories = new Map(
+      categories.map(i => {
+        const questions = i.questions.map(quest => new QuestionInternal(quest.content, quest.hints));
+        return [i.name, shuffle(questions)];
+      })
+    );
+  }
+
+  public getNextQuestion(categoryName: string) {
+    const categories = this.categories.get(categoryName);
+    const question = categories.find(quest => !quest.used);
+    question.markUsed();
+    return question;
+  }
 }

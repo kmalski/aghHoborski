@@ -18,7 +18,7 @@ async function addQuestionSet(questionSet: QuestionSetShared, socket: UserSocket
 
   await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions });
 
-  socket.room.questions = { name: questionSet.name, categories: data.categories };
+  socket.room.questions = new QuestionSetInternal(questionSet.name, data.categories);
   socket.emit(Outgoing.SUCCESS);
 }
 
@@ -36,6 +36,6 @@ async function changeQuestionSet(questionSet: QuestionSetShared, socket: UserSoc
 
   await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: dbQuestionSet });
 
-  socket.room.questions = { name: dbQuestionSet.name, categories: dbQuestionSet.categories };
+  socket.room.questions = new QuestionSetInternal(dbQuestionSet.name, dbQuestionSet.categories);
   socket.emit(Outgoing.SUCCESS);
 }

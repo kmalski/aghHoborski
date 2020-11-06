@@ -1,5 +1,5 @@
 <template>
-  <b-modal class="question-selector" :id="id" hide-footer title="Wybierz pytania">
+  <b-modal class="question-selector" :id="id" hide-footer size="lg" title="Wybierz pytania">
     <b-alert class="modal-alert" v-model="showAlert" variant="warning" dismissible>
       {{ msg }}
     </b-alert>

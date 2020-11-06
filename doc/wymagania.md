@@ -19,11 +19,11 @@ Aplikacja powinna posiadać trzy widoki:
 - wyświetlenie podpowiedzi, kwota za podpowiedź, akceptacja kwoty za podpowiedź
 - zwiększenie puli licytacji
 - importowanie pytań (kilka obsługiwanych formatów, były z tym problemy)
+- dodanie bazy danych i możliwość odtworzenia stanu niezakończonej gry
 
 Teleturniej do tej pory przeprowadzany był w następujący sposób. Każda z drużyn otrzymywała laptopa z widokiem obserwującego bez możliwości interakcji. Ten sam widok wyświetlany był projektem na sali. Operator teleturnieju siedział pośród widzów i słuchając prowadzącego podbijał kwoty licytacji danej drużyny, wyświetlał pytania, resetował liczniki, eliminował kategorie itd. Niestety zdarzało się bardzo wiele błędów: niejasne licytacje, błędy drużyn w licytacji, problemy z cofaniem kwot (co nie było do końca możliwe) przez co konieczne było mówienie widzom, że wyświetlana kwota jest niepoprawna.
 
 Opcjonalnie do zrobienia w przyszłości lub gdy wystarczy czasu:
 - podbicie wersji Vue do Vue 3 (w zależności czy użyte biblioteki rozpoczną wsparcie dla najnowszej wersji)
-- dostowanie do wersji mobilnej przeglądarki
-- dodanie bazy danych i możliwość odtworzenia stanu niezakończonej gry
+- dostosowanie do wersji mobilnej przeglądarki
 - dodanie opcji licytacji przez graczy, co za tym idzie dodatkowe pola, możliwość wpisywania kwot, wybór odpowiedzi, eliminacja kategorii w grze 1:1, obsługa podpowiedzi

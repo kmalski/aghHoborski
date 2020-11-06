@@ -45,15 +45,16 @@ export default {
 .timer {
   @extend .base-card;
 
-  position: relative;
+  position: absolute;
   top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   max-height: fit-content;
   width: fit-content;
-  margin: auto;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 
