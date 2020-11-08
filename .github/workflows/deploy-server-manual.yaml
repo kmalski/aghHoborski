@@ -7,10 +7,10 @@ on:
         description: Branch to build
         default: master
         required: true
-      # tests:
-      #   description: To run tests or not
-      #   default: true
-      #   required: true
+      tests:
+        description: To run tests or not
+        default: true
+        required: true
       server-port:
         description: Port to start server
         default: 2222
@@ -24,6 +24,9 @@ env:
 jobs:
   setup-workspace:
     runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: server
 
     steps:
       - name: Checkout to specified branch
@@ -31,9 +34,14 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-  build:
+      - name: Update dependencies
+        run: |
+          npm ci
+
+  tests:
     needs: [setup-workspace]
     runs-on: self-hosted
+    if: ${{ github.event.inputs.tests }}
     defaults:
       run:
         working-directory: server
@@ -44,9 +52,23 @@ jobs:
         with:
           node-version: 12.x
 
-      - name: Update dependencies
+      - name: Run tests
         run: |
-          npm ci
+          npm run test
+
+  build:
+    needs: [setup-workspace, tests]
+    runs-on: self-hosted
+    if: ${{ always() }} # run build after tests but do not care about result
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
 
       - name: Build server
         run: |

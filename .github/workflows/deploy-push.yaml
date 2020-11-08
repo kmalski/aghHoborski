@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-  build-server:
+  server-tests:
     needs: [setup-workspace]
     runs-on: self-hosted
     defaults:
@@ -34,6 +34,23 @@ jobs:
       - name: Update dependencies
         run: |
           npm ci
+
+      - name: Run tests
+        run: |
+          npm run test
+
+  build-server:
+    needs: [setup-workspace, server-tests]
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
 
       - name: Build server
         run: |

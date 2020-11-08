@@ -2,6 +2,7 @@
 node_modules
 /build
 /dist
+/mongo
 
 # local env files
 .env
