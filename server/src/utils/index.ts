@@ -3,7 +3,7 @@ export { normalizeString, generateToken, shuffle, mapMax };
 function normalizeString(str: string): string {
   if (str == null) return null;
 
-  return str.trim().toLowerCase();
+  return str.trim().replace(/\s+/g, '');
 }
 
 function rand(): string {

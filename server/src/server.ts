@@ -28,21 +28,20 @@ class ClashServer {
     this.io = SocketIO(this.server, { serveClient: false });
   }
 
-  start(port?: number) {
+  async start(port?: number) {
     this.configure();
     if (port) {
-      this.server.listen(port, () => console.log(`[INFO] Server listening at port ${port}`));
+      await this.listen(port);
       this.port = port;
     } else {
-      this.server.listen(0, () => {
-        this.port = (this.server.address() as AddressInfo).port;
-        console.log(`[INFO] Server listening at port ${this.port}`);
-      });
+      await this.listen(0);
+      this.port = (this.server.address() as AddressInfo).port;
     }
+    console.log(`[INFO] Server listening at port ${this.port}`);
   }
 
-  stop() {
-    this.server.close(() => console.log(`[INFO] Server stopped`));
+  async stop() {
+    await this.close();
   }
 
   async connectMongo(uri: string) {
@@ -77,6 +76,14 @@ class ClashServer {
     this.app.use((_req: Request, res: Response, _next: NextFunction) => {
       res.status(404).sendFile(path.join(__dirname, '/../public/index.html'));
     });
+  }
+
+  private async listen(port: number) {
+    return new Promise(resolve => this.server.listen(port, () => resolve()));
+  }
+
+  private async close() {
+    return new Promise(resolve => this.server.close(() => resolve()));
   }
 }
 
