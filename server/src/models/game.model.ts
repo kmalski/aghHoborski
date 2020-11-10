@@ -4,15 +4,21 @@ export { Game, GameShared };
 
 interface GameShared {
   teamName: string;
+  newAmount?: number;
+  newBalance?: number;
+  newCount?: number;
+  newMoneyPool?: number
   desiredState?: boolean;
+  finishAuctionAction?: string;
 }
 
 class Game {
   public activeTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public inactiveTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public moneyPool: number = 0;
+  public isAuction: boolean = false;
   public hintAmount: number = 0;
-  public answeringTeam?: Team;
+  public auctionWinningTeam?: Team;
 
   constructor() {
     for (const name in TeamName) {
@@ -29,72 +35,119 @@ class Game {
         this.moneyPool += team.startAuction();
       }
     });
-
+    this.auctionWinningTeam = null;
+    this.isAuction = true;
     return this.moneyPool;
   }
 
-  bidAmount(team: TeamName, amount: number) {
-    this.moneyPool += amount;
-    this.activeTeams.get[team].bidAmount(amount);
+  finishAuction() {
+    this.isAuction = false;
+    return this.auctionWinningTeam;
   }
 
-  finishAuction() {
-    this.answeringTeam = this.findAuctionWinningTeam();
-    return this.answeringTeam;
+  cancelAuction() {
+    this.isAuction = false;
+    this.auctionWinningTeam = null;
+    this.activeTeams.forEach(team => {
+      this.moneyPool -= team.auctionAmount;
+      team.accountBalance += team.auctionAmount;
+    });
+  }
+
+  bidAmount(teamName: TeamName, amount: number) {
+    const team = this.activeTeams.get(teamName);
+    if (team.allMoney() >= amount && (!this.auctionWinningTeam || amount > this.auctionWinningTeam.auctionAmount)) {
+      this.auctionWinningTeam = team;
+      this.moneyPool += team.bidAmount(amount);
+      return true;
+    }
+    return false;
   }
 
   correctAnswer() {
-    this.answeringTeam.grantPrize(this.moneyPool);
-    this.answeringTeam = null;
+    this.auctionWinningTeam.grantPrize(this.moneyPool);
+    this.auctionWinningTeam = null;
     this.moneyPool = 0;
   }
 
   wrongAnswer() {
-    if (this.answeringTeam.accountBalance === 0) {
-      this.activeTeams.delete(this.answeringTeam.name);
+    if (this.auctionWinningTeam.accountBalance < 300) {
+      this.activeTeams.delete(this.auctionWinningTeam.name);
     }
-    this.answeringTeam = null;
+    this.auctionWinningTeam = null;
+  }
+
+  noAnswerNeeded() {
+    if (this.auctionWinningTeam.accountBalance < 300) {
+      this.activeTeams.delete(this.auctionWinningTeam.name);
+    }
+    this.auctionWinningTeam = null;
+    this.moneyPool = 0;
   }
 
   startSecondRound() {
     const winningTeam = this.findWinningTeam();
+    this.activeTeams.delete(winningTeam.name);
+    this.inactiveTeams = new Map([...this.inactiveTeams, ...this.activeTeams]);
     this.activeTeams = new Map<TeamName, Team>();
     this.activeTeams.set(winningTeam.name, winningTeam);
-    this.activeTeams.set(TeamName.MASTERS, new Team(TeamName.MASTERS));
+    this.moveToActive(TeamName.MASTERS);
     this.activeTeams.get(TeamName.MASTERS).accountBalance = 10000;
   }
 
-  changeBlackBox(team: TeamName, hasBlackBox: boolean) {
-    this.activeTeams.get(team).hasBlackBox = hasBlackBox;
+  changeBlackBox(teamName: TeamName, hasBlackBox: boolean) {
+    this.activeTeams.get(teamName).hasBlackBox = hasBlackBox;
   }
 
-  changeTeamStatus(team: TeamName, inGame: boolean) {
+  changeTeamStatus(teamName: TeamName, inGame: boolean) {
     if (!inGame) {
-      return this.moveToInactive(team);
+      return this.moveToInactive(teamName);
     }
-    return this.moveToActive(team);
+    return this.moveToActive(teamName);
   }
 
-  isInGame(team: TeamName) {
-    return this.activeTeams.get(team) != null;
+  isInGame(teamName: TeamName) {
+    return this.activeTeams.get(teamName) != null;
   }
 
-  exists(team: TeamName) {
-    return this.activeTeams.get(team) != null || this.inactiveTeams.get(team) != null;
+  exists(teamName: TeamName) {
+    return this.activeTeams.get(teamName) != null || this.inactiveTeams.get(teamName) != null;
   }
 
-  private moveToInactive(team: TeamName) {
-    const teamObj = this.activeTeams.get(team);
-    this.inactiveTeams.set(team, teamObj);
-    this.activeTeams.delete(team);
-    return teamObj;
+  isAnsweringStage() {
+    return this.auctionWinningTeam && !this.isAuction;
   }
 
-  private moveToActive(team: TeamName) {
-    const teamObj = this.inactiveTeams.get(team);
-    this.activeTeams.set(team, teamObj);
-    this.inactiveTeams.delete(team);
-    return teamObj;
+  auctionAmount(teamName: TeamName) {
+    const team = this.activeTeams.get(teamName);
+    if (team) return team.auctionAmount;
+    return 0;
+  }
+
+  accountBalance(teamName: TeamName) {
+    const team = this.activeTeams.get(teamName);
+    if (team) return team.accountBalance;
+    return 0;
+  }
+
+  hintsCount(teamName: TeamName) {
+    const team = this.activeTeams.get(teamName);
+    if (team) return team.hintsCount;
+    return 0;
+  }
+
+  private moveToInactive(teamName: TeamName) {
+    const team = this.activeTeams.get(teamName);
+    this.inactiveTeams.set(teamName, team);
+    this.activeTeams.delete(teamName);
+    return team;
+  }
+
+  private moveToActive(teamName: TeamName) {
+    const team = this.inactiveTeams.get(teamName);
+    this.activeTeams.set(teamName, team);
+    this.inactiveTeams.delete(teamName);
+    return team;
   }
 
   private findAuctionWinningTeam() {

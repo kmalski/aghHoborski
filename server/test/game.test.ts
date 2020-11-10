@@ -46,6 +46,7 @@ describe('Test game socket events', function () {
       data.hasBlackBox.should.be.equal(false);
       data.hintsCount.should.be.equal(0);
       data.inGame.should.be.equal(true);
+      data.isAuction.should.be.equal(false);
       should.not.exist(data.auctionAmount);
       done();
     });
@@ -67,6 +68,7 @@ describe('Test game socket events', function () {
       data.hasBlackBox.should.be.equal(false);
       data.hintsCount.should.be.equal(0);
       data.inGame.should.be.equal(false);
+      data.isAuction.should.be.equal(false);
       should.not.exist(data.auctionAmount);
       done();
     });
@@ -93,6 +95,132 @@ describe('Test game socket events', function () {
     client.once('redBlackBoxChanged', (data: any) => {
       data.state.should.be.equal(false);
       done();
+    });
+  });
+
+  it('Fail to change black box status of inactive team', function (done) {
+    client.emit('changeBlackBox', { teamName: 'masters', desiredState: false });
+    client.once('warning', (msg: any) => {
+      msg.should.be.equal('Zmiana czarnej skrzynki jest w tym momencie niedozwolona.');
+      done();
+    });
+  });
+
+  it('Fail to change black box status with invalid data', function (done) {
+    client.emit('changeBlackBox', { teamName: 'red', desiredState: 'dsa' });
+    client.once('warning', (msg: any) => {
+      msg.should.be.equal('Zmiana czarnej skrzynki jest w tym momencie niedozwolona.');
+      done();
+    });
+  });
+
+  it('Change account balance', function (done) {
+    client.emit('changeAccountBalance', { teamName: 'yellow', newBalance: 6000 });
+    client.once('yellowAccountBalanceChanged', (data: any) => {
+      data.accountBalance.should.be.equal(6000);
+      done();
+    });
+  });
+
+  it('Fail to change account balance of inactive team', function (done) {
+    client.emit('changeAccountBalance', { teamName: 'masters', newBalance: 6000 });
+    client.once('warning', (msg: any) => {
+      msg.should.be.equal('Zmiana stanu konta na 6000 jest w tym momencie niedozwolona.');
+      done();
+    });
+  });
+
+  it('Change hints count', function (done) {
+    client.emit('changeHintsCount', { teamName: 'blue', newCount: 2 });
+    client.once('blueHintsCountChanged', (data: any) => {
+      data.hintsCount.should.be.equal(2);
+      done();
+    });
+  });
+
+  it('Fail to change hints count with invalid data', function (done) {
+    client.emit('changeHintsCount', { teamName: 'blue', newCount: 'dsa' });
+    client.once('warning', (msg: any) => {
+      msg.should.be.equal('Zmiana ilości podpowiedzi na dsa jest w tym momencie niedozwolona.');
+      done();
+    });
+  });
+
+  it('Auction with black box as prize', function (done) {
+    client.emit('startAuction');
+    client.once('auctionStarted', () => {
+      client.once('yellowAuctionAmountChanged', (data: any) => {
+        data.auctionAmount.should.be.equal(200);
+        client.emit('changeAuctionAmount', { teamName: 'yellow', newAmount: 500 });
+        client.once('yellowAuctionAmountChanged', (data: any) => {
+          data.auctionAmount.should.be.equal(500);
+          client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 500 });
+          client.emit('changeAuctionAmount', { teamName: 'red', newAmount: 600 });
+          client.once('redAuctionAmountChanged', (data: any) => {
+            data.auctionAmount.should.be.equal(600);
+            client.emit('finishAuction', { finishAuctionAction: 'grantBlackBox' });
+            client.once('redBlackBoxChanged', (data: any) => {
+              data.state.should.be.equal(true);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+  it('Auction with hint prize', function (done) {
+    client.emit('resetAccountBalances', { newBalance: 5000 });
+    client.once('greenAccountBalanceChanged', (data: any) => {
+      data.accountBalance.should.be.equal(5000);
+      client.emit('startAuction');
+      client.once('auctionStarted', () => {
+        client.once('greenAuctionAmountChanged', (data: any) => {
+          data.auctionAmount.should.be.equal(200);
+          client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 4000 });
+          client.once('blueAuctionAmountChanged', (data: any) => {
+            data.auctionAmount.should.be.equal(4000);
+            client.emit('changeAuctionAmount', { teamName: 'green', newAmount: 4100 });
+            client.once('greenAuctionAmountChanged', (data: any) => {
+              data.auctionAmount.should.be.equal(4100);
+              client.emit('finishAuction', { finishAuctionAction: 'grantHint' });
+              client.once('greenHintsCountChanged', (data: any) => {
+                data.hintsCount.should.be.equal(1);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  it('Auction with canceling', function (done) {
+    client.emit('resetAccountBalances', { newBalance: 5000 });
+    client.once('greenAccountBalanceChanged', (data: any) => {
+      data.accountBalance.should.be.equal(5000);
+      client.emit('startAuction');
+      client.once('auctionStarted', () => {
+        client.once('greenAuctionAmountChanged', (data: any) => {
+          data.auctionAmount.should.be.equal(200);
+          client.emit('changeAuctionAmount', { teamName: 'green', newAmount: 3000 });
+          client.once('greenAuctionAmountChanged', (data: any) => {
+            data.auctionAmount.should.be.equal(3000);
+            client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 3100 });
+            client.once('blueAuctionAmountChanged', (data: any) => {
+              data.auctionAmount.should.be.equal(3100);
+              client.emit('cancelAuction');
+              client.once('roundFinished', () => {
+                client.emit('getMoneyPool');
+                client.once('moneyPool', (data: any) => {
+                  data.moneyPool.should.be.equal(0);
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
     });
   });
 });

@@ -18,7 +18,24 @@ export default {
       example: ''
     };
   },
-  sockets: {},
+  created() {
+    this.$socket.client.emit('joinRoom', {
+      name: this.$route.params.room
+    });
+  },
+  methods: {
+    returnHome(msg) {
+      this.$router.push({
+        name: 'Home',
+        params: { initialShowAlert: true, initialMsg: msg }
+      });
+    }
+  },
+  sockets: {
+    warning(msg) {
+      this.returnHome(msg);
+    }
+  },
   components: {
     AppStatusIcon: StatusIcon,
     AppQuestionSection: QuestionSection,

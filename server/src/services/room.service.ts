@@ -38,7 +38,7 @@ async function create(roomData: RoomShared, socket: UserSocket) {
   });
 }
 
-function join(roomData: RoomShared, socket: UserSocket) {
+function join(roomData: RoomShared, socket: UserSocket, io: Server) {
   if (!roomData.name) {
     return socket.emit(Outgoing.WARNING, `Błędne dane.`);
   }
@@ -50,10 +50,11 @@ function join(roomData: RoomShared, socket: UserSocket) {
     return socket.emit(Outgoing.WARNING, `Podany pokój nie istnieje lub gra nie jest aktywna.`);
   }
 
-  // TODO: normal user should not have access to token, not big deal bcs not exposed in API
   socket.room = room;
   socket.join(socket.room.name);
   socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name });
+
+  game.listen(io, socket);
 }
 
 async function adminJoin(roomData: RoomShared, socket: UserSocket) {
@@ -101,4 +102,5 @@ function authorize(roomData: RoomShared, socket: UserSocket, io: Server) {
 
   // now we are sure that only authorized sockets will be able to emit game events
   game.listen(io, socket);
+  game.listenAdmin(io, socket);
 }

@@ -15,6 +15,7 @@ interface TeamShared {
   hasBlackBox: boolean;
   hintsCount: number;
   inGame?: boolean;
+  isAuction?: boolean;
 }
 
 class Team {
@@ -28,6 +29,10 @@ class Team {
     this.name = name;
   }
 
+  allMoney() {
+    return this.accountBalance + this.auctionAmount;
+  }
+
   startAuction() {
     this.accountBalance -= 200;
     this.auctionAmount = 200;
@@ -36,15 +41,24 @@ class Team {
   }
 
   bidAmount(amount: number) {
-    this.accountBalance -= amount;
-    this.auctionAmount += amount;
+    const amountDiff = amount - this.auctionAmount;
+    this.accountBalance -= amountDiff;
+    this.auctionAmount += amountDiff;
+    return amountDiff;
   }
 
   grantPrize(amount: number) {
     this.accountBalance += amount;
+    return this.accountBalance;
   }
 
   grantHint() {
     this.hintsCount += 1;
+    return this.hintsCount;
+  }
+
+  grantBlackBox() {
+    this.hasBlackBox = true;
+    return this.hasBlackBox;
   }
 }

@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import socket from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
+import VueShortkey from 'vue-shortkey';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 const serverAddress = process.env.VUE_APP_SERVER_ADDRESS || 'https://awantura-server.malski.pl';
@@ -14,6 +15,7 @@ const io = socket(serverAddress, {
 Vue.use(VueSocketIOExt, io, { store });
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.use(VueShortkey);
 
 new Vue({
   router,

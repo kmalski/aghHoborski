@@ -8,33 +8,39 @@
         <app-one-on-one-card :disabled="true"></app-one-on-one-card>
       </div>
       <div class="admin__row">
-        <app-team-card team-name="Niebiescy" variant="blue"></app-team-card>
-        <app-team-card team-name="Zieloni" variant="green"></app-team-card>
-        <app-team-card team-name="Żółci" variant="yellow"></app-team-card>
-        <app-team-card team-name="Czerwoni" variant="red"></app-team-card>
-        <app-team-card team-name="Mistrzowie" variant="masters"></app-team-card>
+        <app-team-card team-name="Niebiescy" variant="blue" shortcut="1"></app-team-card>
+        <app-team-card team-name="Zieloni" variant="green" shortcut="2"></app-team-card>
+        <app-team-card team-name="Żółci" variant="yellow" shortcut="3"></app-team-card>
+        <app-team-card team-name="Czerwoni" variant="red" shortcut="4"></app-team-card>
+        <app-team-card team-name="Mistrzowie" variant="masters" shortcut="5"></app-team-card>
       </div>
       <div class="admin__row to-left">
         <app-reset-card></app-reset-card>
         <app-hint-card :disabled="true"></app-hint-card>
-        <app-bid-card :disabled="true"></app-bid-card>
+        <app-money-pool-card></app-money-pool-card>
       </div>
+      <b-alert
+        class="alert-position"
+        variant="warning"
+        dismissible
+        :show="alert.dismissCountDown"
+        @dismiss-count-down="countDownChanged"
+      >
+        {{ alert.msg }}
+      </b-alert>
     </section>
-    <b-alert class="alert-position" v-model="showAlert" variant="warning" dismissible>
-      {{ msg }}
-    </b-alert>
     <app-status-icon />
   </section>
 </template>
 
 <script>
-import StatusIcon from '@/components/shared/StatusIcon.vue';
+import MoneyPoolCard from '@/components/admin/MoneyPoolCard';
 import CategoryCard from '@/components/admin/CategoryCard';
 import OneOnOneCard from '@/components/admin/OneOnOneCard';
+import StatusIcon from '@/components/shared/StatusIcon';
 import ResetCard from '@/components/admin/ResetCard';
 import HintCard from '@/components/admin/HintCard';
 import TeamCard from '@/components/admin/TeamCard';
-import BidCard from '@/components/admin/BidCard';
 import Timer from '@/components/admin/Timer';
 import Menu from '@/components/admin/Menu';
 
@@ -42,8 +48,10 @@ export default {
   name: 'Admin',
   data() {
     return {
-      showAlert: false,
-      msg: ''
+      alert: {
+        msg: '',
+        dismissCountDown: 0
+      }
     };
   },
   created() {
@@ -58,6 +66,9 @@ export default {
         name: 'Login',
         params: { initialShowAlert: true, initialMsg: msg }
       });
+    },
+    countDownChanged(dismissCountDown) {
+      this.alert.dismissCountDown = dismissCountDown;
     }
   },
   sockets: {
@@ -65,18 +76,18 @@ export default {
       this.forceLogout(msg);
     },
     warning(msg) {
-      this.msg = msg;
-      this.showAlert = true;
+      this.alert.msg = msg;
+      this.alert.dismissCountDown = 3;
     }
   },
   components: {
+    AppMoneyPoolCard: MoneyPoolCard,
     AppCategoryCard: CategoryCard,
     AppOneOnOneCard: OneOnOneCard,
     AppStatusIcon: StatusIcon,
     AppResetCard: ResetCard,
     AppHintCard: HintCard,
     AppTeamCard: TeamCard,
-    AppBidCard: BidCard,
     AppTimer: Timer,
     AppMenu: Menu
   }

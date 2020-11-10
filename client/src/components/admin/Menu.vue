@@ -42,7 +42,7 @@ export default {
           actions: [
             {
               name: 'Zacznij licytację',
-              action: this.dummy
+              action: this.startAuction
             },
             {
               name: 'Zakończ licytację: wybierz kategorię',
@@ -50,11 +50,15 @@ export default {
             },
             {
               name: 'Zakończ licytację: wygrano podpowiedź',
-              action: this.dummy
+              action: this.grantHint
             },
             {
               name: 'Zakończ licytację: wygrano czarną skrzynkę',
-              action: this.dummy
+              action: this.grantBlackBox
+            },
+            {
+              name: 'Anuluj licytację',
+              action: this.cancelAuction
             }
           ]
         },
@@ -130,6 +134,18 @@ export default {
     };
   },
   methods: {
+    startAuction() {
+      this.$socket.client.emit('startAuction');
+    },
+    grantHint() {
+      this.$socket.client.emit('finishAuction', { finishAuctionAction: 'grantHint' });
+    },
+    grantBlackBox() {
+      this.$socket.client.emit('finishAuction', { finishAuctionAction: 'grantBlackBox' });
+    },
+    cancelAuction() {
+      this.$socket.client.emit('cancelAuction');
+    },
     uploadQuestions() {
       this.$bvModal.show(this.uploaderId);
     },

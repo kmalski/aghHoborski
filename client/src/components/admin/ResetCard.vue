@@ -1,7 +1,12 @@
 <template>
   <div class="reset-card">
-    <label>Reset</label>
-    <b-form-input v-model="resetAmount" />
+    <label>Reset kont</label>
+    <b-form-input
+      v-model="newAccountBalance"
+      @keydown.enter="resetAmounts"
+      @focus="event => event.target.select()"
+      number
+    />
     <b-button class="blue-shadow rectangle-btn" variant="primary" @click="resetAmounts">
       Zresetuj
     </b-button>
@@ -13,11 +18,15 @@ export default {
   name: 'ResetCard',
   data() {
     return {
-      resetAmount: ''
+      newAccountBalance: null
     };
   },
   methods: {
-    resetAmounts() {}
+    resetAmounts() {
+      if (this.newAccountBalance < 100) this.newAccountBalance *= 100;
+      this.$socket.client.emit('resetAccountBalances', { newBalance: this.newAccountBalance });
+      this.newAccountBalance = null;
+    }
   }
 };
 </script>

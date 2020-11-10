@@ -8,15 +8,34 @@
     </div>
     <div class="card-row">
       <label>Licytacja</label>
-      <b-form-input :disabled="!inGame" v-model="auctionAmount" />
+      <b-form-input
+        :disabled="!inGame || !isAuction"
+        v-shortkey.focus="['ctrl', shortcut]"
+        @focus="event => event.target.select()"
+        @keyup.enter="emitAuctionAmountChange"
+        v-model="auctionAmount"
+        number
+      />
     </div>
     <div class="card-row">
       <label>Stan konta</label>
-      <b-form-input :disabled="!inGame" v-model="accountBalance" />
+      <b-form-input
+        :disabled="!inGame"
+        @keyup.enter="emitAccountBalanceChange"
+        @focus="event => event.target.select()"
+        v-model="accountBalance"
+        number
+      />
     </div>
     <div class="card-row">
       <label>Podpowiedzi</label>
-      <b-form-input :disabled="!inGame" v-model="hintsCount" />
+      <b-form-input
+        :disabled="!inGame"
+        @keyup.enter="emitHintsCountChange"
+        @focus="event => event.target.select()"
+        v-model="hintsCount"
+        number
+      />
     </div>
     <div class="card-row">
       <label>Czarna skrzynka</label>
@@ -41,6 +60,10 @@ export default {
       validator(value) {
         return ['blue', 'green', 'yellow', 'red', 'masters'].includes(value);
       }
+    },
+    shortcut: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -53,24 +76,35 @@ export default {
       hintsCount: null,
       hasBlackBox: false,
       isAnswering: false, // TODO: implement color background depending on isAnswering
+      isAuction: false,
       inGame: false
     };
   },
   created() {
     this.$socket.client.emit('getTeamState', { teamName: this.variant });
     this.$socket.client.on(this.variant + 'TeamState', this.fillData);
-    this.$socket.client.on(this.variant + 'BlackBoxChanged', this.changeBlackBox);
     this.$socket.client.on(this.variant + 'TeamStatusChanged', this.changeInGame);
+    this.$socket.client.on(this.variant + 'AuctionAmountChanged', this.changeAuctionAmount);
+    this.$socket.client.on(this.variant + 'AccountBalanceChanged', this.changeAccountBalance);
+    this.$socket.client.on(this.variant + 'HintsCountChanged', this.changeHintsCount);
+    this.$socket.client.on(this.variant + 'BlackBoxChanged', this.changeBlackBox);
   },
   computed: {
     buttonVariant() {
       return this.inGame ? 'primary' : 'light';
+    },
+    validateAuctionAmount() {
+      return (
+        (this.auctionAmount > 200 && Number.isInteger(this.auctionAmount / 100)) ||
+        (this.auctionAmount < 100 && Number.isInteger(this.auctionAmount))
+      );
     }
   },
   methods: {
     fillData(data) {
       this.accountBalance = data.accountBalance;
       this.auctionAmount = data.auctionAmount;
+      this.isAuction = data.isAuction;
       this.hintsCount = data.hintsCount;
       this.hasBlackBox = data.hasBlackBox;
       this.inGame = data.inGame;
@@ -78,17 +112,44 @@ export default {
     toggleInGame() {
       this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, desiredState: !this.inGame });
     },
-    changeInGame(data) {
-      this.inGame = data.state;
+    emitAuctionAmountChange() {
+      if (this.validateAuctionAmount) {
+        if (this.auctionAmount < 100) this.auctionAmount *= 100;
+        this.$socket.client.emit('changeAuctionAmount', { teamName: this.variant, newAmount: this.auctionAmount });
+      }
     },
-    toggleHint() {
-      this.hasHint = !this.hasHint;
+    emitAccountBalanceChange() {
+      if (this.accountBalance < 100) this.accountBalance *= 100;
+      this.$socket.client.emit('changeAccountBalance', { teamName: this.variant, newBalance: this.accountBalance });
+    },
+    emitHintsCountChange() {
+      this.$socket.client.emit('changeHintsCount', { teamName: this.variant, newCount: this.hintsCount });
     },
     toggleBlackBox() {
       this.$socket.client.emit('changeBlackBox', { teamName: this.variant, desiredState: !this.hasBlackBox });
     },
+    changeInGame(data) {
+      this.inGame = data.state;
+    },
+    changeAuctionAmount(data) {
+      this.auctionAmount = data.auctionAmount;
+    },
+    changeAccountBalance(data) {
+      this.accountBalance = data.accountBalance;
+    },
+    changeHintsCount(data) {
+      this.hintsCount = data.hintsCount;
+    },
     changeBlackBox(data) {
       this.hasBlackBox = data.state;
+    }
+  },
+  sockets: {
+    auctionStarted() {
+      this.isAuction = true;
+    },
+    auctionFinished() {
+      this.isAuction = false;
     }
   }
 };
