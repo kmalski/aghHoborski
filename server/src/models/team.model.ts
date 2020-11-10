@@ -1,4 +1,4 @@
-export { TeamName, Team };
+export { TeamName, TeamShared, Team };
 
 enum TeamName {
   BLUE = 'blue',
@@ -8,10 +8,18 @@ enum TeamName {
   MASTERS = 'masters'
 }
 
+interface TeamShared {
+  name: TeamName;
+  auctionAmount: number;
+  accountBalance: number;
+  hasBlackBox: boolean;
+  hintsCount: number;
+  inGame?: boolean;
+}
+
 class Team {
   public name: TeamName;
   public auctionAmount: number;
-  public inGame: boolean = true;
   public accountBalance: number = 5000;
   public hasBlackBox: boolean = false;
   public hintsCount: number = 0;

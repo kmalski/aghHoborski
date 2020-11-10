@@ -1,28 +1,47 @@
+import { Server } from 'socket.io';
 import { Game, GameShared } from '../models/game.model';
 import { UserSocket } from '../utils/socket.utils';
-import { TeamName } from '../models/team.model';
+import { TeamName, TeamShared } from '../models/team.model';
 import { Outgoing } from '../utils/event.constants';
 
-export { grantBlackBox, removeBlackBox };
+export { changeBlackBox, changeTeamStatus, getTeamState };
 
-function grantBlackBox(gameData: GameShared, socket: UserSocket) {
+function getTeamState(gameData: GameShared, socket: UserSocket) {
   const game = socket.room.game;
   const teamName = gameData.teamName as TeamName;
 
-  if (!game.isIn(teamName)) return false;
+  if (!game.exists(teamName)) {
+    return socket.emit(teamName + Outgoing.TEAM_STATE);
+  }
 
-  game.grantBlackBox(teamName);
-  socket.to(socket.room.name).emit(Outgoing.BLACK_BOX_GRANTED, { teamName: teamName });
-  return true;
+  let team: TeamShared;
+  if (game.isInGame(teamName)) {
+    team = game.activeTeams.get(teamName);
+    team.inGame = true;
+  } else {
+    team = game.inactiveTeams.get(teamName);
+    team.inGame = false;
+  }
+  socket.emit(teamName + Outgoing.TEAM_STATE, team);
 }
 
-function removeBlackBox(gameData: GameShared, socket: UserSocket) {
+function changeBlackBox(gameData: GameShared, socket: UserSocket, io: Server) {
   const game = socket.room.game;
   const teamName = gameData.teamName as TeamName;
 
-  if (!game.isIn(teamName)) return false;
+  if (!game.isInGame(teamName) || gameData.desiredState == null) return;
 
-  game.removeBlackBox(teamName);
-  socket.to(socket.room.name).emit(Outgoing.BLACK_BOX_REMOVED, { teamName: teamName });
-  return true;
+  game.changeBlackBox(teamName, gameData.desiredState);
+  io.in(socket.room.name).emit(teamName + Outgoing.BLACK_BOX_CHANGED, { state: gameData.desiredState });
+}
+
+function changeTeamStatus(gameData: GameShared, socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+  const teamName = gameData.teamName as TeamName;
+
+  if (gameData.desiredState == null) return;
+  if (game.isInGame(teamName) === gameData.desiredState) return;
+
+  game.changeTeamStatus(teamName, gameData.desiredState);
+  io.in(socket.room.name).emit(teamName + Outgoing.TEAM_STATUS_CHANGED, { state: gameData.desiredState });
 }

@@ -1,13 +1,14 @@
 import bcrypt from 'bcrypt';
+import { Server } from 'socket.io';
 import { RoomModel, RoomShared, RoomInternal } from '../models/room.model';
 import { QuestionSetInternal, QuestionSetSchema } from '../models/question.model';
 import { Outgoing } from '../utils/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import * as game from '../sockets/game.socket';
 
-export { join, adminJoin, create, adminGetState };
+export { join, adminJoin, create, authorize };
 
-const saltRounds = 10;
+const saltRounds = 8;
 const activeRooms: RoomInternal[] = [];
 
 async function create(roomData: RoomShared, socket: UserSocket) {
@@ -79,7 +80,7 @@ async function adminJoin(roomData: RoomShared, socket: UserSocket) {
   socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
 }
 
-function adminGetState(roomData: RoomShared, socket: UserSocket) {
+function authorize(roomData: RoomShared, socket: UserSocket, io: Server) {
   if (!roomData.token || !roomData.name) {
     return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
   }
@@ -96,7 +97,8 @@ function adminGetState(roomData: RoomShared, socket: UserSocket) {
 
   socket.room = room;
   socket.join(socket.room.name);
-  socket.emit(Outgoing.STATE);
+  socket.emit(Outgoing.AUTHORIZED);
 
-  game.listen(socket);
+  // now we are sure that only authorized sockets will be able to emit game events
+  game.listen(io, socket);
 }

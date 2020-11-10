@@ -14,15 +14,17 @@ describe('Test room socket events', function () {
   let mongo: MongoMemoryServer;
   let token: string;
 
-  before(async function () {
+  before(function (done) {
     mongo = new MongoMemoryServer();
     server = new ClashServer();
-    const mongoUri = await mongo.getUri();
-
-    await server.connectMongo(mongoUri);
-    await server.start();
-
-    client = SocketIOClient.connect('http://localhost:' + server.getPort(), options);
+    mongo
+      .getUri()
+      .then(uri => server.connectMongo(uri))
+      .then(() => server.start())
+      .then(() => {
+        client = SocketIOClient.connect('http://localhost:' + server.getPort(), options);
+        done();
+      });
   });
 
   after(async function () {
@@ -94,16 +96,16 @@ describe('Test room socket events', function () {
     });
   });
 
-  it('Admin get state with token', function (done) {
-    client.emit('adminGetState', { name: 'TestName', token: token });
+  it('Authorize with token', function (done) {
+    client.emit('authorize', { name: 'TestName', token: token });
 
-    client.once('state', () => {
+    client.once('authorized', () => {
       done();
     });
   });
 
-  it('Admin fail to get state with wrong token', function (done) {
-    client.emit('adminGetState', { name: 'TestName', token: 'WrongToken' });
+  it('Fail to authorize with wrong token', function (done) {
+    client.emit('authorize', { name: 'TestName', token: 'WrongToken' });
 
     client.once('unauthorized', (msg: any) => {
       msg.should.be.equal('Brak uprawnień.');
@@ -111,8 +113,8 @@ describe('Test room socket events', function () {
     });
   });
 
-  it('Admin fail to get state of not existing room', function (done) {
-    client.emit('adminGetState', { name: 'NotExist', token: 'WrongToken' });
+  it('Fail to authorize of not existing room', function (done) {
+    client.emit('authorize', { name: 'NotExist', token: 'WrongToken' });
 
     client.once('unauthorized', (msg: any) => {
       msg.should.be.equal('Pokój nie jest już aktywny.');

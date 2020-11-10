@@ -47,7 +47,7 @@ export default {
     };
   },
   created() {
-    this.$socket.client.emit('adminGetState', {
+    this.$socket.client.emit('authorize', {
       name: this.$route.params.room,
       token: localStorage.awanturaToken
     });

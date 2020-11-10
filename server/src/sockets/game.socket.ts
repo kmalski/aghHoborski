@@ -1,18 +1,13 @@
 import { Server } from 'socket.io';
 import { UserSocket } from '../utils/socket.utils';
 import { Incoming } from '../utils/event.constants';
-import { grantBlackBox, removeBlackBox } from '../services/game.service';
+import { changeBlackBox, changeTeamStatus, getTeamState } from '../services/game.service';
 
 export { listen };
 
-function listen(socket: UserSocket) {
-  socket.on(Incoming.GRANT_BLACK_BOX, (gameData, acknowledge) => {
-    const result = grantBlackBox(gameData, socket);
-    acknowledge(result);
-  });
-
-  socket.on(Incoming.REMOVE_BLACK_BOX, (gameData, acknowledge) => {
-    const result = removeBlackBox(gameData, socket);
-    acknowledge(result);
-  });
+// TODO: not all events should be restrictet to admin
+function listen(io: Server, socket: UserSocket) {
+  socket.on(Incoming.GET_TEAM_STATE, gameData => getTeamState(gameData, socket));
+  socket.on(Incoming.CHANGE_BLACK_BOX, gameData => changeBlackBox(gameData, socket, io));
+  socket.on(Incoming.CHANGE_TEAM_STATUS, gameData => changeTeamStatus(gameData, socket, io));
 }

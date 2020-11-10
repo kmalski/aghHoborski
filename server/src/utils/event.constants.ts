@@ -10,14 +10,15 @@ enum Outgoing {
   // rooms
   ROOM_CREATED = 'roomCreated',
   ROOM_JOINED = 'roomJoined',
-  STATE = 'state',
+  AUTHORIZED = 'authorized',
 
   // questions
   ALL_QUESTION_SETS = 'allQuestionSets',
 
   // game
-  BLACK_BOX_GRANTED = 'blackBoxGranted',
-  BLACK_BOX_REMOVED = 'blackBoxRemoved'
+  TEAM_STATE = 'TeamState',
+  BLACK_BOX_CHANGED = 'BlackBoxChanged',
+  TEAM_STATUS_CHANGED = 'TeamStatusChanged'
 }
 
 enum Incoming {
@@ -28,8 +29,7 @@ enum Incoming {
   CREATE_ROOM = 'createRoom',
   JOIN_ROOM = 'joinRoom',
   ADMIN_JOIN_ROOM = 'adminJoinRoom',
-  GET_STATE = 'getState',
-  ADMIN_GET_STATE = 'adminGetState',
+  AUTHORIZE = 'authorize',
 
   // questions
   ADD_QUESTION_SET = 'addQuestionSet',
@@ -37,6 +37,7 @@ enum Incoming {
   CHANGE_QUESTION_SET = 'changeQuestionSet',
 
   // game
-  GRANT_BLACK_BOX = 'grantBlackBox',
-  REMOVE_BLACK_BOX = 'removeBlackBox'
+  GET_TEAM_STATE = 'getTeamState',
+  CHANGE_BLACK_BOX = 'changeBlackBox',
+  CHANGE_TEAM_STATUS = 'changeTeamStatus'
 }

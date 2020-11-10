@@ -1,26 +1,26 @@
 <template>
-  <div class="admin-card" :class="{ [variant + '-border']: isInGame }">
+  <div class="admin-card" :class="{ [variant + '-border']: inGame }">
     <div class="card-row">
       <label class="team-name" :class="[variant + '-font']">{{ teamName }}</label>
       <b-button class="blue-shadow rectangle-btn" :variant="buttonVariant" @click="toggleInGame">
-        {{ isInGame ? 'Gra' : 'Nie gra' }}
+        {{ inGame ? 'Gra' : 'Nie gra' }}
       </b-button>
     </div>
     <div class="card-row">
       <label>Licytacja</label>
-      <b-form-input :disabled="!isInGame" v-model="auctionAmount" />
+      <b-form-input :disabled="!inGame" v-model="auctionAmount" />
     </div>
     <div class="card-row">
       <label>Stan konta</label>
-      <b-form-input :disabled="!isInGame" v-model="accountBalance" />
+      <b-form-input :disabled="!inGame" v-model="accountBalance" />
     </div>
     <div class="card-row">
       <label>Podpowiedzi</label>
-      <b-form-input :disabled="!isInGame" v-model="hintCount" />
+      <b-form-input :disabled="!inGame" v-model="hintsCount" />
     </div>
     <div class="card-row">
       <label>Czarna skrzynka</label>
-      <b-button :disabled="!isInGame" class="blue-shadow square-btn" variant="primary" @click="toggleBlackBox">
+      <b-button :disabled="!inGame" class="blue-shadow square-btn" variant="primary" @click="toggleBlackBox">
         <b-icon :icon="hasBlackBox ? 'check2' : 'x'"></b-icon>
       </b-button>
     </div>
@@ -48,36 +48,47 @@ export default {
       styles: {
         border: true
       },
-      accountBalance: 1000,
-      auctionAmount: 200,
-      hintCount: 0,
+      accountBalance: null,
+      auctionAmount: null,
+      hintsCount: null,
       hasBlackBox: false,
-      isAnswering: false,
-      isInGame: true
+      isAnswering: false, // TODO: implement color background depending on isAnswering
+      inGame: false
     };
+  },
+  created() {
+    this.$socket.client.emit('getTeamState', { teamName: this.variant });
+    this.$socket.client.on(this.variant + 'TeamState', this.fillData);
+    this.$socket.client.on(this.variant + 'BlackBoxChanged', this.changeBlackBox);
+    this.$socket.client.on(this.variant + 'TeamStatusChanged', this.changeInGame);
   },
   computed: {
     buttonVariant() {
-      return this.isInGame ? 'primary' : 'light';
+      return this.inGame ? 'primary' : 'light';
     }
   },
   methods: {
+    fillData(data) {
+      this.accountBalance = data.accountBalance;
+      this.auctionAmount = data.auctionAmount;
+      this.hintsCount = data.hintsCount;
+      this.hasBlackBox = data.hasBlackBox;
+      this.inGame = data.inGame;
+    },
     toggleInGame() {
-      this.isInGame = !this.isInGame;
+      this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, desiredState: !this.inGame });
+    },
+    changeInGame(data) {
+      this.inGame = data.state;
     },
     toggleHint() {
       this.hasHint = !this.hasHint;
     },
     toggleBlackBox() {
-      if (this.hasBlackBox) {
-        this.$socket.client.emit('removeBlackBox', { teamName: this.variant }, confirmation => {
-          if (confirmation) this.hasBlackBox = false;
-        });
-      } else {
-        this.$socket.client.emit('grantBlackBox', { teamName: this.variant }, confirmation => {
-          if (confirmation) this.hasBlackBox = true;
-        });
-      }
+      this.$socket.client.emit('changeBlackBox', { teamName: this.variant, desiredState: !this.hasBlackBox });
+    },
+    changeBlackBox(data) {
+      this.hasBlackBox = data.state;
     }
   }
 };
