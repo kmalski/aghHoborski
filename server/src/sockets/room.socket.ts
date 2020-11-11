@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { RoomShared } from '../models/room.model';
+import { RoomData } from '../models/room.model';
 import { Incoming } from '../utils/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import { normalizeString } from '../utils';
@@ -14,7 +14,7 @@ function listen(io: Server, socket: UserSocket) {
   socket.on(Incoming.AUTHORIZE, roomData => authorize(normalize(roomData), socket, io));
 }
 
-function normalize(roomData: RoomShared): RoomShared {
+function normalize(roomData: RoomData): RoomData {
   roomData.name = normalizeString(roomData.name);
   return roomData;
 }

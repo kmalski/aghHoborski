@@ -30,15 +30,11 @@ class Team {
     this.name = name;
   }
 
-  allMoney() {
-    return this.accountBalance + this.auctionAmount;
-  }
-
   startAuction() {
-    this.accountBalance -= 200;
-    this.auctionAmount = 200;
-
-    return 200;
+    const startAmount = 200;
+    this.accountBalance -= startAmount;
+    this.auctionAmount = startAmount;
+    return startAmount;
   }
 
   bidAmount(amount: number) {
@@ -64,6 +60,10 @@ class Team {
   }
 
   ableToPlay() {
-    return this.allMoney() > 200;
+    return this.getAllMoney() > 200;
+  }
+
+  getAllMoney() {
+    return this.accountBalance + this.auctionAmount;
   }
 }

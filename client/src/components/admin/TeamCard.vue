@@ -113,26 +113,32 @@ export default {
       this.hasLost = data.hasLost;
     },
     toggleInGame() {
-      this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, desiredState: !this.inGame });
+      this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, newIsInGame: !this.inGame });
     },
     emitAuctionAmountChange() {
       if (this.validateAuctionAmount) {
         if (this.auctionAmount < 200) this.auctionAmount *= 100;
-        this.$socket.client.emit('changeAuctionAmount', { teamName: this.variant, newAmount: this.auctionAmount });
+        this.$socket.client.emit('changeAuctionAmount', {
+          teamName: this.variant,
+          newAuctionAmount: this.auctionAmount
+        });
       }
     },
     emitAccountBalanceChange() {
       if (this.accountBalance < 100) this.accountBalance *= 100;
-      this.$socket.client.emit('changeAccountBalance', { teamName: this.variant, newBalance: this.accountBalance });
+      this.$socket.client.emit('changeAccountBalance', {
+        teamName: this.variant,
+        newAccountBalance: this.accountBalance
+      });
     },
     emitHintsCountChange() {
-      this.$socket.client.emit('changeHintsCount', { teamName: this.variant, newCount: this.hintsCount });
+      this.$socket.client.emit('changeHintsCount', { teamName: this.variant, newHintsCount: this.hintsCount });
     },
     toggleBlackBox() {
-      this.$socket.client.emit('changeBlackBox', { teamName: this.variant, desiredState: !this.hasBlackBox });
+      this.$socket.client.emit('changeBlackBox', { teamName: this.variant, newHasBlackBox: !this.hasBlackBox });
     },
     changeInGame(data) {
-      this.inGame = data.state;
+      this.inGame = data.isInGame;
     },
     changeAuctionAmount(data) {
       this.auctionAmount = data.auctionAmount;
@@ -145,7 +151,7 @@ export default {
       this.hintsCount = data.hintsCount;
     },
     changeBlackBox(data) {
-      this.hasBlackBox = data.state;
+      this.hasBlackBox = data.hasBlackBox;
     },
     changeHasLost(data) {
       this.hasLost = data.hasLost;

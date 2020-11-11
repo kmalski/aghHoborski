@@ -1,9 +1,9 @@
 import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
-import { QuestionSetInternal, QuestionSetSchema } from './question.model';
+import { QuestionSet, QuestionSetSchema } from './question.model';
 import { Game } from './game.model';
 import { generateToken } from '../utils';
 
-export { RoomModel, RoomShared, RoomInternal };
+export { RoomModel, RoomData, Room };
 
 class RoomSchema {
   @prop({ unique: true })
@@ -20,20 +20,17 @@ const RoomModel = getModelForClass(RoomSchema, {
   schemaOptions: { collection: 'rooms' }
 });
 
-interface Room {
+interface RoomData {
   name: string;
   token?: string;
-}
-
-interface RoomShared extends Room {
   readonly password?: string;
 }
 
-class RoomInternal implements Room {
+class Room {
   public name: string;
   public token: string;
   public game: Game;
-  public questions?: QuestionSetInternal;
+  public questions?: QuestionSet;
 
   constructor(name: string) {
     this.name = name;
@@ -43,9 +40,10 @@ class RoomInternal implements Room {
 
   withToken() {
     this.token = generateToken();
+    return this;
   }
 
-  withQuestions(questions: QuestionSetInternal) {
+  withQuestions(questions: QuestionSet) {
     this.questions = questions;
     return this;
   }

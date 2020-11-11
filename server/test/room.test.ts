@@ -15,6 +15,7 @@ describe('Test room socket events', function () {
   let token: string;
 
   before(function (done) {
+    this.timeout(60000);
     mongo = new MongoMemoryServer();
     server = new ClashServer();
     mongo

@@ -14,6 +14,7 @@ describe('Test game socket events', function () {
   let mongo: MongoMemoryServer;
 
   before(function (done) {
+    this.timeout(60000);
     mongo = new MongoMemoryServer();
     server = new ClashServer();
     mongo
@@ -54,9 +55,9 @@ describe('Test game socket events', function () {
   });
 
   it('Disable team', function (done) {
-    client.emit('changeTeamStatus', { teamName: 'green', desiredState: false });
+    client.emit('changeTeamStatus', { teamName: 'green', newIsInGame: false });
     client.once('greenTeamStatusChanged', (data: any) => {
-      data.state.should.be.equal(false);
+      data.isInGame.should.be.equal(false);
       done();
     });
   });
@@ -77,31 +78,31 @@ describe('Test game socket events', function () {
   });
 
   it('Enable team', function (done) {
-    client.emit('changeTeamStatus', { teamName: 'green', desiredState: true });
+    client.emit('changeTeamStatus', { teamName: 'green', newIsInGame: true });
     client.once('greenTeamStatusChanged', (data: any) => {
-      data.state.should.be.equal(true);
+      data.isInGame.should.be.equal(true);
       done();
     });
   });
 
   it('Grant black box', function (done) {
-    client.emit('changeBlackBox', { teamName: 'red', desiredState: true });
+    client.emit('changeBlackBox', { teamName: 'red', newHasBlackBox: true });
     client.once('redBlackBoxChanged', (data: any) => {
-      data.state.should.be.equal(true);
+      data.hasBlackBox.should.be.equal(true);
       done();
     });
   });
 
   it('Remove black box', function (done) {
-    client.emit('changeBlackBox', { teamName: 'red', desiredState: false });
+    client.emit('changeBlackBox', { teamName: 'red', newHasBlackBox: false });
     client.once('redBlackBoxChanged', (data: any) => {
-      data.state.should.be.equal(false);
+      data.hasBlackBox.should.be.equal(false);
       done();
     });
   });
 
   it('Fail to change black box status of inactive team', function (done) {
-    client.emit('changeBlackBox', { teamName: 'masters', desiredState: false });
+    client.emit('changeBlackBox', { teamName: 'masters', newHasBlackBox: false });
     client.once('warning', (msg: any) => {
       msg.should.be.equal('Zmiana czarnej skrzynki jest w tym momencie niedozwolona.');
       done();
@@ -109,7 +110,7 @@ describe('Test game socket events', function () {
   });
 
   it('Fail to change black box status with invalid data', function (done) {
-    client.emit('changeBlackBox', { teamName: 'red', desiredState: 'dsa' });
+    client.emit('changeBlackBox', { teamName: 'red', desirednewHasBlackBoxState: 'dsa' });
     client.once('warning', (msg: any) => {
       msg.should.be.equal('Zmiana czarnej skrzynki jest w tym momencie niedozwolona.');
       done();
@@ -117,7 +118,7 @@ describe('Test game socket events', function () {
   });
 
   it('Change account balance', function (done) {
-    client.emit('changeAccountBalance', { teamName: 'yellow', newBalance: 6000 });
+    client.emit('changeAccountBalance', { teamName: 'yellow', newAccountBalance: 6000 });
     client.once('yellowAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(6000);
       data.hasLost.should.be.equal(false);
@@ -126,7 +127,7 @@ describe('Test game socket events', function () {
   });
 
   it('Fail to change account balance of inactive team', function (done) {
-    client.emit('changeAccountBalance', { teamName: 'masters', newBalance: 6000 });
+    client.emit('changeAccountBalance', { teamName: 'masters', newAccountBalance: 6000 });
     client.once('warning', (msg: any) => {
       msg.should.be.equal('Zmiana stanu konta na 6000 jest w tym momencie niedozwolona.');
       done();
@@ -134,7 +135,7 @@ describe('Test game socket events', function () {
   });
 
   it('Change hints count', function (done) {
-    client.emit('changeHintsCount', { teamName: 'blue', newCount: 2 });
+    client.emit('changeHintsCount', { teamName: 'blue', newHintsCount: 2 });
     client.once('blueHintsCountChanged', (data: any) => {
       data.hintsCount.should.be.equal(2);
       done();
@@ -142,7 +143,7 @@ describe('Test game socket events', function () {
   });
 
   it('Fail to change hints count with invalid data', function (done) {
-    client.emit('changeHintsCount', { teamName: 'blue', newCount: 'dsa' });
+    client.emit('changeHintsCount', { teamName: 'blue', newHintsCount: 'dsa' });
     client.once('warning', (msg: any) => {
       msg.should.be.equal('Zmiana ilości podpowiedzi na dsa jest w tym momencie niedozwolona.');
       done();
@@ -154,19 +155,19 @@ describe('Test game socket events', function () {
     client.once('auctionStarted', () => {
       client.once('yellowAuctionAmountChanged', (data: any) => {
         data.auctionAmount.should.be.equal(200);
-        client.emit('changeAuctionAmount', { teamName: 'yellow', newAmount: 500 });
+        client.emit('changeAuctionAmount', { teamName: 'yellow', newAuctionAmount: 500 });
         client.once('yellowAuctionAmountChanged', (data: any) => {
           data.auctionAmount.should.be.equal(500);
-          client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 500 });
-          client.emit('changeAuctionAmount', { teamName: 'red', newAmount: 4900 });
+          client.emit('changeAuctionAmount', { teamName: 'blue', newAuctionAmount: 500 });
+          client.emit('changeAuctionAmount', { teamName: 'red', newAuctionAmount: 4900 });
           client.once('redAuctionAmountChanged', (data: any) => {
             data.auctionAmount.should.be.equal(4900);
-            client.emit('finishAuction', { finishAuctionAction: 'grantBlackBox' });
+            client.emit('finishAuction', { auctionFinishAction: 'grantBlackBox' });
             client.once('redHasLostChanged', (data: any) => {
               data.hasLost.should.be.equal(true);
             });
             client.once('redBlackBoxChanged', (data: any) => {
-              data.state.should.be.equal(true);
+              data.hasBlackBox.should.be.equal(true);
               done();
             });
           });
@@ -176,20 +177,20 @@ describe('Test game socket events', function () {
   });
 
   it('Auction with hint prize', function (done) {
-    client.emit('resetAccountBalances', { newBalance: 5000 });
+    client.emit('resetAccountBalances', { newAccountBalance: 5000 });
     client.once('greenAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(5000);
       client.emit('startAuction');
       client.once('auctionStarted', () => {
         client.once('greenAuctionAmountChanged', (data: any) => {
           data.auctionAmount.should.be.equal(200);
-          client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 4000 });
+          client.emit('changeAuctionAmount', { teamName: 'blue', newAuctionAmount: 4000 });
           client.once('blueAuctionAmountChanged', (data: any) => {
             data.auctionAmount.should.be.equal(4000);
-            client.emit('changeAuctionAmount', { teamName: 'green', newAmount: 4100 });
+            client.emit('changeAuctionAmount', { teamName: 'green', newAuctionAmount: 4100 });
             client.once('greenAuctionAmountChanged', (data: any) => {
               data.auctionAmount.should.be.equal(4100);
-              client.emit('finishAuction', { finishAuctionAction: 'grantHint' });
+              client.emit('finishAuction', { auctionFinishAction: 'grantHint' });
               client.once('greenHintsCountChanged', (data: any) => {
                 data.hintsCount.should.be.equal(1);
                 done();
@@ -202,17 +203,17 @@ describe('Test game socket events', function () {
   });
 
   it('Auction with canceling', function (done) {
-    client.emit('resetAccountBalances', { newBalance: 5000 });
+    client.emit('resetAccountBalances', { newAccountBalance: 5000 });
     client.once('greenAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(5000);
       client.emit('startAuction');
       client.once('auctionStarted', () => {
         client.once('greenAuctionAmountChanged', (data: any) => {
           data.auctionAmount.should.be.equal(200);
-          client.emit('changeAuctionAmount', { teamName: 'green', newAmount: 3000 });
+          client.emit('changeAuctionAmount', { teamName: 'green', newAuctionAmount: 3000 });
           client.once('greenAuctionAmountChanged', (data: any) => {
             data.auctionAmount.should.be.equal(3000);
-            client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 3100 });
+            client.emit('changeAuctionAmount', { teamName: 'blue', newAuctionAmount: 3100 });
             client.once('blueAuctionAmountChanged', (data: any) => {
               data.auctionAmount.should.be.equal(3100);
               client.emit('cancelAuction');
@@ -231,7 +232,7 @@ describe('Test game socket events', function () {
   });
 
   it('Has lost when all money not greater than 200', function (done) {
-    client.emit('changeAccountBalance', { teamName: 'blue', newBalance: 199 });
+    client.emit('changeAccountBalance', { teamName: 'blue', newAccountBalance: 199 });
     client.once('blueAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(199);
       data.hasLost.should.be.equal(true);

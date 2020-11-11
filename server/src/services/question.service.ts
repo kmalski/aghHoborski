@@ -1,11 +1,11 @@
 import { Outgoing } from '../utils/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import { RoomModel } from '../models/room.model';
-import { QuestionSetModel, QuestionSetInternal, QuestionSetShared } from '../models/question.model';
+import { QuestionSetModel, QuestionSet, QuestionSetData } from '../models/question.model';
 
 export { addQuestionSet, getAllQuestionSets, changeQuestionSet };
 
-async function addQuestionSet(questionData: QuestionSetShared, socket: UserSocket) {
+async function addQuestionSet(questionData: QuestionSetData, socket: UserSocket) {
   const questionSet = await QuestionSetModel.findOne({ name: questionData.name });
 
   if (questionSet) {
@@ -18,7 +18,7 @@ async function addQuestionSet(questionData: QuestionSetShared, socket: UserSocke
 
   await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
-  socket.room.questions = new QuestionSetInternal(questionData.name, data.categories);
+  socket.room.questions = new QuestionSet(questionData.name, data.categories);
   socket.emit(Outgoing.SUCCESS);
 }
 
@@ -28,7 +28,7 @@ async function getAllQuestionSets(socket: UserSocket) {
   socket.emit(Outgoing.ALL_QUESTION_SETS, questionSetDb);
 }
 
-async function changeQuestionSet(questionData: QuestionSetShared, socket: UserSocket) {
+async function changeQuestionSet(questionData: QuestionSetData, socket: UserSocket) {
   const questionSetDb = await QuestionSetModel.findOne({ name: questionData.name });
 
   if (!questionSetDb) {
@@ -36,6 +36,6 @@ async function changeQuestionSet(questionData: QuestionSetShared, socket: UserSo
   }
   await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
-  socket.room.questions = new QuestionSetInternal(questionSetDb.name, questionSetDb.categories);
+  socket.room.questions = new QuestionSet(questionSetDb.name, questionSetDb.categories);
   socket.emit(Outgoing.SUCCESS);
 }

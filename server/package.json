@@ -10,7 +10,7 @@
     "prestart": "npm run build",
     "start": "node build/server.js",
     "serve": "tsnd --rs --respawn src/server.ts",
-    "test": "mocha -r ts-node/register 'test/**/*.ts' --timeout 60000"
+    "test": "mocha -r ts-node/register 'test/**/*.ts'"
   },
   "dependencies": {
     "@typegoose/typegoose": "^7.4.1",

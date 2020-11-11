@@ -1,15 +1,16 @@
 import { Team, TeamName } from './team.model';
 
-export { Game, GameShared };
+export { Game, GameData };
 
-interface GameShared {
+interface GameData {
   teamName: string;
-  newAmount?: number;
-  newBalance?: number;
-  newCount?: number;
+  newAuctionAmount?: number;
+  newAccountBalance?: number;
+  newHintsCount?: number;
   newMoneyPool?: number;
-  desiredState?: boolean;
-  finishAuctionAction?: string;
+  newHasBlackBox?: boolean;
+  newIsInGame?: boolean;
+  auctionFinishAction?: string;
 }
 
 class Game {
@@ -60,7 +61,7 @@ class Game {
 
   bidAmount(teamName: TeamName, amount: number) {
     const team = this.activeTeams.get(teamName);
-    if (team.allMoney() >= amount && (!this.auctionWinningTeam || amount > this.auctionWinningTeam.auctionAmount)) {
+    if (team.getAllMoney() >= amount && (!this.auctionWinningTeam || amount > this.auctionWinningTeam.auctionAmount)) {
       this.auctionWinningTeam = team;
       this.moneyPool += team.bidAmount(amount);
       return true;
@@ -93,10 +94,6 @@ class Game {
     this.activeTeams.get(TeamName.MASTERS).accountBalance = 10000;
   }
 
-  changeBlackBox(teamName: TeamName, hasBlackBox: boolean) {
-    this.activeTeams.get(teamName).hasBlackBox = hasBlackBox;
-  }
-
   changeTeamStatus(teamName: TeamName, inGame: boolean) {
     if (!inGame) {
       return this.moveToInactive(teamName);
@@ -116,28 +113,16 @@ class Game {
     return this.auctionWinningTeam && !this.isAuction;
   }
 
-  getAuctionAmount(teamName: TeamName) {
-    const team = this.activeTeams.get(teamName);
-    if (team) return team.auctionAmount;
-    return 0;
-  }
-
-  getAccountBalance(teamName: TeamName) {
-    const team = this.activeTeams.get(teamName);
-    if (team) return team.accountBalance;
-    return 0;
-  }
-
-  getHintsCount(teamName: TeamName) {
-    const team = this.activeTeams.get(teamName);
-    if (team) return team.hintsCount;
-    return 0;
-  }
-
   getTeam(teamName: TeamName) {
-    if (this.isInGame(teamName)) {
-      return this.activeTeams.get(teamName);
-    }
+    if (this.isInGame(teamName)) return this.activeTeams.get(teamName);
+    else return this.inactiveTeams.get(teamName);
+  }
+
+  getActiveTeam(teamName: TeamName) {
+    return this.activeTeams.get(teamName);
+  }
+
+  getInactiveTeam(teamName: TeamName) {
     return this.inactiveTeams.get(teamName);
   }
 
@@ -161,11 +146,6 @@ class Game {
     this.activeTeams.set(teamName, team);
     this.inactiveTeams.delete(teamName);
     return team;
-  }
-
-  private findAuctionWinningTeam() {
-    const entry = [...this.activeTeams.entries()].reduce((x, y) => (x[1].auctionAmount > y[1].auctionAmount ? x : y));
-    return entry[1];
   }
 
   private findWinningTeam() {

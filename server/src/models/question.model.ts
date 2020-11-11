@@ -1,7 +1,7 @@
 import { prop, getModelForClass } from '@typegoose/typegoose';
 import { shuffle } from '../utils';
 
-export { QuestionSetModel, QuestionSetSchema, QuestionSetInternal, QuestionSetShared, QuestionInternal };
+export { QuestionSetModel, QuestionSetSchema, QuestionSetData, QuestionSet, Question };
 
 class QuestionSchema {
   @prop()
@@ -31,12 +31,12 @@ const QuestionSetModel = getModelForClass(QuestionSetSchema, {
   schemaOptions: { collection: 'questions', timestamps: true }
 });
 
-interface QuestionSetShared {
+interface QuestionSetData {
   name: string;
   file?: any;
 }
 
-class QuestionInternal {
+class Question {
   public content: string;
   public hints: string[];
   public answer: string;
@@ -53,16 +53,16 @@ class QuestionInternal {
   }
 }
 
-class QuestionSetInternal {
+class QuestionSet {
   public name: string;
-  public categories: Map<string, QuestionInternal[]>;
-  public currentQuestion: QuestionInternal;
+  public categories: Map<string, Question[]>;
+  public currentQuestion: Question;
 
   constructor(name: string, categories: CategorySchema[]) {
     this.name = name;
     this.categories = new Map(
       categories.map(i => {
-        const questions = i.questions.map(quest => new QuestionInternal(quest.content, quest.hints));
+        const questions = i.questions.map(quest => new Question(quest.content, quest.hints));
         return [i.name, shuffle(questions)];
       })
     );
@@ -74,9 +74,5 @@ class QuestionSetInternal {
     question.markUsed();
     this.currentQuestion = question;
     return question;
-  }
-
-  public getCurrentQuestion() {
-    return this.currentQuestion;
   }
 }
