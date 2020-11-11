@@ -2,14 +2,14 @@
   <section class="spectator">
     <app-status-icon />
     <app-question-section></app-question-section>
-    <app-auction-section></app-auction-section>
+    <app-amounts-section></app-amounts-section>
   </section>
 </template>
 
 <script>
 import StatusIcon from '@/components/shared/StatusIcon.vue';
 import QuestionSection from '@/components/spectator/QuestionSection.vue';
-import AuctionSection from '@/components/spectator/AuctionSection.vue';
+import AmountsSection from '@/components/spectator/AmountsSection.vue';
 
 export default {
   name: 'Spectator',
@@ -39,7 +39,7 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppQuestionSection: QuestionSection,
-    AppAuctionSection: AuctionSection
+    AppAmountsSection: AmountsSection
   }
 };
 </script>
@@ -50,7 +50,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  align-content: space-between;
   min-height: 100vh;
 }
 </style>

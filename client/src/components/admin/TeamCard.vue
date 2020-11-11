@@ -9,7 +9,7 @@
     <div class="card-row">
       <label>Licytacja</label>
       <b-form-input
-        :disabled="!inGame || !isAuction"
+        :disabled="!inGame || !isAuction || hasLost"
         v-shortkey.focus="['ctrl', shortcut]"
         @focus="event => event.target.select()"
         @keyup.enter="emitAuctionAmountChange"
@@ -77,7 +77,8 @@ export default {
       hasBlackBox: false,
       isAnswering: false, // TODO: implement color background depending on isAnswering
       isAuction: false,
-      inGame: false
+      inGame: false,
+      hasLost: false
     };
   },
   created() {
@@ -88,6 +89,7 @@ export default {
     this.$socket.client.on(this.variant + 'AccountBalanceChanged', this.changeAccountBalance);
     this.$socket.client.on(this.variant + 'HintsCountChanged', this.changeHintsCount);
     this.$socket.client.on(this.variant + 'BlackBoxChanged', this.changeBlackBox);
+    this.$socket.client.on(this.variant + 'HasLostChanged', this.changeHasLost);
   },
   computed: {
     buttonVariant() {
@@ -95,8 +97,8 @@ export default {
     },
     validateAuctionAmount() {
       return (
-        (this.auctionAmount > 200 && Number.isInteger(this.auctionAmount / 100)) ||
-        (this.auctionAmount < 100 && Number.isInteger(this.auctionAmount))
+        (this.auctionAmount >= 200 && Number.isInteger(this.auctionAmount / 100)) ||
+        (this.auctionAmount < 200 && Number.isInteger(this.auctionAmount))
       );
     }
   },
@@ -108,13 +110,14 @@ export default {
       this.hintsCount = data.hintsCount;
       this.hasBlackBox = data.hasBlackBox;
       this.inGame = data.inGame;
+      this.hasLost = data.hasLost;
     },
     toggleInGame() {
       this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, desiredState: !this.inGame });
     },
     emitAuctionAmountChange() {
       if (this.validateAuctionAmount) {
-        if (this.auctionAmount < 100) this.auctionAmount *= 100;
+        if (this.auctionAmount < 200) this.auctionAmount *= 100;
         this.$socket.client.emit('changeAuctionAmount', { teamName: this.variant, newAmount: this.auctionAmount });
       }
     },
@@ -136,12 +139,16 @@ export default {
     },
     changeAccountBalance(data) {
       this.accountBalance = data.accountBalance;
+      this.hasLost = data.hasLost;
     },
     changeHintsCount(data) {
       this.hintsCount = data.hintsCount;
     },
     changeBlackBox(data) {
       this.hasBlackBox = data.state;
+    },
+    changeHasLost(data) {
+      this.hasLost = data.hasLost;
     }
   },
   sockets: {

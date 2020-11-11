@@ -23,6 +23,7 @@ enum Outgoing {
   ACCOUNT_BALANCE_CHANGED = 'AccountBalanceChanged',
   HINTS_COUNT_CHANGED = 'HintsCountChanged',
   BLACK_BOX_CHANGED = 'BlackBoxChanged',
+  HAS_LOST_CHANGED = 'HasLostChanged',
   MONEY_POOL_CHANGED = 'moneyPoolChanged',
   AUCTION_STARTED = 'auctionStarted',
   AUCTION_FINISHED = 'auctionFinished',

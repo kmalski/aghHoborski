@@ -16,11 +16,12 @@ interface TeamShared {
   hintsCount: number;
   inGame?: boolean;
   isAuction?: boolean;
+  hasLost?: boolean;
 }
 
 class Team {
   public name: TeamName;
-  public auctionAmount: number;
+  public auctionAmount: number = 0;
   public accountBalance: number = 5000;
   public hasBlackBox: boolean = false;
   public hintsCount: number = 0;
@@ -60,5 +61,9 @@ class Team {
   grantBlackBox() {
     this.hasBlackBox = true;
     return this.hasBlackBox;
+  }
+
+  ableToPlay() {
+    return this.allMoney() > 200;
   }
 }

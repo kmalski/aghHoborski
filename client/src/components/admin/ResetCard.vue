@@ -25,7 +25,6 @@ export default {
     resetAmounts() {
       if (this.newAccountBalance < 100) this.newAccountBalance *= 100;
       this.$socket.client.emit('resetAccountBalances', { newBalance: this.newAccountBalance });
-      this.newAccountBalance = null;
     }
   }
 };

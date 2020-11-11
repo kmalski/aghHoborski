@@ -42,12 +42,13 @@ describe('Test game socket events', function () {
     client.emit('getTeamState', { teamName: 'green' });
     client.once('greenTeamState', (data: any) => {
       data.name.should.be.equal('green');
+      data.auctionAmount.should.be.equal(0);
       data.accountBalance.should.be.equal(5000);
       data.hasBlackBox.should.be.equal(false);
       data.hintsCount.should.be.equal(0);
       data.inGame.should.be.equal(true);
       data.isAuction.should.be.equal(false);
-      should.not.exist(data.auctionAmount);
+      data.hasLost.should.be.equal(false);
       done();
     });
   });
@@ -64,12 +65,13 @@ describe('Test game socket events', function () {
     client.emit('getTeamState', { teamName: 'green' });
     client.once('greenTeamState', (data: any) => {
       data.name.should.be.equal('green');
+      data.auctionAmount.should.be.equal(0);
       data.accountBalance.should.be.equal(5000);
       data.hasBlackBox.should.be.equal(false);
       data.hintsCount.should.be.equal(0);
       data.inGame.should.be.equal(false);
       data.isAuction.should.be.equal(false);
-      should.not.exist(data.auctionAmount);
+      data.hasLost.should.be.equal(false);
       done();
     });
   });
@@ -118,6 +120,7 @@ describe('Test game socket events', function () {
     client.emit('changeAccountBalance', { teamName: 'yellow', newBalance: 6000 });
     client.once('yellowAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(6000);
+      data.hasLost.should.be.equal(false);
       done();
     });
   });
@@ -146,7 +149,7 @@ describe('Test game socket events', function () {
     });
   });
 
-  it('Auction with black box as prize', function (done) {
+  it('Auction with black box as prize and out of the game', function (done) {
     client.emit('startAuction');
     client.once('auctionStarted', () => {
       client.once('yellowAuctionAmountChanged', (data: any) => {
@@ -155,10 +158,13 @@ describe('Test game socket events', function () {
         client.once('yellowAuctionAmountChanged', (data: any) => {
           data.auctionAmount.should.be.equal(500);
           client.emit('changeAuctionAmount', { teamName: 'blue', newAmount: 500 });
-          client.emit('changeAuctionAmount', { teamName: 'red', newAmount: 600 });
+          client.emit('changeAuctionAmount', { teamName: 'red', newAmount: 4900 });
           client.once('redAuctionAmountChanged', (data: any) => {
-            data.auctionAmount.should.be.equal(600);
+            data.auctionAmount.should.be.equal(4900);
             client.emit('finishAuction', { finishAuctionAction: 'grantBlackBox' });
+            client.once('redHasLostChanged', (data: any) => {
+              data.hasLost.should.be.equal(true);
+            });
             client.once('redBlackBoxChanged', (data: any) => {
               data.state.should.be.equal(true);
               done();
@@ -221,6 +227,15 @@ describe('Test game socket events', function () {
           });
         });
       });
+    });
+  });
+
+  it('Has lost when all money not greater than 200', function (done) {
+    client.emit('changeAccountBalance', { teamName: 'blue', newBalance: 199 });
+    client.once('blueAccountBalanceChanged', (data: any) => {
+      data.accountBalance.should.be.equal(199);
+      data.hasLost.should.be.equal(true);
+      done();
     });
   });
 });

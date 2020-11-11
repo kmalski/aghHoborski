@@ -14,7 +14,7 @@
         <app-team-card team-name="Czerwoni" variant="red" shortcut="4"></app-team-card>
         <app-team-card team-name="Mistrzowie" variant="masters" shortcut="5"></app-team-card>
       </div>
-      <div class="admin__row to-left">
+      <div class="admin__row">
         <app-reset-card></app-reset-card>
         <app-hint-card :disabled="true"></app-hint-card>
         <app-money-pool-card></app-money-pool-card>
@@ -101,16 +101,12 @@ export default {
 
   &__content {
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column;
     justify-content: center;
     position: relative;
     width: 85vw;
     height: 100vh;
     padding: 0 1rem;
-  }
-
-  .to-left {
-    justify-content: flex-start;
   }
 
   &__row {

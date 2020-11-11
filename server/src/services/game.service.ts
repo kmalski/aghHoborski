@@ -1,9 +1,8 @@
 import { Server } from 'socket.io';
-import { Game, GameShared } from '../models/game.model';
+import { GameShared } from '../models/game.model';
 import { UserSocket } from '../utils/socket.utils';
 import { TeamName, TeamShared } from '../models/team.model';
 import { Outgoing } from '../utils/event.constants';
-import { isBoolean } from 'util';
 
 export {
   getTeamState,
@@ -28,17 +27,13 @@ function getTeamState(gameData: GameShared, socket: UserSocket) {
     return socket.emit(teamName + Outgoing.TEAM_STATE);
   }
 
-  let team: TeamShared;
-  if (game.isInGame(teamName)) {
-    team = game.activeTeams.get(teamName);
-    team.inGame = true;
-  } else {
-    team = game.inactiveTeams.get(teamName);
-    team.inGame = false;
-  }
-  team.isAuction = game.isAuction;
+  const team = game.getTeam(teamName);
+  const teamShared = team as TeamShared;
+  teamShared.inGame = game.isInGame(teamName);
+  teamShared.isAuction = game.isAuction;
+  teamShared.hasLost = !team.ableToPlay();
 
-  socket.emit(teamName + Outgoing.TEAM_STATE, team);
+  socket.emit(teamName + Outgoing.TEAM_STATE, teamShared);
 }
 
 function getMoneyPool(socket: UserSocket) {
@@ -63,6 +58,7 @@ function changeTeamStatus(gameData: GameShared, socket: UserSocket, io: Server) 
   }
 
   game.changeTeamStatus(teamName, gameData.desiredState);
+
   io.in(socket.room.name).emit(teamName + Outgoing.TEAM_STATUS_CHANGED, { state: gameData.desiredState });
 }
 
@@ -76,7 +72,7 @@ function changeAuctionAmount(gameData: GameShared, socket: UserSocket, io: Serve
     !game.isInGame(teamName) ||
     !game.bidAmount(teamName, gameData.newAmount)
   ) {
-    socket.emit(teamName + Outgoing.AUCTION_AMOUNT_CHANGED, { auctionAmount: game.auctionAmount(teamName) });
+    socket.emit(teamName + Outgoing.AUCTION_AMOUNT_CHANGED, { auctionAmount: game.getAuctionAmount(teamName) });
     return socket.emit(Outgoing.WARNING, `Licytacja kwoty ${gameData.newAmount} jest w tym momencie niedozwolona.`);
   }
 
@@ -91,15 +87,19 @@ function changeAccountBalance(gameData: GameShared, socket: UserSocket, io: Serv
   const teamName = gameData.teamName as TeamName;
 
   if (!Number.isInteger(gameData.newBalance) || !game.isInGame(teamName)) {
-    socket.emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: game.accountBalance(teamName) });
+    socket.emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: game.getAccountBalance(teamName) });
     return socket.emit(
       Outgoing.WARNING,
       `Zmiana stanu konta na ${gameData.newBalance} jest w tym momencie niedozwolona.`
     );
   }
 
-  game.activeTeams.get(teamName).accountBalance = gameData.newBalance;
-  io.in(socket.room.name).emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: gameData.newBalance });
+  const team = game.activeTeams.get(teamName);
+  team.accountBalance = gameData.newBalance;
+  io.in(socket.room.name).emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, {
+    accountBalance: gameData.newBalance,
+    hasLost: !team.ableToPlay()
+  });
 }
 
 function changeHintsCount(gameData: GameShared, socket: UserSocket, io: Server) {
@@ -107,7 +107,7 @@ function changeHintsCount(gameData: GameShared, socket: UserSocket, io: Server) 
   const teamName = gameData.teamName as TeamName;
 
   if (!Number.isInteger(gameData.newCount) || !game.isInGame(teamName)) {
-    socket.emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, { hintsCount: game.hintsCount(teamName) });
+    socket.emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, { hintsCount: game.getHintsCount(teamName) });
     return socket.emit(
       Outgoing.WARNING,
       `Zmiana ilości podpowiedzi na ${gameData.newCount} jest w tym momencie niedozwolona.`
@@ -165,8 +165,8 @@ function resetAccountBalances(gameData: GameShared, socket: UserSocket) {
 function startAuction(socket: UserSocket, io: Server) {
   const game = socket.room.game;
 
-  if (game.isAuction === true) {
-    return socket.emit(Outgoing.WARNING, 'Aukcja już trwa.');
+  if (game.isAuction === true || game.getAbleToPlaySize() < 2) {
+    return socket.emit(Outgoing.WARNING, 'Nie można rozpocząć aukcji.');
   }
 
   game.startAuction();
@@ -174,8 +174,12 @@ function startAuction(socket: UserSocket, io: Server) {
   io.in(socket.room.name).emit(Outgoing.AUCTION_STARTED);
   io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
   game.activeTeams.forEach(team => {
-    io.in(socket.room.name).emit(team.name + Outgoing.AUCTION_AMOUNT_CHANGED, { auctionAmount: team.auctionAmount });
-    io.in(socket.room.name).emit(team.name + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: team.accountBalance });
+    if (team.ableToPlay()) {
+      io.in(socket.room.name).emit(team.name + Outgoing.AUCTION_AMOUNT_CHANGED, { auctionAmount: team.auctionAmount });
+      io.in(socket.room.name).emit(team.name + Outgoing.ACCOUNT_BALANCE_CHANGED, {
+        accountBalance: team.accountBalance
+      });
+    }
   });
 }
 
@@ -189,6 +193,9 @@ function finishAuction(gameData: GameShared, socket: UserSocket, io: Server) {
   const team = game.finishAuction();
 
   io.in(socket.room.name).emit(Outgoing.AUCTION_FINISHED);
+  if (!team.ableToPlay()) {
+    io.in(socket.room.name).emit(team.name + Outgoing.HAS_LOST_CHANGED, { hasLost: true });
+  }
   switch (gameData.finishAuctionAction) {
     case 'grantBlackBox':
       game.noAnswerNeeded();

@@ -72,7 +72,10 @@ async function adminJoin(roomData: RoomShared, socket: UserSocket) {
   let room = activeRooms.find(e => e.name === name);
   if (!room) {
     const questions = dbRoom.questions as QuestionSetSchema;
-    room = new RoomInternal(name).withQuestions(new QuestionSetInternal(questions.name, questions.categories));
+    room = new RoomInternal(name);
+    if(questions) {
+      room.withQuestions(new QuestionSetInternal(questions.name, questions.categories));
+    }
     activeRooms.push(room);
   }
 

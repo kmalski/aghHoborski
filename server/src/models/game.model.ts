@@ -7,7 +7,7 @@ interface GameShared {
   newAmount?: number;
   newBalance?: number;
   newCount?: number;
-  newMoneyPool?: number
+  newMoneyPool?: number;
   desiredState?: boolean;
   finishAuctionAction?: string;
 }
@@ -31,7 +31,7 @@ class Game {
 
   startAuction() {
     this.activeTeams.forEach(team => {
-      if (team.accountBalance > 200) {
+      if (team.ableToPlay()) {
         this.moneyPool += team.startAuction();
       }
     });
@@ -42,6 +42,9 @@ class Game {
 
   finishAuction() {
     this.isAuction = false;
+    this.activeTeams.forEach(team => {
+      team.auctionAmount = 0;
+    });
     return this.auctionWinningTeam;
   }
 
@@ -51,6 +54,7 @@ class Game {
     this.activeTeams.forEach(team => {
       this.moneyPool -= team.auctionAmount;
       team.accountBalance += team.auctionAmount;
+      team.auctionAmount = 0;
     });
   }
 
@@ -71,16 +75,10 @@ class Game {
   }
 
   wrongAnswer() {
-    if (this.auctionWinningTeam.accountBalance < 300) {
-      this.activeTeams.delete(this.auctionWinningTeam.name);
-    }
     this.auctionWinningTeam = null;
   }
 
   noAnswerNeeded() {
-    if (this.auctionWinningTeam.accountBalance < 300) {
-      this.activeTeams.delete(this.auctionWinningTeam.name);
-    }
     this.auctionWinningTeam = null;
     this.moneyPool = 0;
   }
@@ -118,22 +116,37 @@ class Game {
     return this.auctionWinningTeam && !this.isAuction;
   }
 
-  auctionAmount(teamName: TeamName) {
+  getAuctionAmount(teamName: TeamName) {
     const team = this.activeTeams.get(teamName);
     if (team) return team.auctionAmount;
     return 0;
   }
 
-  accountBalance(teamName: TeamName) {
+  getAccountBalance(teamName: TeamName) {
     const team = this.activeTeams.get(teamName);
     if (team) return team.accountBalance;
     return 0;
   }
 
-  hintsCount(teamName: TeamName) {
+  getHintsCount(teamName: TeamName) {
     const team = this.activeTeams.get(teamName);
     if (team) return team.hintsCount;
     return 0;
+  }
+
+  getTeam(teamName: TeamName) {
+    if (this.isInGame(teamName)) {
+      return this.activeTeams.get(teamName);
+    }
+    return this.inactiveTeams.get(teamName);
+  }
+
+  getAbleToPlaySize() {
+    let count = 0;
+    this.activeTeams.forEach(team => {
+      if (team.ableToPlay()) count++;
+    });
+    return count;
   }
 
   private moveToInactive(teamName: TeamName) {
