@@ -14,7 +14,7 @@ interface TeamShared {
   accountBalance: number;
   hasBlackBox: boolean;
   hintsCount: number;
-  inGame?: boolean;
+  isInGame?: boolean;
   isAuction?: boolean;
   hasLost?: boolean;
 }

@@ -138,10 +138,10 @@ export default {
       this.$socket.client.emit('startAuction');
     },
     grantHint() {
-      this.$socket.client.emit('finishAuction', { finishAuctionAction: 'grantHint' });
+      this.$socket.client.emit('finishAuction', { auctionFinishAction: 'grantHint' });
     },
     grantBlackBox() {
-      this.$socket.client.emit('finishAuction', { finishAuctionAction: 'grantBlackBox' });
+      this.$socket.client.emit('finishAuction', { auctionFinishAction: 'grantBlackBox' });
     },
     cancelAuction() {
       this.$socket.client.emit('cancelAuction');

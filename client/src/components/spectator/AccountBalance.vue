@@ -1,5 +1,5 @@
 <template>
-  <div v-if="inGame" class="account-balance" :class="[variant + '-background']">
+  <div v-if="isInGame" class="account-balance" :class="[variant + '-background']">
     <p>{{ accountBalance }}</p>
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       accountBalance: null,
-      inGame: false
+      isInGame: false
     };
   },
   created() {
@@ -31,10 +31,10 @@ export default {
   methods: {
     fillData(data) {
       this.accountBalance = data.accountBalance;
-      this.inGame = data.inGame;
+      this.isInGame = data.isInGame;
     },
     changeInGame(data) {
-      this.inGame = data.state;
+      this.isInGame = data.isInGame;
     },
     changeAccountBalance(data) {
       this.accountBalance = data.accountBalance;

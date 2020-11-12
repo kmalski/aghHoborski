@@ -47,7 +47,7 @@ describe('Test game socket events', function () {
       data.accountBalance.should.be.equal(5000);
       data.hasBlackBox.should.be.equal(false);
       data.hintsCount.should.be.equal(0);
-      data.inGame.should.be.equal(true);
+      data.isInGame.should.be.equal(true);
       data.isAuction.should.be.equal(false);
       data.hasLost.should.be.equal(false);
       done();
@@ -70,7 +70,7 @@ describe('Test game socket events', function () {
       data.accountBalance.should.be.equal(5000);
       data.hasBlackBox.should.be.equal(false);
       data.hintsCount.should.be.equal(0);
-      data.inGame.should.be.equal(false);
+      data.isInGame.should.be.equal(false);
       data.isAuction.should.be.equal(false);
       data.hasLost.should.be.equal(false);
       done();

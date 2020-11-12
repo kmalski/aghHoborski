@@ -1,15 +1,15 @@
 <template>
-  <div class="admin-card" :class="{ [variant + '-border']: inGame }">
+  <div class="admin-card" :class="{ [variant + '-border']: isInGame }">
     <div class="card-row">
       <label class="team-name" :class="[variant + '-font']">{{ teamName }}</label>
       <b-button class="blue-shadow rectangle-btn" :variant="buttonVariant" @click="toggleInGame">
-        {{ inGame ? 'Gra' : 'Nie gra' }}
+        {{ isInGame ? 'Gra' : 'Nie gra' }}
       </b-button>
     </div>
     <div class="card-row">
       <label>Licytacja</label>
       <b-form-input
-        :disabled="!inGame || !isAuction || hasLost"
+        :disabled="!isInGame || !isAuction || hasLost"
         v-shortkey.focus="['ctrl', shortcut]"
         @focus="event => event.target.select()"
         @keyup.enter="emitAuctionAmountChange"
@@ -20,7 +20,7 @@
     <div class="card-row">
       <label>Stan konta</label>
       <b-form-input
-        :disabled="!inGame"
+        :disabled="!isInGame"
         @keyup.enter="emitAccountBalanceChange"
         @focus="event => event.target.select()"
         v-model="accountBalance"
@@ -30,7 +30,7 @@
     <div class="card-row">
       <label>Podpowiedzi</label>
       <b-form-input
-        :disabled="!inGame"
+        :disabled="!isInGame"
         @keyup.enter="emitHintsCountChange"
         @focus="event => event.target.select()"
         v-model="hintsCount"
@@ -39,7 +39,7 @@
     </div>
     <div class="card-row">
       <label>Czarna skrzynka</label>
-      <b-button :disabled="!inGame" class="blue-shadow square-btn" variant="primary" @click="toggleBlackBox">
+      <b-button :disabled="!isInGame" class="blue-shadow square-btn" variant="primary" @click="toggleBlackBox">
         <b-icon :icon="hasBlackBox ? 'check2' : 'x'"></b-icon>
       </b-button>
     </div>
@@ -77,7 +77,7 @@ export default {
       hasBlackBox: false,
       isAnswering: false, // TODO: implement color background depending on isAnswering
       isAuction: false,
-      inGame: false,
+      isInGame: false,
       hasLost: false
     };
   },
@@ -93,7 +93,7 @@ export default {
   },
   computed: {
     buttonVariant() {
-      return this.inGame ? 'primary' : 'light';
+      return this.isInGame ? 'primary' : 'light';
     },
     validateAuctionAmount() {
       return (
@@ -109,11 +109,11 @@ export default {
       this.isAuction = data.isAuction;
       this.hintsCount = data.hintsCount;
       this.hasBlackBox = data.hasBlackBox;
-      this.inGame = data.inGame;
+      this.isInGame = data.isInGame;
       this.hasLost = data.hasLost;
     },
     toggleInGame() {
-      this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, newIsInGame: !this.inGame });
+      this.$socket.client.emit('changeTeamStatus', { teamName: this.variant, newIsInGame: !this.isInGame });
     },
     emitAuctionAmountChange() {
       if (this.validateAuctionAmount) {
@@ -138,7 +138,7 @@ export default {
       this.$socket.client.emit('changeBlackBox', { teamName: this.variant, newHasBlackBox: !this.hasBlackBox });
     },
     changeInGame(data) {
-      this.inGame = data.isInGame;
+      this.isInGame = data.isInGame;
     },
     changeAuctionAmount(data) {
       this.auctionAmount = data.auctionAmount;

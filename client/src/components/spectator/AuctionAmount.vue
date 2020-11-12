@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="inGame"
+    v-if="isInGame"
     class="auction-amount"
     :class="[variant + '-background']"
     :style="{ visibility: isAuction ? 'visible' : 'hidden' }"
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       auctionAmount: null,
-      inGame: false,
+      isInGame: false,
       isAuction: false
     };
   },
@@ -37,11 +37,11 @@ export default {
   methods: {
     fillData(data) {
       this.auctionAmount = data.auctionAmount;
-      this.inGame = data.inGame;
+      this.isInGame = data.isInGame;
       this.isAuction = data.isAuction;
     },
     changeInGame(data) {
-      this.inGame = data.state;
+      this.isInGame = data.isInGame;
     },
     changeAuctionAmount(data) {
       this.auctionAmount = data.auctionAmount;

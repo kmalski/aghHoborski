@@ -29,7 +29,7 @@ function getTeamState(gameData: GameData, socket: UserSocket) {
 
   const team = game.getTeam(teamName);
   const teamShared = team as TeamShared;
-  teamShared.inGame = game.isInGame(teamName);
+  teamShared.isInGame = game.isInGame(teamName);
   teamShared.isAuction = game.isAuction;
   teamShared.hasLost = !team.ableToPlay();
 
