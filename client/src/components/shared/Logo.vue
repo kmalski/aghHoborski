@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <h1>Awantura o Naukę</h1>
+    <p>Awantura o Naukę</p>
   </div>
 </template>
 
@@ -10,4 +10,17 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.logo {
+  height: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  p {
+    margin: 0;
+    font-size: 4.25rem;
+    font-weight: 500;
+  }
+}
+</style>

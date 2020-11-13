@@ -4,13 +4,19 @@
       {{ msg }}
     </b-alert>
     <app-status-icon />
-    <app-logo class="split__left"></app-logo>
-    <app-spectator-form class="split__right"></app-spectator-form>
+    <div class="split__left">
+      <app-logo></app-logo>
+      <app-scene></app-scene>
+    </div>
+    <div class="split__right">
+      <app-spectator-form></app-spectator-form>
+    </div>
   </section>
 </template>
 
 <script>
 import Logo from '@/components/shared/Logo.vue';
+import Scene from '@/components/three/Scene.vue';
 import StatusIcon from '@/components/shared/StatusIcon.vue';
 import SpectatorForm from '@/components/home/SpectatorForm.vue';
 
@@ -39,8 +45,9 @@ export default {
     }
   },
   components: {
-    AppStatusIcon: StatusIcon,
     AppLogo: Logo,
+    AppScene: Scene,
+    AppStatusIcon: StatusIcon,
     AppSpectatorForm: SpectatorForm
   }
 };
@@ -51,5 +58,6 @@ export default {
 
 .home {
   @extend .split;
+  background-image: radial-gradient(at 25vw 50vh, #fff, #e1dfe1);
 }
 </style>

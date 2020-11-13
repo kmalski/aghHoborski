@@ -4,13 +4,17 @@
       {{ msg }}
     </b-alert>
     <app-status-icon />
-    <app-logo class="split__left"></app-logo>
+    <div class="split__left">
+      <app-logo></app-logo>
+      <app-scene></app-scene>
+    </div>
     <app-login-form class="split__right"></app-login-form>
   </section>
 </template>
 
 <script>
 import Logo from '@/components/shared/Logo.vue';
+import Scene from '@/components/three/Scene.vue';
 import StatusIcon from '@/components/shared/StatusIcon.vue';
 import LoginForm from '@/components/login/LoginForm.vue';
 
@@ -43,8 +47,9 @@ export default {
     }
   },
   components: {
-    AppStatusIcon: StatusIcon,
     AppLogo: Logo,
+    AppScene: Scene,
+    AppStatusIcon: StatusIcon,
     AppLoginForm: LoginForm
   }
 };
@@ -55,5 +60,7 @@ export default {
 
 .login {
   @extend .split;
+
+  background-image: radial-gradient(at 25vw 50vh, #fff, #e1dfe1);
 }
 </style>

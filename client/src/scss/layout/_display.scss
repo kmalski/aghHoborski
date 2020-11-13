@@ -1,18 +1,20 @@
 .split {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   align-items: center;
   width: 100vw;
   height: 100vh;
 
   &__left,
   &__right {
+    padding: 0;
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    padding: 1rem;
+    justify-content: center;
+    align-items: center;
     width: 50vw;
+    height: 100vh;
   }
 }
 

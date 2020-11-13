@@ -54,4 +54,13 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.spectator-form {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+}
+</style>
