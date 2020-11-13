@@ -14,6 +14,9 @@ enum Outgoing {
 
   // questions
   ALL_QUESTION_SETS = 'allQuestionSets',
+  CURRENT_QUESTION = 'currentQuestion',
+  NEXT_QUESTION = 'nextQuestion',
+  AVAILABLE_CATEGORIES = 'availableCategories',
 
   // game
   TEAM_STATE = 'TeamState',
@@ -44,6 +47,9 @@ enum Incoming {
   ADD_QUESTION_SET = 'addQuestionSet',
   GET_ALL_QUESTION_SETS = 'getAllQuestionSets',
   CHANGE_QUESTION_SET = 'changeQuestionSet',
+  GET_CURRENT_QUESTION = 'getCurrentQuestion',
+  GET_AVAILABLE_CATEGORIES = 'getAvailableCategories',
+  DRAW_NEXT_QUESTION = 'drawNextQuestion',
 
   // game
   GET_TEAM_STATE = 'getTeamState',

@@ -3,6 +3,7 @@ import { GameData } from '../models/game.model';
 import { UserSocket } from '../utils/socket.utils';
 import { TeamName, TeamShared } from '../models/team.model';
 import { Outgoing } from '../utils/event.constants';
+import { drawNextQuestion } from './question.service';
 
 export {
   getTeamState,
@@ -192,6 +193,9 @@ function finishAuction(gameData: GameData, socket: UserSocket, io: Server) {
   const game = socket.room.game;
 
   if (game.isAuction === false || !gameData.auctionFinishAction || !game.auctionWinningTeam) {
+    if (gameData.categoryName) {
+      return socket.emit(Outgoing.FAIL, 'Nie można zakończyć aukcji.');
+    }
     return socket.emit(Outgoing.WARNING, 'Nie można zakończyć aukcji.');
   }
 
@@ -214,6 +218,8 @@ function finishAuction(gameData: GameData, socket: UserSocket, io: Server) {
       io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
       io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
       return io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: team.grantHint() });
+    case 'drawNextQuestion':
+      return drawNextQuestion({ categoryName: gameData.categoryName }, socket, io);
     default:
       return socket.emit(Outgoing.WARNING, 'Nieznana akcja.');
   }

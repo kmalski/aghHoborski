@@ -5,6 +5,7 @@ import { QuestionSet, QuestionSetSchema } from '../models/question.model';
 import { Outgoing } from '../utils/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import * as game from '../sockets/game.socket';
+import * as question from '../sockets/question.socket';
 
 export { join, adminJoin, create, authorize };
 
@@ -54,6 +55,7 @@ function join(roomData: RoomData, socket: UserSocket, io: Server) {
   socket.join(socket.room.name);
   socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name });
 
+  question.listen(io, socket);
   game.listen(io, socket);
 }
 
@@ -104,6 +106,7 @@ function authorize(roomData: RoomData, socket: UserSocket, io: Server) {
   socket.emit(Outgoing.AUTHORIZED);
 
   // now we are sure that only authorized sockets will be able to emit game events
+  question.listen(io, socket);
   game.listen(io, socket);
   game.listenAdmin(io, socket);
 }

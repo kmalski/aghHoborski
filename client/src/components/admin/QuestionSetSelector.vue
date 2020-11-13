@@ -1,5 +1,5 @@
 <template>
-  <b-modal class="question-selector" :id="id" hide-footer size="lg" title="Wybierz pytania">
+  <b-modal :id="id" hide-footer size="lg" title="Wybierz pytania">
     <b-alert class="modal-alert" v-model="showAlert" variant="warning" dismissible>
       {{ msg }}
     </b-alert>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'QuestionSelector',
+  name: 'QuestionSetSelector',
   props: {
     id: {
       type: String,
@@ -44,7 +44,11 @@ export default {
     };
   },
   mounted() {
-    this.$socket.client.emit('getAllQuestionSets');
+    this.$root.$on('bv::modal::show', event => {
+      if (event.componentId === this.id) {
+        this.$socket.client.emit('getAllQuestionSets');
+      }
+    });
   },
   methods: {
     changeQuestionSet(index) {
@@ -66,8 +70,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.modal-alert {
-  font-size: 0.9rem;
-}
-</style>
+<style scoped lang="scss"></style>

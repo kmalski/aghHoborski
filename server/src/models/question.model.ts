@@ -32,8 +32,9 @@ const QuestionSetModel = getModelForClass(QuestionSetSchema, {
 });
 
 interface QuestionSetData {
-  name: string;
+  name?: string;
   file?: any;
+  categoryName?: string;
 }
 
 class Question {
@@ -56,23 +57,30 @@ class Question {
 class QuestionSet {
   public name: string;
   public categories: Map<string, Question[]>;
-  public currentQuestion: Question;
+  public current: {
+    category: string;
+    question: Question;
+  };
 
   constructor(name: string, categories: CategorySchema[]) {
     this.name = name;
     this.categories = new Map(
-      categories.map(i => {
-        const questions = i.questions.map(quest => new Question(quest.content, quest.hints));
-        return [i.name, shuffle(questions)];
+      categories.map(category => {
+        const questions = category.questions.map(quest => new Question(quest.content, quest.hints));
+        return [category.name, shuffle(questions)];
       })
     );
   }
 
-  public getNextQuestion(categoryName: string) {
-    const categories = this.categories.get(categoryName);
-    const question = categories.find(quest => !quest.used);
+  getNextQuestion(categoryName: string) {
+    const category = this.categories.get(categoryName);
+    const question = category.find(quest => !quest.used);
     question.markUsed();
-    this.currentQuestion = question;
+    this.current = { category: categoryName, question };
     return question;
+  }
+
+  categoryExists(categoryName: string) {
+    return this.categories.has(categoryName);
   }
 }

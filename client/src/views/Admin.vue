@@ -4,7 +4,7 @@
     <section class="admin__content">
       <app-timer></app-timer>
       <div class="admin__row">
-        <app-category-card></app-category-card>
+        <app-question-card></app-question-card>
         <app-one-on-one-card :disabled="true"></app-one-on-one-card>
       </div>
       <div class="admin__row">
@@ -35,7 +35,7 @@
 
 <script>
 import MoneyPoolCard from '@/components/admin/MoneyPoolCard';
-import CategoryCard from '@/components/admin/CategoryCard';
+import QuestionCard from '@/components/admin/QuestionCard';
 import OneOnOneCard from '@/components/admin/OneOnOneCard';
 import StatusIcon from '@/components/shared/StatusIcon';
 import ResetCard from '@/components/admin/ResetCard';
@@ -82,7 +82,7 @@ export default {
   },
   components: {
     AppMoneyPoolCard: MoneyPoolCard,
-    AppCategoryCard: CategoryCard,
+    AppQuestionCard: QuestionCard,
     AppOneOnOneCard: OneOnOneCard,
     AppStatusIcon: StatusIcon,
     AppResetCard: ResetCard,

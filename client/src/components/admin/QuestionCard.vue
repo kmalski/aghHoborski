@@ -1,5 +1,5 @@
 <template>
-  <div class="category-card">
+  <div class="question-card">
     <div class="card-row">
       <label>Kategoria</label>
       <p>{{ category }}</p>
@@ -9,7 +9,7 @@
       <p>{{ question }}</p>
     </div>
     <div class="card-row">
-      <label>Podpowiedź</label>
+      <label>Podpowiedzi</label>
       <div class="hint-list">
         <p v-for="hint in hints" :key="hint">{{ hint }}</p>
       </div>
@@ -19,15 +19,29 @@
 
 <script>
 export default {
-  name: 'CategoryCard',
+  name: 'QuestionCard',
   data() {
     return {
-      category: 'Jakaś kategoria',
-      question: `Pytanie pytanie pytanie pytanie pytanie
-                pytanie pytanie pytanie pytanie pytanie
-                pytanie pytanie pytanie pytanie pytanie ?`,
-      hints: ['Podpowiedź1', 'Podpowiedź2', 'Podpowiedź3', 'Podpowiedź4']
+      category: '',
+      question: '',
+      hints: []
     };
+  },
+  created() {
+    this.$socket.client.emit('getCurrentQuestion');
+    this.$socket.client.on('currentQuestion', this.fillData);
+  },
+  methods: {
+    fillData(data) {
+      this.category = data.category;
+      this.question = data.question;
+      this.hints = data.hints;
+    }
+  },
+  sockets: {
+    nextQuestion(data) {
+      this.fillData(data);
+    }
   }
 };
 </script>
@@ -35,7 +49,7 @@ export default {
 <style scoped lang="scss">
 @import '../../scss/main.scss';
 
-.category-card {
+.question-card {
   @extend .base-card;
 
   display: flex;
@@ -43,7 +57,8 @@ export default {
   align-items: center;
   justify-content: center;
   max-height: fit-content;
-  max-width: 35vw;
+  min-height: 23vh;
+  width: 35vw;
   margin: auto;
 
   label {
@@ -71,6 +86,8 @@ export default {
     .hint-list {
       display: flex;
       flex-flow: row wrap;
+      justify-content: space-between;
+      width: 100%;
 
       * {
         flex: 1 0 40%;

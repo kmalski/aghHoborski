@@ -1,5 +1,5 @@
 <template>
-  <b-modal class="question-uploader" :id="id" hide-footer title="Dodaj własne pytania">
+  <b-modal :id="id" hide-footer title="Dodaj własne pytania">
     <b-alert class="modal-alert" v-model="showAlert" variant="warning" dismissible>
       {{ msg }}
     </b-alert>
@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: 'QuestionUploader',
+  name: 'QuestionSetUploader',
   props: {
     id: {
       type: String,
@@ -58,10 +58,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.modal-alert {
-  font-size: 0.9rem;
-}
-
 .buttons-wrapper {
   float: right;
   display: flex;

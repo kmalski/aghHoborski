@@ -11,6 +11,7 @@ interface GameData {
   newHasBlackBox?: boolean;
   newIsInGame?: boolean;
   auctionFinishAction?: string;
+  categoryName?: string;
 }
 
 class Game {

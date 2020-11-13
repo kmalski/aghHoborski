@@ -20,20 +20,23 @@
     <b-button class="blue-shadow menu__btn" variant="primary" @click="logout">
       Wyloguj
     </b-button>
-    <app-question-uploader :id="uploaderId"></app-question-uploader>
-    <app-question-selector :id="selectorId"></app-question-selector>
+    <app-category-selector :id="categoryId"></app-category-selector>
+    <app-question-set-uploader :id="uploaderId"></app-question-set-uploader>
+    <app-question-set-selector :id="selectorId"></app-question-set-selector>
   </section>
 </template>
 
 <script>
-import QuestionUploader from '@/components/admin/QuestionUploader';
-import QuestionSelector from '@/components/admin/QuestionSelector';
+import CategorySelector from '@/components/admin/CategorySelector';
+import QuestionSetUploader from '@/components/admin/QuestionSetUploader';
+import QuestionSetSelector from '@/components/admin/QuestionSetSelector';
 
 export default {
   name: 'Menu',
   data() {
     return {
       uploaderId: 'uploader',
+      categoryId: 'category',
       selectorId: 'selector',
       actionCategories: [
         {
@@ -46,7 +49,7 @@ export default {
             },
             {
               name: 'Zakończ licytację: wybierz kategorię',
-              action: this.dummy
+              action: this.chooseCategory
             },
             {
               name: 'Zakończ licytację: wygrano podpowiedź',
@@ -143,6 +146,9 @@ export default {
     grantBlackBox() {
       this.$socket.client.emit('finishAuction', { auctionFinishAction: 'grantBlackBox' });
     },
+    chooseCategory() {
+      this.$bvModal.show(this.categoryId);
+    },
     cancelAuction() {
       this.$socket.client.emit('cancelAuction');
     },
@@ -160,8 +166,9 @@ export default {
     dummy() {}
   },
   components: {
-    AppQuestionUploader: QuestionUploader,
-    AppQuestionSelector: QuestionSelector
+    AppCategorySelector: CategorySelector,
+    AppQuestionSetUploader: QuestionSetUploader,
+    AppQuestionSetSelector: QuestionSetSelector
   }
 };
 </script>

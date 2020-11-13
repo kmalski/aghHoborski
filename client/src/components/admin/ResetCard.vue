@@ -18,13 +18,27 @@ export default {
   name: 'ResetCard',
   data() {
     return {
+      resetModalId: 'resetModalId',
       newAccountBalance: null
     };
   },
   methods: {
-    resetAmounts() {
+    async resetAmounts() {
       if (this.newAccountBalance < 100) this.newAccountBalance *= 100;
+      if (await this.confirm());
       this.$socket.client.emit('resetAccountBalances', { newAccountBalance: this.newAccountBalance });
+    },
+    async confirm() {
+      return await this.$bvModal.msgBoxConfirm(
+        `Czy na pewno chcesz aby stan kont wszystkich drużyń wynosił ${this.newAccountBalance}?`,
+        {
+          centered: true,
+          size: 'sm',
+          buttonSize: 'sm',
+          okTitle: 'Tak',
+          cancelTitle: 'Nie'
+        }
+      );
     }
   }
 };

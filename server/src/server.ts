@@ -7,7 +7,6 @@ import mongoose from 'mongoose';
 import SocketIO from 'socket.io';
 
 import * as room from './sockets/room.socket';
-import * as question from './sockets/question.socket';
 import { UserSocket } from './utils/socket.utils';
 import { Incoming } from './utils/event.constants';
 import { AddressInfo } from 'net';
@@ -69,7 +68,6 @@ class ClashServer {
     this.io.on(Incoming.CONNECT, (socket: UserSocket) => {
       console.log(`New user connected: ${socket.id}`);
 
-      question.listen(this.io, socket);
       room.listen(this.io, socket);
     });
 
