@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { RoomData } from '../models/room.model';
-import { Incoming } from '../utils/event.constants';
+import { Incoming } from '../constans/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import { normalizeString } from '../utils';
 import { join, create, adminJoin, authorize } from '../services/room.service';

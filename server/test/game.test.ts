@@ -7,6 +7,25 @@ import { ClashServer } from '../src/server';
 
 const should = chai.should();
 
+const questionSet = `
+{
+  "categories": [
+    {
+      "name": "Pilka nozna",
+      "questions": [
+        {
+          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?",
+          "hints": ["1972", "1960", "1952", "1976"]
+        },
+        {
+          "content": "Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?",
+          "hints": ["Jerzy Engel", "Janusz Wójcik", "Paweł Janas", "Zbigniew Boniek"]
+        }
+      ]
+    }
+  ]
+}`;
+
 describe('Test game socket events', function () {
   const options = { transports: ['websocket'] };
   let server: ClashServer;
@@ -27,7 +46,10 @@ describe('Test game socket events', function () {
         client.emit('createRoom', { name: 'GameTestName', password: 'GameTestPassword' });
         client.once('roomCreated', (roomData: any) => {
           client.emit('authorize', { name: 'GameTestName', token: roomData.token });
-          client.once('authorized', () => done());
+          client.once('authorized', () => {
+            client.emit('addQuestionSet', { name: 'testSet', file: questionSet });
+            client.once('success', () => done());
+          });
         });
       });
   });
@@ -151,8 +173,9 @@ describe('Test game socket events', function () {
   });
 
   it('Auction with black box as prize and out of the game', function (done) {
-    client.emit('startAuction');
-    client.once('auctionStarted', () => {
+    client.emit('startAuction', { categoryName: 'blackBox' });
+    client.once('auctionStarted', (data: any) => {
+      data.category.should.be.equal('blackBox');
       client.once('yellowAuctionAmountChanged', (data: any) => {
         data.auctionAmount.should.be.equal(200);
         client.emit('changeAuctionAmount', { teamName: 'yellow', newAuctionAmount: 500 });
@@ -162,7 +185,7 @@ describe('Test game socket events', function () {
           client.emit('changeAuctionAmount', { teamName: 'red', newAuctionAmount: 4900 });
           client.once('redAuctionAmountChanged', (data: any) => {
             data.auctionAmount.should.be.equal(4900);
-            client.emit('finishAuction', { auctionFinishAction: 'grantBlackBox' });
+            client.emit('finishAuction');
             client.once('redHasLostChanged', (data: any) => {
               data.hasLost.should.be.equal(true);
             });
@@ -180,8 +203,9 @@ describe('Test game socket events', function () {
     client.emit('resetAccountBalances', { newAccountBalance: 5000 });
     client.once('greenAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(5000);
-      client.emit('startAuction');
-      client.once('auctionStarted', () => {
+      client.emit('startAuction', { categoryName: 'hint' });
+      client.once('auctionStarted', (data: any) => {
+        data.category.should.be.equal('hint');
         client.once('greenAuctionAmountChanged', (data: any) => {
           data.auctionAmount.should.be.equal(200);
           client.emit('changeAuctionAmount', { teamName: 'blue', newAuctionAmount: 4000 });
@@ -190,7 +214,7 @@ describe('Test game socket events', function () {
             client.emit('changeAuctionAmount', { teamName: 'green', newAuctionAmount: 4100 });
             client.once('greenAuctionAmountChanged', (data: any) => {
               data.auctionAmount.should.be.equal(4100);
-              client.emit('finishAuction', { auctionFinishAction: 'grantHint' });
+              client.emit('finishAuction');
               client.once('greenHintsCountChanged', (data: any) => {
                 data.hintsCount.should.be.equal(1);
                 done();
@@ -206,7 +230,7 @@ describe('Test game socket events', function () {
     client.emit('resetAccountBalances', { newAccountBalance: 5000 });
     client.once('greenAccountBalanceChanged', (data: any) => {
       data.accountBalance.should.be.equal(5000);
-      client.emit('startAuction');
+      client.emit('startAuction', { categoryName: 'hint' });
       client.once('auctionStarted', () => {
         client.once('greenAuctionAmountChanged', (data: any) => {
           data.auctionAmount.should.be.equal(200);

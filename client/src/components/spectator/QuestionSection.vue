@@ -4,7 +4,7 @@
       <p class="ml-5">PYTANIE {{ question.number }}</p>
       <p class="mr-5">ETAP {{ stageNumber }}</p>
     </app-separator>
-    <div class="question">
+    <div class="question" :class="{ [backgroundColor + '-background']: backgroundColor }">
       <p class="question__category">{{ question.category }}</p>
       <p class="question__content">{{ question.content }}</p>
       <div class="question__hints">
@@ -23,13 +23,49 @@ export default {
     return {
       question: {
         number: 0,
-        content:
-          'Jaka tkanka, wchodzaca w skład zespołu tkanek przewodzących, transportuje substancje odżywcze wytworzone w procesie fotosyntezy?',
-        hints: ['łyko', 'drewno', 'miazga', 'skórka'],
-        category: 'Biologia'
+        category: '',
+        content: '',
+        hints: []
       },
+      backgroundColor: '',
       stageNumber: 1
     };
+  },
+  created() {
+    this.$socket.client.emit('getCurrentQuestion');
+    this.$socket.client.on('currentQuestion', this.fillData);
+  },
+  methods: {
+    fillData(data) {
+      this.question.number = data.roundNumber;
+      switch (data.roundStage) {
+        case 'auction':
+          this.question.category = this.transformCategory(data.category);
+          break;
+        case 'answering':
+          this.question.content = data.content;
+          this.backgroundColor = data.winningTeam;
+          break;
+      }
+    },
+    transformCategory(category) {
+      if (category === 'blackBox') return 'Czarna skrzynka';
+      else if (category === 'hint') return 'Podpowiedź';
+      else return category;
+    }
+  },
+  sockets: {
+    auctionStarted(data) {
+      this.question.category = this.transformCategory(data.category);
+      this.question.number = data.roundNumber;
+    },
+    auctionFinished(data) {
+      this.backgroundColor = data.winningTeam;
+      this.question.category = '';
+    },
+    nextQuestion(data) {
+      this.question.content = data.question;
+    }
   },
   components: {
     AppSeparator: Separator

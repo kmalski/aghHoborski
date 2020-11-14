@@ -55,11 +55,14 @@ class Question {
 }
 
 class QuestionSet {
+  public static BLACK_BOX_CATEGORY: string = 'blackBox';
+  public static HINT_CATEGORY: string = 'hint';
+
   public name: string;
   public categories: Map<string, Question[]>;
   public current: {
     category: string;
-    question: Question;
+    question?: Question;
   };
 
   constructor(name: string, categories: CategorySchema[]) {
@@ -72,15 +75,30 @@ class QuestionSet {
     );
   }
 
-  getNextQuestion(categoryName: string) {
-    const category = this.categories.get(categoryName);
-    const question = category.find(quest => !quest.used);
-    question.markUsed();
-    this.current = { category: categoryName, question };
-    return question;
+  setCategory(categoryName: string) {
+    this.current = { category: categoryName };
+  }
+
+  drawQuestion() {
+    if (this.categories.has(this.current.category)) {
+      const category = this.categories.get(this.current.category);
+      const question = category.find(quest => !quest.used);
+      question.markUsed();
+      this.current.question = question;
+      return question;
+    }
   }
 
   categoryExists(categoryName: string) {
-    return this.categories.has(categoryName);
+    return (
+      this.categories.has(categoryName) ||
+      categoryName === QuestionSet.BLACK_BOX_CATEGORY ||
+      categoryName === QuestionSet.HINT_CATEGORY
+    );
+  }
+
+  reset() {
+    this.current = null;
+    this.categories.forEach(questions => questions.forEach(question => (question.used = false)));
   }
 }

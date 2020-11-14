@@ -33,12 +33,20 @@ export default {
   },
   methods: {
     fillData(data) {
-      this.category = data.category;
+      this.category = this.transformCategory(data.category);
       this.question = data.question;
       this.hints = data.hints;
+    },
+    transformCategory(category) {
+      if (category === 'blackBox') return 'Czarna skrzynka';
+      else if (category === 'hint') return 'Podpowiedź';
+      else return category;
     }
   },
   sockets: {
+    auctionStarted(data) {
+      this.category = this.transformCategory(data.category);
+    },
     nextQuestion(data) {
       this.fillData(data);
     }
@@ -57,7 +65,7 @@ export default {
   align-items: center;
   justify-content: center;
   max-height: fit-content;
-  min-height: 23vh;
+  min-height: 25vh;
   width: 35vw;
   margin: auto;
 
@@ -68,7 +76,7 @@ export default {
   .card-row {
     display: grid;
     grid-template: 1fr / 30% 70%;
-    margin: 0.25rem auto;
+    margin: auto;
     width: 100%;
 
     > :first-child {

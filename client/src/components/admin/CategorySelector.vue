@@ -4,7 +4,10 @@
       {{ msg }}
     </b-alert>
     <div class="categories">
-      <p v-for="category in categories" :key="category" @click="drawNextQuestion(category)">{{ category }}</p>
+      <p @click="startAuction('blackBox')">Czarna skrzynka</p>
+      <p @click="startAuction('hint')">Podpowiedź</p>
+      <hr />
+      <p v-for="category in categories" :key="category" @click="startAuction(category)">{{ category }}</p>
     </div>
   </b-modal>
 </template>
@@ -33,9 +36,8 @@ export default {
     });
   },
   methods: {
-    drawNextQuestion(categoryName) {
-      console.log(categoryName);
-      this.$socket.client.emit('finishAuction', { auctionFinishAction: 'drawNextQuestion', categoryName });
+    startAuction(categoryName) {
+      this.$socket.client.emit('startAuction', { categoryName });
     }
   },
   sockets: {
@@ -63,6 +65,14 @@ export default {
   justify-content: flex-start;
   font-size: 0.8rem;
   width: fit-content;
+
+  hr {
+    flex: 0 0 98%;
+    border: none;
+    border-bottom: 1px solid black;
+    background: white;
+    margin: 0.5rem auto;
+  }
 
   p {
     display: inline-block;

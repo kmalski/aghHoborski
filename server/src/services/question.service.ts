@@ -1,17 +1,10 @@
 import { Server } from 'socket.io';
-import { Outgoing } from '../utils/event.constants';
+import { Outgoing } from '../constans/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import { RoomModel } from '../models/room.model';
 import { QuestionSetModel, QuestionSet, QuestionSetData } from '../models/question.model';
 
-export {
-  addQuestionSet,
-  getAllQuestionSets,
-  changeQuestionSet,
-  getCurrentQuestion,
-  getAvailableCategories,
-  drawNextQuestion
-};
+export { addQuestionSet, getAllQuestionSets, changeQuestionSet, getCurrentQuestion, getAvailableCategories };
 
 async function addQuestionSet(questionData: QuestionSetData, socket: UserSocket) {
   const questionSet = await QuestionSetModel.findOne({ name: questionData.name });
@@ -52,38 +45,18 @@ function getCurrentQuestion(socket: UserSocket) {
   const game = socket.room.game;
   const questions = socket.room.questions;
 
-  if (!questions || !game.isAnsweringStage()) {
-    return socket.emit(Outgoing.CURRENT_QUESTION, {});
+  if (!questions || !questions.current) {
+    return socket.emit(Outgoing.CURRENT_QUESTION, { roundStage: game.roundStage, roundNumber: game.roundNumber });
   }
 
-  if (!questions.current) {
-    return socket.emit(Outgoing.WARNING, 'Nie wybrano kategorii');
+  const current = questions.current;
+  const question = { category: current.category, roundStage: game.roundStage, roundNumber: game.roundNumber } as any;
+  if (current.question) {
+    question.content = current.question.content;
+    question.hints = current.question.hints;
+    question.winningTeam = game.auctionWinningTeam.name;
   }
-
-  const question = questions.current.question;
-  socket.emit(Outgoing.CURRENT_QUESTION, {
-    category: questions.current.category,
-    question: question.content,
-    hints: question.hints
-  });
-}
-
-function drawNextQuestion(questionData: QuestionSetData, socket: UserSocket, io: Server) {
-  const questions = socket.room.questions;
-
-  if (!questions) {
-    return socket.emit(Outgoing.WARNING, 'Nie wybrano zestawu pytań');
-  } else if (!questionData || !questionData.categoryName || !questions.categoryExists(questionData.categoryName)) {
-    return socket.emit(Outgoing.WARNING, 'Podana kategoria nie istnieje.');
-  }
-
-  const question = questions.getNextQuestion(questionData.categoryName);
-  socket.emit(Outgoing.SUCCESS);
-  io.in(socket.room.name).emit(Outgoing.NEXT_QUESTION, {
-    category: questionData.categoryName,
-    question: question.content,
-    hints: question.hints
-  });
+  socket.emit(Outgoing.CURRENT_QUESTION, question);
 }
 
 function getAvailableCategories(socket: UserSocket) {

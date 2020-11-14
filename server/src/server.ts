@@ -8,7 +8,7 @@ import SocketIO from 'socket.io';
 
 import * as room from './sockets/room.socket';
 import { UserSocket } from './utils/socket.utils';
-import { Incoming } from './utils/event.constants';
+import { Incoming } from './constans/event.constants';
 import { AddressInfo } from 'net';
 
 export { ClashServer };

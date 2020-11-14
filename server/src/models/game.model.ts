@@ -1,4 +1,5 @@
 import { Team, TeamName } from './team.model';
+import { RoundStage } from '../constans/game.constants';
 
 export { Game, GameData };
 
@@ -18,9 +19,10 @@ class Game {
   public activeTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public inactiveTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public moneyPool: number = 0;
-  public isAuction: boolean = false;
   public hintAmount: number = 0;
   public auctionWinningTeam?: Team;
+  public roundStage: RoundStage = RoundStage.IDLE;
+  public roundNumber: number = 0;
 
   constructor() {
     for (const name in TeamName) {
@@ -38,12 +40,13 @@ class Game {
       }
     });
     this.auctionWinningTeam = null;
-    this.isAuction = true;
+    this.roundStage = RoundStage.AUCTION;
+    this.roundNumber += 1;
     return this.moneyPool;
   }
 
   finishAuction() {
-    this.isAuction = false;
+    this.roundStage = RoundStage.ANSWERING;
     this.activeTeams.forEach(team => {
       team.auctionAmount = 0;
     });
@@ -51,13 +54,14 @@ class Game {
   }
 
   cancelAuction() {
-    this.isAuction = false;
+    this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam = null;
     this.activeTeams.forEach(team => {
       this.moneyPool -= team.auctionAmount;
       team.accountBalance += team.auctionAmount;
       team.auctionAmount = 0;
     });
+    this.roundNumber -= 1;
   }
 
   bidAmount(teamName: TeamName, amount: number) {
@@ -71,16 +75,19 @@ class Game {
   }
 
   correctAnswer() {
+    this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam.grantPrize(this.moneyPool);
     this.auctionWinningTeam = null;
     this.moneyPool = 0;
   }
 
   wrongAnswer() {
+    this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam = null;
   }
 
   noAnswerNeeded() {
+    this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam = null;
     this.moneyPool = 0;
   }
@@ -110,8 +117,16 @@ class Game {
     return this.activeTeams.get(teamName) != null || this.inactiveTeams.get(teamName) != null;
   }
 
-  isAnsweringStage() {
-    return this.auctionWinningTeam && !this.isAuction;
+  isAuction() {
+    return this.roundStage === RoundStage.AUCTION;
+  }
+
+  isAnswering() {
+    return this.roundStage === RoundStage.ANSWERING;
+  }
+
+  isIdle() {
+    return this.roundStage === RoundStage.IDLE;
   }
 
   getTeam(teamName: TeamName) {

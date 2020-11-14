@@ -30,7 +30,8 @@ enum Outgoing {
   MONEY_POOL_CHANGED = 'moneyPoolChanged',
   AUCTION_STARTED = 'auctionStarted',
   AUCTION_FINISHED = 'auctionFinished',
-  ROUND_FINISHED = 'roundFinished'
+  ROUND_FINISHED = 'roundFinished',
+  GAME_RESET = 'gameReset'
 }
 
 enum Incoming {
@@ -63,5 +64,6 @@ enum Incoming {
   RESET_ACCOUNT_BALANCES = 'resetAccountBalances',
   START_AUCTION = 'startAuction',
   FINISH_AUCTION = 'finishAuction',
-  CANCEL_AUCTION = 'cancelAuction'
+  CANCEL_AUCTION = 'cancelAuction',
+  RESET_GAME = 'resetGame'
 }

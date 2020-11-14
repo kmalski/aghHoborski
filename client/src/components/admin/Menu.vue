@@ -44,20 +44,12 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Zacznij licytację',
+              name: 'Zacznij licytację...',
               action: this.startAuction
             },
             {
-              name: 'Zakończ licytację: wybierz kategorię',
-              action: this.chooseCategory
-            },
-            {
-              name: 'Zakończ licytację: wygrano podpowiedź',
-              action: this.grantHint
-            },
-            {
-              name: 'Zakończ licytację: wygrano czarną skrzynkę',
-              action: this.grantBlackBox
+              name: 'Zakończ licytację',
+              action: this.finishAuction
             },
             {
               name: 'Anuluj licytację',
@@ -120,16 +112,20 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Dodaj własną pule pytań',
+              name: 'Dodaj własną pule pytań...',
               action: this.uploadQuestions
             },
             {
-              name: 'Wybierz pule pytań spośród istniejących',
+              name: 'Wybierz pule pytań spośród istniejących...',
               action: this.getAllQuestions
             },
             {
-              name: 'Pokaż aktualne ustawienia gry',
+              name: 'Pokaż aktualne ustawienia gry...',
               action: this.showGameSettings
+            },
+            {
+              name: 'Zresetuj całą grę',
+              action: this.resetGame
             }
           ]
         }
@@ -138,16 +134,10 @@ export default {
   },
   methods: {
     startAuction() {
-      this.$socket.client.emit('startAuction');
-    },
-    grantHint() {
-      this.$socket.client.emit('finishAuction', { auctionFinishAction: 'grantHint' });
-    },
-    grantBlackBox() {
-      this.$socket.client.emit('finishAuction', { auctionFinishAction: 'grantBlackBox' });
-    },
-    chooseCategory() {
       this.$bvModal.show(this.categoryId);
+    },
+    finishAuction() {
+      this.$socket.client.emit('finishAuction');
     },
     cancelAuction() {
       this.$socket.client.emit('cancelAuction');
@@ -159,6 +149,16 @@ export default {
       this.$bvModal.show(this.selectorId);
     },
     showGameSettings() {},
+    async resetGame() {
+      const confirmation = await this.$bvModal.msgBoxConfirm(`Czy na pewno chcesz rozpocząć grę od nowa?`, {
+        centered: true,
+        size: 'sm',
+        buttonSize: 'sm',
+        okTitle: 'Tak',
+        cancelTitle: 'Nie'
+      });
+      if (confirmation) this.$socket.client.emit('resetGame');
+    },
     logout() {
       this.$router.push({ name: 'Login' });
       localStorage.removeItem('awanturaToken');

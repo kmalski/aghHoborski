@@ -78,6 +78,9 @@ export default {
     warning(msg) {
       this.alert.msg = msg;
       this.alert.dismissCountDown = 3;
+    },
+    gameReset() {
+      this.$router.go(0);
     }
   },
   components: {

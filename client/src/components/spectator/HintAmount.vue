@@ -1,5 +1,5 @@
 <template>
-  <div class="hint-amount neutral-background">
+  <div class="hint-amount neutral-background" :style="{ visibility: 'hidden' }">
     <p>{{ hintAmount }}</p>
   </div>
 </template>

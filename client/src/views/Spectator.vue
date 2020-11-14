@@ -34,6 +34,9 @@ export default {
   sockets: {
     warning(msg) {
       this.returnHome(msg);
+    },
+    gameReset() {
+      this.$router.go(0);
     }
   },
   components: {

@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { UserSocket } from '../utils/socket.utils';
-import { Incoming } from '../utils/event.constants';
+import { Incoming } from '../constans/event.constants';
 import {
   changeAccountBalance,
   changeAuctionAmount,
@@ -13,7 +13,8 @@ import {
   finishAuction,
   cancelAuction,
   getMoneyPool,
-  resetAccountBalances
+  resetAccountBalances,
+  resetGame
 } from '../services/game.service';
 
 export { listen, listenAdmin };
@@ -31,7 +32,8 @@ function listenAdmin(io: Server, socket: UserSocket) {
   socket.on(Incoming.CHANGE_BLACK_BOX, gameData => changeBlackBox(gameData, socket, io));
   socket.on(Incoming.CHANGE_MONEY_POOL, gameData => changeMoneyPool(gameData, socket, io));
   socket.on(Incoming.RESET_ACCOUNT_BALANCES, gameData => resetAccountBalances(gameData, socket));
-  socket.on(Incoming.START_AUCTION, () => startAuction(socket, io));
-  socket.on(Incoming.FINISH_AUCTION, gameData => finishAuction(gameData, socket, io));
+  socket.on(Incoming.START_AUCTION, gameData => startAuction(gameData, socket, io));
+  socket.on(Incoming.FINISH_AUCTION, () => finishAuction(socket, io));
   socket.on(Incoming.CANCEL_AUCTION, () => cancelAuction(socket, io));
+  socket.on(Incoming.RESET_GAME, () => resetGame(socket, io));
 }

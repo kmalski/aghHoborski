@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { Server } from 'socket.io';
 import { RoomModel, RoomData, Room } from '../models/room.model';
 import { QuestionSet, QuestionSetSchema } from '../models/question.model';
-import { Outgoing } from '../utils/event.constants';
+import { Outgoing } from '../constans/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import * as game from '../sockets/game.socket';
 import * as question from '../sockets/question.socket';
@@ -107,6 +107,7 @@ function authorize(roomData: RoomData, socket: UserSocket, io: Server) {
 
   // now we are sure that only authorized sockets will be able to emit game events
   question.listen(io, socket);
+  question.listenAdmin(io, socket);
   game.listen(io, socket);
   game.listenAdmin(io, socket);
 }
