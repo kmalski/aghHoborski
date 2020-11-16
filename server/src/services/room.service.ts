@@ -5,6 +5,7 @@ import { QuestionSet, QuestionSetSchema } from '../models/question.model';
 import { Outgoing } from '../constans/event.constants';
 import { UserSocket } from '../utils/socket.utils';
 import * as game from '../sockets/game.socket';
+import * as team from '../sockets/team.socket';
 import * as question from '../sockets/question.socket';
 
 export { join, adminJoin, create, authorize };
@@ -57,6 +58,7 @@ function join(roomData: RoomData, socket: UserSocket, io: Server) {
 
   question.listen(io, socket);
   game.listen(io, socket);
+  team.listen(io, socket);
 }
 
 async function adminJoin(roomData: RoomData, socket: UserSocket) {
@@ -110,4 +112,6 @@ function authorize(roomData: RoomData, socket: UserSocket, io: Server) {
   question.listenAdmin(io, socket);
   game.listen(io, socket);
   game.listenAdmin(io, socket);
+  team.listen(io, socket);
+  team.listenAdmin(io, socket);
 }

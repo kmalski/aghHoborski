@@ -34,21 +34,30 @@ export default {
   methods: {
     fillData(data) {
       this.category = this.transformCategory(data.category);
-      this.question = data.question;
+      this.question = data.content;
       this.hints = data.hints;
     },
     transformCategory(category) {
       if (category === 'blackBox') return 'Czarna skrzynka';
       else if (category === 'hint') return 'Podpowiedź';
       else return category;
+    },
+    resetData() {
+      this.category = '';
+      this.question = '';
+      this.hints = [];
     }
   },
   sockets: {
     auctionStarted(data) {
       this.category = this.transformCategory(data.category);
     },
+    roundFinished() {
+      this.resetData();
+    },
     nextQuestion(data) {
-      this.fillData(data);
+      this.question = data.question;
+      this.hints = data.hints;
     }
   }
 };

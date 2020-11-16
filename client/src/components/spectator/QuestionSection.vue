@@ -5,9 +5,9 @@
       <p class="mr-5">ETAP {{ stageNumber }}</p>
     </app-separator>
     <div class="question" :class="{ [backgroundColor + '-background']: backgroundColor }">
-      <p class="question__category">{{ question.category }}</p>
-      <p class="question__content">{{ question.content }}</p>
-      <div class="question__hints">
+      <p v-show="question.category" class="question__category">{{ question.category }}</p>
+      <p v-show="question.content" class="question__content">{{ question.content }}</p>
+      <div v-show="question.hints.length" class="question__hints">
         <p v-for="hint in question.hints" :key="hint">{{ hint }}</p>
       </div>
     </div>
@@ -23,11 +23,11 @@ export default {
     return {
       question: {
         number: 0,
-        category: '',
-        content: '',
+        category: null,
+        content: null,
         hints: []
       },
-      backgroundColor: '',
+      backgroundColor: null,
       stageNumber: 1
     };
   },
@@ -41,6 +41,7 @@ export default {
       switch (data.roundStage) {
         case 'auction':
           this.question.category = this.transformCategory(data.category);
+          this.backgroundColor = 'neutral';
           break;
         case 'answering':
           this.question.content = data.content;
@@ -58,13 +59,19 @@ export default {
     auctionStarted(data) {
       this.question.category = this.transformCategory(data.category);
       this.question.number = data.roundNumber;
+      this.backgroundColor = 'neutral';
     },
     auctionFinished(data) {
       this.backgroundColor = data.winningTeam;
-      this.question.category = '';
+      this.question.category = null;
     },
     nextQuestion(data) {
       this.question.content = data.question;
+    },
+    roundFinished() {
+      this.backgroundColor = null;
+      this.question.category = null;
+      this.question.content = null;
     }
   },
   components: {
@@ -84,21 +91,23 @@ export default {
   margin: 3rem;
   width: 90%;
   overflow: hidden;
-  border-radius: 25px;
+  border-radius: 20px;
   color: $font-color;
 }
 
 .question {
   width: 100%;
-  padding: 1rem auto;
   font-size: 2rem;
+  margin: 0;
 
   &__category {
-    background-color: $neutral-color;
+    text-align: center;
+    padding: 0.15rem 0;
   }
 
   &__content {
     text-align: center;
+    padding: 0.15rem 0;
   }
 
   &__hints {

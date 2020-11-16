@@ -6,7 +6,8 @@ import {
   getAllQuestionSets,
   changeQuestionSet,
   getCurrentQuestion,
-  getAvailableCategories
+  getAvailableCategories,
+  skipQuestion
 } from '../services/question.service';
 
 export { listen, listenAdmin };
@@ -20,4 +21,5 @@ function listenAdmin(io: Server, socket: UserSocket) {
   socket.on(Incoming.ADD_QUESTION_SET, questionData => addQuestionSet(questionData, socket));
   socket.on(Incoming.CHANGE_QUESTION_SET, questionData => changeQuestionSet(questionData, socket));
   socket.on(Incoming.GET_ALL_QUESTION_SETS, () => getAllQuestionSets(socket));
+  socket.on(Incoming.SKIP_QUESTION, () => skipQuestion(socket, io));
 }

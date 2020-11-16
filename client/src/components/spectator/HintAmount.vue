@@ -1,5 +1,5 @@
 <template>
-  <div class="hint-amount neutral-background" :style="{ visibility: 'hidden' }">
+  <div class="hint-amount neutral-background" :style="{ visibility: 'visible' }">
     <p>{{ hintAmount }}</p>
   </div>
 </template>
@@ -9,7 +9,7 @@ export default {
   name: 'HintAmount',
   data() {
     return {
-      hintAmount: null
+      hintAmount: 500
     };
   },
   created() {},

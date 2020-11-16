@@ -63,11 +63,11 @@ export default {
           actions: [
             {
               name: 'Wygrali rundę',
-              action: this.dummy
+              action: this.markCorrectAnswer
             },
             {
               name: 'Przegrali rundę',
-              action: this.dummy
+              action: this.markWrongAnswer
             },
             {
               name: 'Rozpocznij nową rundę',
@@ -75,7 +75,7 @@ export default {
             },
             {
               name: 'Pomiń pytanie',
-              action: this.dummy
+              action: this.skipQuestion
             }
           ]
         },
@@ -141,6 +141,15 @@ export default {
     },
     cancelAuction() {
       this.$socket.client.emit('cancelAuction');
+    },
+    markCorrectAnswer() {
+      this.$socket.client.emit('markCorrectAnswer');
+    },
+    markWrongAnswer() {
+      this.$socket.client.emit('markWrongAnswer');
+    },
+    skipQuestion() {
+      this.$socket.client.emit('skipQuestion');
     },
     uploadQuestions() {
       this.$bvModal.show(this.uploaderId);

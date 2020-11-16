@@ -83,9 +83,12 @@ class QuestionSet {
     if (this.categories.has(this.current.category)) {
       const category = this.categories.get(this.current.category);
       const question = category.find(quest => !quest.used);
-      question.markUsed();
-      this.current.question = question;
-      return question;
+      if (question) {
+        question.markUsed();
+        this.current.question = question;
+        return question;
+      }
+      return null;
     }
   }
 

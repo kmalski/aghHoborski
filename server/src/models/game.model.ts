@@ -4,15 +4,9 @@ import { RoundStage } from '../constans/game.constants';
 export { Game, GameData };
 
 interface GameData {
-  teamName: string;
-  newAuctionAmount?: number;
-  newAccountBalance?: number;
-  newHintsCount?: number;
-  newMoneyPool?: number;
-  newHasBlackBox?: boolean;
-  newIsInGame?: boolean;
-  auctionFinishAction?: string;
   categoryName?: string;
+  newMoneyPool?: number;
+  auctionFinishAction?: string;
 }
 
 class Game {
