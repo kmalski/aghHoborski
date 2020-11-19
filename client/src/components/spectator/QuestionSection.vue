@@ -2,6 +2,7 @@
   <section class="question-section">
     <app-separator>
       <p class="ml-5">PYTANIE {{ question.number }}</p>
+      <p class="timer">{{ this.seconds | timeFormat }}</p>
       <p class="mr-5">ETAP {{ stageNumber }}</p>
     </app-separator>
     <div class="question" :class="{ [backgroundColor + '-background']: backgroundColor }">
@@ -28,7 +29,9 @@ export default {
         hints: []
       },
       backgroundColor: null,
-      stageNumber: 1
+      stageNumber: 1,
+      seconds: null,
+      timeIntervalID: null
     };
   },
   created() {
@@ -72,6 +75,25 @@ export default {
       this.backgroundColor = null;
       this.question.category = null;
       this.question.content = null;
+    },
+    timeStarted(data) {
+      this.seconds = data.value;
+      this.timeIntervalID = setInterval(() => (this.seconds -= 1), 1000);
+    },
+    timeStopped() {
+      clearInterval(this.timeIntervalID);
+      this.seconds = null;
+    }
+  },
+  filters: {
+    timeFormat(seconds) {
+      if (seconds === null) return null;
+      let minutes = Math.floor(seconds / 60);
+      seconds = seconds % 60;
+
+      minutes = minutes > 9 ? minutes : '0' + minutes;
+      seconds = seconds > 9 ? seconds : '0' + seconds;
+      return `${minutes}:${seconds}`;
     }
   },
   components: {
@@ -93,6 +115,10 @@ export default {
   overflow: hidden;
   border-radius: 20px;
   color: $font-color;
+
+  .timer {
+    font-weight: 500;
+  }
 }
 
 .question {

@@ -1,8 +1,8 @@
 export { Incoming, Outgoing };
 
 /*
-These are all events that server can emit. 
-These ones beginning  with capital letter needs team name prefix. 
+These are all events that the server can emit. 
+Those beginning with a capital letter requires team name prefix. 
 Example: redTeamState
 */
 enum Outgoing {
@@ -41,11 +41,15 @@ enum Outgoing {
   AUCTION_FINISHED = 'auctionFinished',
   ROUND_FINISHED = 'roundFinished',
   CORRECT_ANSWER = 'correctAnswer',
-  WRONG_ANSWER = 'wrongAnswer'
+  WRONG_ANSWER = 'wrongAnswer',
+
+  // time
+  TIME_STARTED = 'timeStarted',
+  TIME_STOPPED = 'timeStopped'
 }
 
 /*
-These are all events that server can handle as input. 
+These are all events that the server can handle as an input. 
 */
 enum Incoming {
   // built-in
@@ -83,5 +87,9 @@ enum Incoming {
   FINISH_AUCTION = 'finishAuction',
   CANCEL_AUCTION = 'cancelAuction',
   MARK_CORRECT_ANSWER = 'markCorrectAnswer',
-  MARK_WRONG_ANSWER = 'markWrongAnswer'
+  MARK_WRONG_ANSWER = 'markWrongAnswer',
+
+  // time
+  START_TIME = 'startTime',
+  STOP_TIME = 'stopTime'
 }

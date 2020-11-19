@@ -7,6 +7,7 @@ import { UserSocket } from '../utils/socket.utils';
 import * as game from '../sockets/game.socket';
 import * as team from '../sockets/team.socket';
 import * as question from '../sockets/question.socket';
+import * as time from '../sockets/time.socket';
 
 export { join, adminJoin, create, authorize };
 
@@ -114,4 +115,5 @@ function authorize(roomData: RoomData, socket: UserSocket, io: Server) {
   game.listenAdmin(io, socket);
   team.listen(io, socket);
   team.listenAdmin(io, socket);
+  time.listenAdmin(io, socket);
 }

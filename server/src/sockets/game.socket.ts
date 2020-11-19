@@ -22,7 +22,7 @@ function listen(io: Server, socket: UserSocket) {
 
 function listenAdmin(io: Server, socket: UserSocket) {
   socket.on(Incoming.RESET_GAME, () => resetGame(socket, io));
-  socket.on(Incoming.CHANGE_MONEY_POOL, teamData => changeMoneyPool(teamData, socket, io));
+  socket.on(Incoming.CHANGE_MONEY_POOL, gameData => changeMoneyPool(gameData, socket, io));
   socket.on(Incoming.START_AUCTION, gameData => startAuction(gameData, socket, io));
   socket.on(Incoming.FINISH_AUCTION, () => finishAuction(socket, io));
   socket.on(Incoming.CANCEL_AUCTION, () => cancelAuction(socket, io));

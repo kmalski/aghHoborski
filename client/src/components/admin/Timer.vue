@@ -1,7 +1,7 @@
 <template>
   <div class="timer">
     <label>Czas</label>
-    <b-form-input v-model="time" />
+    <b-form-input number v-model="time" />
     <b-button class="blue-shadow" variant="primary" @click="startStopTime">
       {{ isTimePassing ? 'Stop' : 'Start' }}
     </b-button>
@@ -24,16 +24,27 @@ export default {
   methods: {
     resetTime() {
       this.time = 60;
-      this.isTimePassing = false;
-      clearInterval(this.intervalID);
+      this.stopTime();
     },
     startStopTime() {
-      this.isTimePassing = !this.isTimePassing;
-      if (this.isTimePassing) {
-        this.intervalID = setInterval(() => (this.time -= 1), 1000);
-      } else {
-        clearInterval(this.intervalID);
-      }
+      this.isTimePassing ? this.stopTime() : this.startTime();
+    },
+    startTime() {
+      this.$socket.client.emit('startTime', { newValue: this.time });
+    },
+    stopTime() {
+      this.$socket.client.emit('stopTime');
+    }
+  },
+  sockets: {
+    timeStarted(data) {
+      this.isTimePassing = true;
+      this.time = data.value;
+      this.intervalID = setInterval(() => (this.time -= 1), 1000);
+    },
+    timeStopped() {
+      this.isTimePassing = false;
+      clearInterval(this.intervalID);
     }
   }
 };
