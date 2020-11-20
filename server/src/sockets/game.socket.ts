@@ -3,6 +3,7 @@ import { UserSocket } from '../utils/socket.utils';
 import { Incoming } from '../constans/event.constants';
 import {
   getGameState,
+  getGameSettings,
   getMoneyPool,
   resetGame,
   changeMoneyPool,
@@ -21,6 +22,7 @@ function listen(io: Server, socket: UserSocket) {
 }
 
 function listenAdmin(io: Server, socket: UserSocket) {
+  socket.on(Incoming.GET_GAME_SETTINGS, () => getGameSettings(socket, io));
   socket.on(Incoming.RESET_GAME, () => resetGame(socket, io));
   socket.on(Incoming.CHANGE_MONEY_POOL, gameData => changeMoneyPool(gameData, socket, io));
   socket.on(Incoming.START_AUCTION, gameData => startAuction(gameData, socket, io));

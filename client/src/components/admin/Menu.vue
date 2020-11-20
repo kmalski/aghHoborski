@@ -20,6 +20,7 @@
     <b-button class="blue-shadow menu__btn" variant="primary" @click="logout">
       Wyloguj
     </b-button>
+    <app-game-settings :id="settingsId"></app-game-settings>
     <app-category-selector :id="categoryId"></app-category-selector>
     <app-question-set-uploader :id="uploaderId"></app-question-set-uploader>
     <app-question-set-selector :id="selectorId"></app-question-set-selector>
@@ -27,6 +28,7 @@
 </template>
 
 <script>
+import GameSettings from '@/components/admin/GameSettings';
 import CategorySelector from '@/components/admin/CategorySelector';
 import QuestionSetUploader from '@/components/admin/QuestionSetUploader';
 import QuestionSetSelector from '@/components/admin/QuestionSetSelector';
@@ -38,6 +40,7 @@ export default {
       uploaderId: 'uploader',
       categoryId: 'category',
       selectorId: 'selector',
+      settingsId: 'settings',
       actionCategories: [
         {
           name: 'Licytacja',
@@ -157,7 +160,9 @@ export default {
     getAllQuestions() {
       this.$bvModal.show(this.selectorId);
     },
-    showGameSettings() {},
+    showGameSettings() {
+      this.$bvModal.show(this.settingsId);
+    },
     async resetGame() {
       const confirmation = await this.$bvModal.msgBoxConfirm(`Czy na pewno chcesz rozpocząć grę od nowa?`, {
         centered: true,
@@ -175,6 +180,7 @@ export default {
     dummy() {}
   },
   components: {
+    AppGameSettings: GameSettings,
     AppCategorySelector: CategorySelector,
     AppQuestionSetUploader: QuestionSetUploader,
     AppQuestionSetSelector: QuestionSetSelector
@@ -182,6 +188,7 @@ export default {
 };
 </script>
 
+GameSettings
 <style scoped lang="scss">
 @import '../../scss/main.scss';
 

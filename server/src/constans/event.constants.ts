@@ -16,13 +16,13 @@ enum Outgoing {
   ROOM_CREATED = 'roomCreated',
   ROOM_JOINED = 'roomJoined',
   AUTHORIZED = 'authorized',
-
+  
   // questions
   ALL_QUESTION_SETS = 'allQuestionSets',
   CURRENT_QUESTION = 'currentQuestion',
   AVAILABLE_CATEGORIES = 'availableCategories',
   NEXT_QUESTION = 'nextQuestion',
-
+  
   // team
   TEAM_STATE = 'TeamState',
   TEAM_STATUS_CHANGED = 'TeamStatusChanged',
@@ -31,9 +31,10 @@ enum Outgoing {
   HINTS_COUNT_CHANGED = 'HintsCountChanged',
   BLACK_BOX_CHANGED = 'BlackBoxChanged',
   HAS_LOST_CHANGED = 'HasLostChanged',
-
+  
   // game
   GAME_STATE = 'gameState',
+  GAME_SETTINGS = 'gameSettings',
   MONEY_POOL = 'moneyPool',
   GAME_RESET = 'gameReset',
   MONEY_POOL_CHANGED = 'moneyPoolChanged',
@@ -60,7 +61,7 @@ enum Incoming {
   JOIN_ROOM = 'joinRoom',
   ADMIN_JOIN_ROOM = 'adminJoinRoom',
   AUTHORIZE = 'authorize',
-
+  
   // questions
   GET_ALL_QUESTION_SETS = 'getAllQuestionSets',
   GET_CURRENT_QUESTION = 'getCurrentQuestion',
@@ -68,7 +69,7 @@ enum Incoming {
   ADD_QUESTION_SET = 'addQuestionSet',
   CHANGE_QUESTION_SET = 'changeQuestionSet',
   SKIP_QUESTION = 'skipQuestion',
-
+  
   // team
   GET_TEAM_STATE = 'getTeamState',
   CHANGE_TEAM_STATUS = 'changeTeamStatus',
@@ -77,9 +78,10 @@ enum Incoming {
   CHANGE_HINTS_COUNT = 'changeHintsCount',
   CHANGE_BLACK_BOX = 'changeBlackBox',
   RESET_ACCOUNT_BALANCES = 'resetAccountBalances',
-
+  
   // game
   GET_GAME_STATE = 'getGameState',
+  GET_GAME_SETTINGS = 'getGameSettings',
   GET_MONEY_POOL = 'getMoneyPool',
   RESET_GAME = 'resetGame',
   CHANGE_MONEY_POOL = 'changeMoneyPool',

@@ -152,4 +152,17 @@ describe('Test game socket events', function () {
       done();
     });
   });
+
+  it('Check game setttings', function (done) {
+    client.emit('getGameSettings');
+    client.once('gameSettings', (data: any) => {
+      data.should.have.length(3);
+      data.should.have.deep.members([
+        { name: 'Nazwa pokoju', value: 'GameTestName' },
+        { name: 'Ilość osób w pokoju', value: 1 },
+        { name: 'Nazwa puli pytań', value: 'testSet' }
+      ]);
+      done();
+    });
+  });
 });

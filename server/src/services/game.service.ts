@@ -6,6 +6,7 @@ import { Game, GameData } from '../models/game.model';
 
 export {
   getGameState,
+  getGameSettings,
   getMoneyPool,
   resetGame,
   changeMoneyPool,
@@ -22,6 +23,20 @@ function getGameState(socket: UserSocket) {
   socket.emit(Outgoing.GAME_STATE, {
     roundStage: game.roundStage
   });
+}
+
+function getGameSettings(socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+
+  const roomName = socket.room.name;
+  const peopleInRoom = io.sockets.adapter.rooms[roomName].length;
+  const questionSetName = socket.room.questions ? socket.room.questions.name : 'Nie wybrano';
+
+  socket.emit(Outgoing.GAME_SETTINGS, [
+    { name: 'Nazwa pokoju', value: roomName },
+    { name: 'Ilość osób w pokoju', value: peopleInRoom },
+    { name: 'Nazwa puli pytań', value: questionSetName }
+  ]);
 }
 
 function getMoneyPool(socket: UserSocket) {
