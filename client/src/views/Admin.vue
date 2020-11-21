@@ -28,8 +28,9 @@
       >
         {{ alert.msg }}
       </b-alert>
+      <app-game-phase />
+      <app-status-icon />
     </section>
-    <app-status-icon />
   </section>
 </template>
 
@@ -38,6 +39,7 @@ import MoneyPoolCard from '@/components/admin/MoneyPoolCard';
 import QuestionCard from '@/components/admin/QuestionCard';
 import OneOnOneCard from '@/components/admin/OneOnOneCard';
 import StatusIcon from '@/components/shared/StatusIcon';
+import GamePhase from '@/components/shared/GamePhase';
 import ResetCard from '@/components/admin/ResetCard';
 import HintCard from '@/components/admin/HintCard';
 import TeamCard from '@/components/admin/TeamCard';
@@ -89,6 +91,7 @@ export default {
     AppOneOnOneCard: OneOnOneCard,
     AppStatusIcon: StatusIcon,
     AppResetCard: ResetCard,
+    AppGamePhase: GamePhase,
     AppHintCard: HintCard,
     AppTeamCard: TeamCard,
     AppTimer: Timer,

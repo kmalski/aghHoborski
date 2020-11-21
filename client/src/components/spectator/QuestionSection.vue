@@ -88,6 +88,8 @@ export default {
   filters: {
     timeFormat(seconds) {
       if (seconds === null) return null;
+      if (seconds < 0) return '00:00';
+
       let minutes = Math.floor(seconds / 60);
       seconds = seconds % 60;
 

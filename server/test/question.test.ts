@@ -85,12 +85,30 @@ describe('Test question socket events', function () {
     });
   });
 
+  it('Fail to change question set', function (done) {
+    client.emit('changeQuestionSet', { name: 'testSet123' });
+    client.once('fail', (msg: any) => {
+      msg.should.be.equal('Zbiór pytań o nazwie testSet123 nie istnieje.');
+      done();
+    });
+  });
+
+  it('Change question set', function (done) {
+    client.emit('addQuestionSet', { name: 'testSet2', file: validQuestionSet });
+    client.once('success', () => {
+      client.emit('changeQuestionSet', { name: 'testSet2' });
+      client.once('success', () => done());
+    });
+  });
+
   it('Get all question sets', function (done) {
     client.emit('getAllQuestionSets');
     client.once('allQuestionSets', (data: any) => {
-      data.should.have.length(1);
+      data.should.have.length(2);
       data[0].name.should.be.equal('testSet');
       data[0].should.have.property('createdAt');
+      data[1].name.should.be.equal('testSet2');
+      data[1].should.have.property('createdAt');
       done();
     });
   });

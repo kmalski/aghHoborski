@@ -26,8 +26,6 @@ function getGameState(socket: UserSocket) {
 }
 
 function getGameSettings(socket: UserSocket, io: Server) {
-  const game = socket.room.game;
-
   const roomName = socket.room.name;
   const peopleInRoom = io.sockets.adapter.rooms[roomName].length;
   const questionSetName = socket.room.questions ? socket.room.questions.name : 'Nie wybrano';
@@ -159,8 +157,12 @@ function cancelAuction(socket: UserSocket, io: Server) {
 
 function markCorrectAnswer(socket: UserSocket, io: Server) {
   const game = socket.room.game;
-
   const team = game.auctionWinningTeam;
+
+  if (!game.isAnswering()) {
+    return socket.emit(Outgoing.WARNING, 'Operacja możliwa do wykonania jedynie w fazie pytań.');
+  }
+
   game.correctAnswer();
 
   io.in(socket.room.name).emit(Outgoing.CORRECT_ANSWER);
@@ -172,6 +174,10 @@ function markCorrectAnswer(socket: UserSocket, io: Server) {
 
 function markWrongAnswer(socket: UserSocket, io: Server) {
   const game = socket.room.game;
+
+  if (!game.isAnswering()) {
+    return socket.emit(Outgoing.WARNING, 'Operacja możliwa do wykonania jedynie w fazie pytań.');
+  }
 
   game.wrongAnswer();
 

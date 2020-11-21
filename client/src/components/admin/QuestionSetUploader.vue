@@ -6,7 +6,7 @@
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-file
         v-model="questionFile"
-        :state="Boolean(questionFile)"
+        :state="fileValid"
         accept=".json"
         browse-text="Wybierz plik"
         placeholder="Wybierz plik lub upuść go tutaj..."
@@ -17,8 +17,8 @@
         {{ questionFile ? questionFile.name : '' }}
       </div>
       <div class="buttons-wrapper">
-        <b-button class="blue-shadow" size="sm" type="submit" variant="primary">Dodaj</b-button>
         <b-button class="dark-shadow" size="sm" @click="$bvModal.hide(id)">Anuluj</b-button>
+        <b-button class="blue-shadow" size="sm" type="submit" variant="primary">Dodaj</b-button>
       </div>
     </b-form>
   </b-modal>
@@ -39,6 +39,12 @@ export default {
       msg: '',
       showAlert: false
     };
+  },
+  computed: {
+    fileValid() {
+      if (this.questionFile === null) return null;
+      return Boolean(this.questionFile);
+    }
   },
   methods: {
     onSubmit() {

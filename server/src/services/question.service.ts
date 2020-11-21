@@ -90,6 +90,11 @@ async function changeQuestionSet(questionData: QuestionSetData, socket: UserSock
 
 function skipQuestion(socket: UserSocket, io: Server) {
   const questions = socket.room.questions;
+  const game = socket.room.game;
+
+  if (game.roundStage !== RoundStage.ANSWERING) {
+    return socket.emit(Outgoing.WARNING, 'Operacja możliwa do wykonania jedynie w fazie pytań.');
+  }
 
   const question = questions.drawQuestion();
   if (!question) {
