@@ -61,6 +61,6 @@ export default {
 .login {
   @extend .split;
 
-  background-image: radial-gradient(at 25vw 50vh, #fff, #e1dfe1);
+  background-image: $home-background-image;
 }
 </style>

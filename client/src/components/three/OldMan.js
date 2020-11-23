@@ -14,7 +14,7 @@ const skinMat = new MeshLambertMaterial({
 });
 
 const shirtMat = new MeshLambertMaterial({
-  color: '#00723f',
+  color: '#00693c',
   flatShading: true
 });
 

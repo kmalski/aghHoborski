@@ -24,12 +24,12 @@ const hairMat = new MeshLambertMaterial({
 });
 
 const irisMat = new MeshLambertMaterial({
-  color: '#0f2b1a',
+  color: '#143822',
   flatShading: true
 });
 
 const shirtMat = new MeshLambertMaterial({
-  color: '#231f20',
+  color: '#1e1e1e',
   flatShading: true
 });
 
@@ -43,8 +43,8 @@ const beltMat = new MeshLambertMaterial({
   flatShading: true
 });
 
-const shoesMat = new MeshLambertMaterial({
-  color: '#585858',
+const hairbandMat = new MeshLambertMaterial({
+  color: '#fb7c7c',
   flatShading: true
 });
 
@@ -61,7 +61,7 @@ hairRight.position.set(155, -25, -50);
 const hairFront = new Mesh(new BoxGeometry(375, 75, 310), hairMat);
 hairFront.position.set(0, 152, -25);
 
-const hairbandLeft = new Mesh(new BoxGeometry(70, 75, 260), shirtMat);
+const hairbandLeft = new Mesh(new BoxGeometry(70, 75, 260), hairbandMat);
 hairbandLeft.position.set(-155, 0, -20);
 
 const hairbandRight = hairbandLeft.clone();
@@ -105,22 +105,22 @@ head.add(lip);
 const body = new Mesh(new BoxGeometry(250, 225, 150), shirtMat);
 body.position.set(0, -220, 400);
 
-const armLeft = new Mesh(new BoxGeometry(60, 250, 100), shirtMat);
-armLeft.position.set(-145, -15, 0);
+const armLeft = new Mesh(new BoxGeometry(60, 190, 100), shirtMat);
+armLeft.position.set(-145, -25, 0);
 
 const armRight = armLeft.clone();
-armRight.position.set(145, -15, 0);
+armRight.position.set(145, -25, 0);
 
-const handLeft = new Mesh(new BoxGeometry(60, 50, 50), skinMat);
-handLeft.position.set(0, -150, 0);
+const handLeft = new Mesh(new BoxGeometry(60, 300, 50), skinMat);
+handLeft.position.set(0, -15, 0);
 
 const handRight = handLeft.clone();
-handRight.position.set(0, -150, 0);
+handRight.position.set(0, -15, 0);
 
 const belt = new Mesh(new BoxGeometry(255, 25, 135), beltMat);
 belt.position.set(0, -130, -10);
 
-const skirt = new Mesh(new BoxGeometry(250, 125, 125), skirtMat);
+const skirt = new Mesh(new BoxGeometry(240, 125, 125), skirtMat);
 skirt.position.set(0, -200, -10);
 
 const legLeft = new Mesh(new BoxGeometry(75, 300, 100), skinMat);
@@ -129,7 +129,7 @@ legLeft.position.set(-75, -200, -10);
 const legRight = legLeft.clone();
 legRight.position.set(75, -200, -10);
 
-const shoeLeft = new Mesh(new BoxGeometry(75, 50, 175), shoesMat);
+const shoeLeft = new Mesh(new BoxGeometry(75, 50, 175), shirtMat);
 shoeLeft.position.set(-75, -360, 25);
 
 const shoeRight = shoeLeft.clone();
@@ -169,6 +169,6 @@ class Woman extends Player {
     hand.rotation.x = 0;
     hand.rotation.z = 0;
     hand.position.x = 145;
-    hand.position.y = -15;
+    hand.position.y = -25;
   }
 }

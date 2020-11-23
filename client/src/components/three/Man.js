@@ -29,7 +29,7 @@ const irisMat = new MeshLambertMaterial({
 });
 
 const shirtMat = new MeshLambertMaterial({
-  color: '#b10d28',
+  color: '#a71930',
   flatShading: true
 });
 
