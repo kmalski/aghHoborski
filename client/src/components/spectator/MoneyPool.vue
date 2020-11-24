@@ -13,15 +13,13 @@ export default {
     };
   },
   created() {
-    this.$socket.client.emit('getMoneyPool');
-    this.$socket.client.on('moneyPool', this.fillData);
-    this.$socket.client.on('moneyPoolChanged', this.changeMoneyPool);
+    this.$socket.client.emit('getGameState');
   },
-  methods: {
-    fillData(data) {
+  sockets: {
+    gameState(data) {
       this.moneyPool = data.moneyPool;
     },
-    changeMoneyPool(data) {
+    moneyPoolChanged(data) {
       this.moneyPool = data.moneyPool;
     }
   }

@@ -88,11 +88,11 @@ export default {
           actions: [
             {
               name: 'Zużyj podpowiedź',
-              action: this.dummy
+              action: this.useHint
             },
             {
               name: 'Rozpocznij licytację o podpowiedź',
-              action: this.dummy
+              action: this.startHintAuction
             }
           ]
         },
@@ -154,6 +154,12 @@ export default {
     skipQuestion() {
       this.$socket.client.emit('skipQuestion');
     },
+    useHint() {
+      this.$socket.client.emit('useHint');
+    },
+    startHintAuction() {
+      this.$socket.client.emit('startHintAuction');
+    },
     uploadQuestions() {
       this.$bvModal.show(this.uploaderId);
     },
@@ -188,7 +194,6 @@ export default {
 };
 </script>
 
-GameSettings
 <style scoped lang="scss">
 @import '../../scss/main.scss';
 

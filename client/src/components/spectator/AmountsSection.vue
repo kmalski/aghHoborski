@@ -1,7 +1,7 @@
 <template>
   <section class="amounts-section">
     <div class="left">
-      <div v-show="isAuction" class="auction" :style="{ 'border-top-right-radius': isAuction ? '20px' : false }">
+      <div v-show="isAuction" class="auction">
         <app-separator>
           <p>LICYTACJA</p>
         </app-separator>
@@ -13,7 +13,7 @@
           <app-auction-amount variant="masters"></app-auction-amount>
         </div>
       </div>
-      <div class="balances">
+      <div class="balances" :style="{ 'border-top-left-radius': isAuction ? '0px' : '20px' }">
         <app-separator>
           <p>STAN KONTA</p>
         </app-separator>
@@ -28,13 +28,13 @@
     </div>
 
     <div class="right">
-      <div v-show="false" class="hint">
+      <div v-show="isHintAuction" class="hint">
         <app-separator>
           <p>PODPOWIEDŹ</p>
         </app-separator>
         <app-hint-amount></app-hint-amount>
       </div>
-      <div class="money-pool" :style="{ 'border-top-right-radius': isAuction ? '20px' : false }">
+      <div class="money-pool" :style="{ 'border-top-right-radius': isHintAuction ? '0px' : '20px' }">
         <app-separator>
           <p>DO WYGRANIA</p>
         </app-separator>
@@ -55,7 +55,8 @@ export default {
   name: 'AmountsSection',
   data() {
     return {
-      isAuction: false
+      isAuction: false,
+      isHintAuction: false
     };
   },
   created() {
@@ -64,12 +65,19 @@ export default {
   sockets: {
     gameState(data) {
       this.isAuction = data.roundStage === 'auction';
+      this.isHintAuction = data.roundStage === 'hintAuction';
     },
     auctionStarted() {
       this.isAuction = true;
     },
     auctionFinished() {
       this.isAuction = false;
+    },
+    hintAuctionStarted() {
+      this.isHintAuction = true;
+    },
+    hintAuctionFinished() {
+      this.isHintAuction = false;
     }
   },
   components: {
@@ -102,11 +110,13 @@ export default {
 
     .auction {
       @extend .flex-column;
+      border-top-right-radius: 20px;
       overflow: hidden;
     }
 
     .balances {
       @extend .flex-column;
+      overflow: hidden;
     }
   }
 
@@ -119,13 +129,14 @@ export default {
     width: 100%;
 
     .hint {
-      overflow: hidden;
       @extend .flex-column;
+      overflow: hidden;
+      border-top-left-radius: 20px;
     }
 
     .money-pool {
-      overflow: hidden;
       @extend .flex-column;
+      overflow: hidden;
     }
   }
 }

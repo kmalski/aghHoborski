@@ -11,7 +11,8 @@ export {
   changeQuestionSet,
   getCurrentQuestion,
   getAvailableCategories,
-  skipQuestion
+  skipQuestion,
+  useHint
 };
 
 async function getAllQuestionSets(socket: UserSocket) {
@@ -35,6 +36,7 @@ function getCurrentQuestion(socket: UserSocket) {
       currentQuestion.content = questions.current.question.content;
       currentQuestion.hints = questions.current.question.hints;
       currentQuestion.winningTeam = game.auctionWinningTeam.name;
+      currentQuestion.hintUsed = questions.current.hintUsed;
       break;
   }
 
@@ -106,4 +108,25 @@ function skipQuestion(socket: UserSocket, io: Server) {
     question: question.content,
     hints: question.hints
   });
+}
+
+function useHint(socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+
+  if (!game.isAnswering() || socket.room.questions.current.hintUsed) {
+    return socket.emit(Outgoing.WARNING, 'Nie można teraz zużyć podpowiedzi.');
+  }
+
+  if (game.auctionWinningTeam.hintsCount < 1) {
+    return socket.emit(Outgoing.WARNING, 'Odpowiadający zespół nie ma podpowiedzi do wykorzystania.');
+  }
+
+  const team = game.auctionWinningTeam;
+  const hints = socket.room.questions.current.question.hints;
+  socket.room.questions.current.hintUsed = true;
+  team.hintsCount -= 1;
+
+  io.in(socket.room.name).emit(Outgoing.HINT_USED, { hints });
+  io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: team.hintsCount });
+  // io.in(socket.room.name).emit(Outgoing.TIME_STARTED, { value: 60 });
 }

@@ -16,7 +16,7 @@
       </div>
       <div class="admin__row">
         <app-reset-card></app-reset-card>
-        <app-hint-card :disabled="true"></app-hint-card>
+        <app-hint-card></app-hint-card>
         <app-money-pool-card></app-money-pool-card>
       </div>
       <b-alert

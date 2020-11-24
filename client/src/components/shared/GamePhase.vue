@@ -26,6 +26,12 @@ export default {
     auctionFinished() {
       this.stage = 'answering';
     },
+    hintAuctionStarted() {
+      this.stage = 'hintAuction';
+    },
+    hintAuctionFinished() {
+      this.stage = 'answering';
+    },
     roundFinished() {
       this.stage = 'idle';
     }
@@ -37,6 +43,8 @@ export default {
           return 'Licytacja';
         case 'answering':
           return 'Pytanie';
+        case 'hintAuction':
+          return 'Licytacja podpowiedzi';
         case 'idle':
           return 'Pomiędzy rundami';
         default:

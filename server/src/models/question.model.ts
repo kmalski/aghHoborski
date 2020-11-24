@@ -63,6 +63,7 @@ class QuestionSet {
   public current: {
     category: string;
     question?: Question;
+    hintUsed: boolean;
   };
 
   constructor(name: string, categories: CategorySchema[]) {
@@ -76,7 +77,7 @@ class QuestionSet {
   }
 
   setCategory(categoryName: string) {
-    this.current = { category: categoryName };
+    this.current = { category: categoryName, hintUsed: false };
   }
 
   drawQuestion() {

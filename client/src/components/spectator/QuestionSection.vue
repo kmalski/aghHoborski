@@ -8,7 +8,7 @@
     <div class="question" :class="{ [backgroundColor + '-background']: backgroundColor }">
       <p v-show="question.category" class="question__category">{{ question.category }}</p>
       <p v-show="question.content" class="question__content">{{ question.content }}</p>
-      <div v-show="question.hints.length" class="question__hints">
+      <div v-show="question.hintUsed" class="question__hints">
         <p v-for="hint in question.hints" :key="hint">{{ hint }}</p>
       </div>
     </div>
@@ -26,6 +26,7 @@ export default {
         number: 0,
         category: null,
         content: null,
+        hintUsed: false,
         hints: []
       },
       backgroundColor: null,
@@ -48,6 +49,8 @@ export default {
           break;
         case 'answering':
           this.question.content = data.content;
+          this.question.hintUsed = data.hintUsed;
+          this.question.hints = data.hints;
           this.backgroundColor = data.winningTeam;
           break;
       }
@@ -75,6 +78,8 @@ export default {
       this.backgroundColor = null;
       this.question.category = null;
       this.question.content = null;
+      this.question.hints = [];
+      this.question.hintUsed = false;
     },
     timeStarted(data) {
       this.seconds = data.value;
@@ -83,6 +88,10 @@ export default {
     timeStopped() {
       clearInterval(this.timeIntervalID);
       this.seconds = null;
+    },
+    hintUsed(data) {
+      this.question.hintUsed = true;
+      this.question.hints = data.hints;
     }
   },
   filters: {

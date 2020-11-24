@@ -6,6 +6,7 @@ export { Game, GameData };
 interface GameData {
   categoryName?: string;
   newMoneyPool?: number;
+  newHintAmount?: number;
   auctionFinishAction?: string;
 }
 
@@ -86,6 +87,23 @@ class Game {
     this.moneyPool = 0;
   }
 
+  startHintAuction() {
+    this.hintAmount = 0;
+    this.roundStage = RoundStage.HINT_AUCTION;
+  }
+
+  acceptHintAuction() {
+    this.roundStage = RoundStage.ANSWERING;
+    this.auctionWinningTeam.hintsCount += 1;
+    this.auctionWinningTeam.accountBalance -= this.hintAmount;
+    this.hintAmount = 0;
+  }
+
+  discardHintAuction() {
+    this.roundStage = RoundStage.ANSWERING;
+    this.hintAmount = 0;
+  }
+
   startSecondRound() {
     const winningTeam = this.findWinningTeam();
     this.activeTeams.delete(winningTeam.name);
@@ -117,6 +135,10 @@ class Game {
 
   isAnswering() {
     return this.roundStage === RoundStage.ANSWERING;
+  }
+
+  isHintAuction() {
+    return this.roundStage === RoundStage.HINT_AUCTION;
   }
 
   isIdle() {

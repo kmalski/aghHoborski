@@ -17,7 +17,7 @@ export default {
     };
   },
   created() {
-    this.$socket.client.emit('getMoneyPool');
+    this.$socket.client.emit('getGameState');
   },
   methods: {
     changeMoneyPool() {
@@ -26,7 +26,7 @@ export default {
     }
   },
   sockets: {
-    moneyPool(data) {
+    gameState(data) {
       this.moneyPool = data.moneyPool;
     },
     moneyPoolChanged(data) {

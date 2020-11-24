@@ -16,13 +16,14 @@ enum Outgoing {
   ROOM_CREATED = 'roomCreated',
   ROOM_JOINED = 'roomJoined',
   AUTHORIZED = 'authorized',
-  
+
   // questions
   ALL_QUESTION_SETS = 'allQuestionSets',
   CURRENT_QUESTION = 'currentQuestion',
   AVAILABLE_CATEGORIES = 'availableCategories',
   NEXT_QUESTION = 'nextQuestion',
-  
+  HINT_USED = 'hintUsed',
+
   // team
   TEAM_STATE = 'TeamState',
   TEAM_STATUS_CHANGED = 'TeamStatusChanged',
@@ -31,18 +32,20 @@ enum Outgoing {
   HINTS_COUNT_CHANGED = 'HintsCountChanged',
   BLACK_BOX_CHANGED = 'BlackBoxChanged',
   HAS_LOST_CHANGED = 'HasLostChanged',
-  
+
   // game
   GAME_STATE = 'gameState',
   GAME_SETTINGS = 'gameSettings',
-  MONEY_POOL = 'moneyPool',
   GAME_RESET = 'gameReset',
   MONEY_POOL_CHANGED = 'moneyPoolChanged',
+  HINT_AMOUNT_CHANGED = 'hintAmountChanged',
   AUCTION_STARTED = 'auctionStarted',
   AUCTION_FINISHED = 'auctionFinished',
   ROUND_FINISHED = 'roundFinished',
   CORRECT_ANSWER = 'correctAnswer',
   WRONG_ANSWER = 'wrongAnswer',
+  HINT_AUCTION_STARTED = 'hintAuctionStarted',
+  HINT_AUCTION_FINISHED = 'hintAuctionFinished',
 
   // time
   TIME_STARTED = 'timeStarted',
@@ -61,7 +64,7 @@ enum Incoming {
   JOIN_ROOM = 'joinRoom',
   ADMIN_JOIN_ROOM = 'adminJoinRoom',
   AUTHORIZE = 'authorize',
-  
+
   // questions
   GET_ALL_QUESTION_SETS = 'getAllQuestionSets',
   GET_CURRENT_QUESTION = 'getCurrentQuestion',
@@ -69,7 +72,8 @@ enum Incoming {
   ADD_QUESTION_SET = 'addQuestionSet',
   CHANGE_QUESTION_SET = 'changeQuestionSet',
   SKIP_QUESTION = 'skipQuestion',
-  
+  USE_HINT = 'useHint',
+
   // team
   GET_TEAM_STATE = 'getTeamState',
   CHANGE_TEAM_STATUS = 'changeTeamStatus',
@@ -78,16 +82,19 @@ enum Incoming {
   CHANGE_HINTS_COUNT = 'changeHintsCount',
   CHANGE_BLACK_BOX = 'changeBlackBox',
   RESET_ACCOUNT_BALANCES = 'resetAccountBalances',
-  
+
   // game
   GET_GAME_STATE = 'getGameState',
   GET_GAME_SETTINGS = 'getGameSettings',
-  GET_MONEY_POOL = 'getMoneyPool',
   RESET_GAME = 'resetGame',
   CHANGE_MONEY_POOL = 'changeMoneyPool',
+  CHANGE_HINT_AMOUNT = 'changeHintAmount',
   START_AUCTION = 'startAuction',
   FINISH_AUCTION = 'finishAuction',
   CANCEL_AUCTION = 'cancelAuction',
+  START_HINT_AUCTION = 'startHintAuction',
+  ACCEPT_HINT_AMOUNT = 'acceptHintAmount',
+  DISCARD_HINT_AMOUNT = 'discardHintAmount',
   MARK_CORRECT_ANSWER = 'markCorrectAnswer',
   MARK_WRONG_ANSWER = 'markWrongAnswer',
 

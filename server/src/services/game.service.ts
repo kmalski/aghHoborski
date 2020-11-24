@@ -7,21 +7,27 @@ import { Game, GameData } from '../models/game.model';
 export {
   getGameState,
   getGameSettings,
-  getMoneyPool,
   resetGame,
   changeMoneyPool,
+  changeHintAmount,
   startAuction,
   finishAuction,
   cancelAuction,
   markCorrectAnswer,
-  markWrongAnswer
+  markWrongAnswer,
+  startHintAuction,
+  acceptHintAmount,
+  discardHintAmount
 };
 
 function getGameState(socket: UserSocket) {
   const game = socket.room.game;
 
   socket.emit(Outgoing.GAME_STATE, {
-    roundStage: game.roundStage
+    roundStage: game.roundStage,
+    roundNumber: game.roundNumber,
+    moneyPool: game.moneyPool,
+    hintAmount: game.hintAmount
   });
 }
 
@@ -35,12 +41,6 @@ function getGameSettings(socket: UserSocket, io: Server) {
     { name: 'Ilość osób w pokoju', value: peopleInRoom },
     { name: 'Nazwa puli pytań', value: questionSetName }
   ]);
-}
-
-function getMoneyPool(socket: UserSocket) {
-  const game = socket.room.game;
-
-  socket.emit(Outgoing.MONEY_POOL, { moneyPool: game.moneyPool });
 }
 
 function resetGame(socket: UserSocket, io: Server) {
@@ -62,6 +62,21 @@ function changeMoneyPool(gameData: GameData, socket: UserSocket, io: Server) {
 
   game.moneyPool = gameData.newMoneyPool;
   io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
+}
+
+function changeHintAmount(gameData: GameData, socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+
+  if (!Number.isInteger(gameData.newHintAmount)) {
+    socket.emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
+    return socket.emit(
+      Outgoing.WARNING,
+      `Zmiana kwoty licytacji podpowiedzi na ${gameData.newHintAmount} nie jest dozwolona.`
+    );
+  }
+
+  game.hintAmount = gameData.newHintAmount;
+  io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
 }
 
 function startAuction(gameData: GameData, socket: UserSocket, io: Server) {
@@ -185,6 +200,43 @@ function markWrongAnswer(socket: UserSocket, io: Server) {
   io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
   io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
   emitAuctionAmountChanged(game, socket.room.name, io);
+}
+
+function startHintAuction(socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+
+  if (!game.isAnswering() || game.isHintAuction()) {
+    return socket.emit(Outgoing.WARNING, 'Nie można rozpocząć licytacji o podpowiedź.');
+  }
+
+  if (game.auctionWinningTeam.accountBalance <= 0) {
+    return socket.emit(Outgoing.WARNING, 'Odpowiadający zespół nie ma już pieniędzy.');
+  }
+
+  game.startHintAuction();
+
+  io.in(socket.room.name).emit(Outgoing.HINT_AUCTION_STARTED, { hintAmount: game.hintAmount });
+}
+
+function acceptHintAmount(socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+  const team = game.auctionWinningTeam;
+
+  game.acceptHintAuction();
+
+  io.in(socket.room.name).emit(Outgoing.HINT_AUCTION_FINISHED);
+  io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: team.hintsCount });
+  io.in(socket.room.name).emit(team.name + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: team.accountBalance });
+  io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
+}
+
+function discardHintAmount(socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+
+  game.discardHintAuction();
+
+  io.in(socket.room.name).emit(Outgoing.HINT_AUCTION_FINISHED);
+  io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
 }
 
 function emitAuctionAmountChanged(game: Game, room: string, io: Server) {

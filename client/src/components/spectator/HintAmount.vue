@@ -1,5 +1,5 @@
 <template>
-  <div class="hint-amount neutral-background" :style="{ visibility: 'visible' }">
+  <div class="hint-amount neutral-background" :style="{ visibility: isHintAuction ? 'visible' : 'hidden' }">
     <p>{{ hintAmount }}</p>
   </div>
 </template>
@@ -9,11 +9,29 @@ export default {
   name: 'HintAmount',
   data() {
     return {
-      hintAmount: 500
+      isHintAuction: false,
+      hintAmount: null
     };
   },
-  created() {},
-  methods: {}
+  created() {
+    this.$socket.client.emit('getGameState');
+  },
+  sockets: {
+    gameState(data) {
+      this.isHintAuction = data.roundStage === 'hintAuction';
+      this.hintAmount = data.hintAmount;
+    },
+    hintAuctionStarted(data) {
+      this.isHintAuction = true;
+      this.hintAmount = data.hintAmount;
+    },
+    hintAuctionFinished() {
+      this.isHintAuction = false;
+    },
+    hintAmountChanged(data) {
+      this.hintAmount = data.hintAmount;
+    }
+  }
 };
 </script>
 

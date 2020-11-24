@@ -1,5 +1,7 @@
 <template>
-  <div class="scene" ref="scene" />
+  <div class="scene" ref="scene">
+    <p>Kliknij nas!</p>
+  </div>
 </template>
 
 <script>
@@ -147,9 +149,21 @@ export default {
 
 <style scoped lang="scss">
 .scene {
+  position: relative;
   width: 100%;
   height: 75%;
   padding: 0;
   margin: 0;
+
+  p {
+    position: absolute;
+    left: 50%;
+    bottom: 15%;
+    transform: translateX(-50%);
+    font-family: monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: #bbbbbb;
+  }
 }
 </style>

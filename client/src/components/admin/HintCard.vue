@@ -1,12 +1,18 @@
 <template>
   <div class="hint-card">
     <label>Podpowiedź</label>
-    <b-form-input :disabled="disabled" v-model="hintAmount" />
+    <b-form-input
+      :disabled="!isHintAuction"
+      v-model="hintAmount"
+      @keydown.enter="changeHintAmount"
+      @focus="event => event.target.select()"
+      number
+    />
     <div>
-      <b-button id="zz" class="blue-shadow square-btn" variant="primary" :disabled="disabled" @click="acceptAmount">
+      <b-button class="blue-shadow square-btn" variant="primary" :disabled="!isHintAuction" @click="acceptAmount">
         <b-icon :icon="'check2'"></b-icon>
       </b-button>
-      <b-button id="zz" class="blue-shadow square-btn" variant="primary" :disabled="disabled" @click="discardAmount">
+      <b-button class="blue-shadow square-btn" variant="primary" :disabled="!isHintAuction" @click="discardAmount">
         <b-icon :icon="'x'"></b-icon>
       </b-button>
     </div>
@@ -15,21 +21,43 @@
 
 <script>
 export default {
-  name: 'ResetCard',
-  props: {
-    disabled: {
-      type: Boolean,
-      default: true
-    }
-  },
+  name: 'HintCard',
   data() {
     return {
-      hintAmount: ''
+      isHintAuction: false,
+      hintAmount: null
     };
   },
+  created() {
+    this.$socket.client.emit('getGameState');
+  },
   methods: {
-    acceptAmount() {},
-    discardAmount() {}
+    changeHintAmount() {
+      if (this.hintAmount < 100) this.hintAmount *= 100;
+      this.$socket.client.emit('changeHintAmount', { newHintAmount: this.hintAmount });
+    },
+    acceptAmount() {
+      this.$socket.client.emit('acceptHintAmount');
+    },
+    discardAmount() {
+      this.$socket.client.emit('discardHintAmount');
+    }
+  },
+  sockets: {
+    gameState(data) {
+      this.isHintAuction = data.roundStage === 'hintAuction';
+      this.hintAmount = data.hintAmount;
+    },
+    hintAuctionStarted(data) {
+      this.isHintAuction = true;
+      this.hintAmount = data.hintAmount;
+    },
+    hintAuctionFinished() {
+      this.isHintAuction = false;
+    },
+    hintAmountChanged(data) {
+      this.hintAmount = data.hintAmount;
+    }
   }
 };
 </script>

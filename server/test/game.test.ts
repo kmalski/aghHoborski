@@ -131,8 +131,8 @@ describe('Test game socket events', function () {
               data.auctionAmount.should.be.equal(3100);
               client.emit('cancelAuction');
               client.once('roundFinished', () => {
-                client.emit('getMoneyPool');
-                client.once('moneyPool', (data: any) => {
+                client.emit('getGameState');
+                client.once('gameState', (data: any) => {
                   data.moneyPool.should.be.equal(0);
                   done();
                 });
