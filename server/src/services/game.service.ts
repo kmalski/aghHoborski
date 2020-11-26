@@ -17,7 +17,8 @@ export {
   markWrongAnswer,
   startHintAuction,
   acceptHintAmount,
-  discardHintAmount
+  discardHintAmount,
+  startSecondStage
 };
 
 function getGameState(socket: UserSocket) {
@@ -26,6 +27,7 @@ function getGameState(socket: UserSocket) {
   socket.emit(Outgoing.GAME_STATE, {
     roundStage: game.roundStage,
     roundNumber: game.roundNumber,
+    stageNumber: game.stageNumber,
     moneyPool: game.moneyPool,
     hintAmount: game.hintAmount
   });
@@ -237,6 +239,29 @@ function discardHintAmount(socket: UserSocket, io: Server) {
 
   io.in(socket.room.name).emit(Outgoing.HINT_AUCTION_FINISHED);
   io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
+}
+
+function startSecondStage(socket: UserSocket, io: Server) {
+  const game = socket.room.game;
+
+  if (!game.isIdle() || game.roundNumber === 2) {
+    return socket.emit(Outgoing.WARNING, 'Nie można teraz rozpocząć drugiego etapu.');
+  }
+
+  if (game.getAbleToPlaySize() < 1) {
+    return socket.emit(Outgoing.WARNING, 'Pierwszy etap nie ma zespołu, który wygrywa.');
+  }
+
+  game.startSecondStage();
+
+  io.in(socket.room.name).emit(Outgoing.SECOND_STAGE_STARTED);
+  game.activeTeams.forEach(team => {
+    io.in(socket.room.name).emit(team.name + Outgoing.TEAM_STATUS_CHANGED, { isInGame: true });
+    io.in(socket.room.name).emit(team.name + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: team.accountBalance });
+  });
+  game.inactiveTeams.forEach(team => {
+    io.in(socket.room.name).emit(team.name + Outgoing.TEAM_STATUS_CHANGED, { isInGame: false });
+  });
 }
 
 function emitAuctionAmountChanged(game: Game, room: string, io: Server) {

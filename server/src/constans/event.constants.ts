@@ -46,6 +46,7 @@ enum Outgoing {
   WRONG_ANSWER = 'wrongAnswer',
   HINT_AUCTION_STARTED = 'hintAuctionStarted',
   HINT_AUCTION_FINISHED = 'hintAuctionFinished',
+  SECOND_STAGE_STARTED = 'secondStageStarted',
 
   // time
   TIME_STARTED = 'timeStarted',
@@ -97,6 +98,7 @@ enum Incoming {
   DISCARD_HINT_AMOUNT = 'discardHintAmount',
   MARK_CORRECT_ANSWER = 'markCorrectAnswer',
   MARK_WRONG_ANSWER = 'markWrongAnswer',
+  START_SECOND_STAGE = 'startSecondStage',
 
   // time
   START_TIME = 'startTime',

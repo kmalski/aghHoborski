@@ -14,7 +14,8 @@ import {
   markWrongAnswer,
   startHintAuction,
   acceptHintAmount,
-  discardHintAmount
+  discardHintAmount,
+  startSecondStage
 } from '../services/game.service';
 
 export { listen, listenAdmin };
@@ -36,4 +37,5 @@ function listenAdmin(io: Server, socket: UserSocket) {
   socket.on(Incoming.START_HINT_AUCTION, () => startHintAuction(socket, io));
   socket.on(Incoming.ACCEPT_HINT_AMOUNT, () => acceptHintAmount(socket, io));
   socket.on(Incoming.DISCARD_HINT_AMOUNT, () => discardHintAmount(socket, io));
+  socket.on(Incoming.START_SECOND_STAGE, () => startSecondStage(socket, io));
 }

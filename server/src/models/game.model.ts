@@ -18,6 +18,7 @@ class Game {
   public auctionWinningTeam?: Team;
   public roundStage: RoundStage = RoundStage.IDLE;
   public roundNumber: number = 0;
+  public stageNumber: number = 1;
 
   constructor() {
     for (const name in TeamName) {
@@ -104,14 +105,14 @@ class Game {
     this.hintAmount = 0;
   }
 
-  startSecondRound() {
+  startSecondStage() {
     const winningTeam = this.findWinningTeam();
-    this.activeTeams.delete(winningTeam.name);
     this.inactiveTeams = new Map([...this.inactiveTeams, ...this.activeTeams]);
     this.activeTeams = new Map<TeamName, Team>();
-    this.activeTeams.set(winningTeam.name, winningTeam);
+    this.moveToActive(winningTeam.name);
     this.moveToActive(TeamName.MASTERS);
     this.activeTeams.get(TeamName.MASTERS).accountBalance = 10000;
+    this.stageNumber = 2;
   }
 
   changeTeamStatus(teamName: TeamName, inGame: boolean) {

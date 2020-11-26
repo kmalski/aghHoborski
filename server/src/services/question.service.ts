@@ -25,7 +25,11 @@ function getCurrentQuestion(socket: UserSocket) {
   const game = socket.room.game;
   const questions = socket.room.questions;
 
-  const currentQuestion = { roundStage: game.roundStage, roundNumber: game.roundNumber } as any;
+  const currentQuestion = {
+    roundStage: game.roundStage,
+    roundNumber: game.roundNumber,
+    stageNumber: game.stageNumber
+  } as any;
   switch (game.roundStage) {
     case RoundStage.IDLE:
       break;

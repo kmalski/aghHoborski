@@ -106,7 +106,7 @@ export default {
             },
             {
               name: 'Zacznij mistrzów',
-              action: this.dummy
+              action: this.startSecondStage
             }
           ]
         },
@@ -159,6 +159,9 @@ export default {
     },
     startHintAuction() {
       this.$socket.client.emit('startHintAuction');
+    },
+    startSecondStage() {
+      this.$socket.client.emit('startSecondStage');
     },
     uploadQuestions() {
       this.$bvModal.show(this.uploaderId);

@@ -165,4 +165,35 @@ describe('Test game socket events', function () {
       done();
     });
   });
+
+  it('Start second stage', function (done) {
+    client.emit('resetGame');
+    client.once('gameReset', () => {
+      client.emit('blueChangeAccountBalance', { newAccountBalance: 100 });
+      client.emit('greenChangeAccountBalance', { newAccountBalance: 100 });
+      client.emit('yellowChangeAccountBalance', { newAccountBalance: 100 });
+      client.emit('startSecondStage');
+      client.once('secondStageStarted', () => {
+        client.emit('getGameState');
+        client.once('gameState', (data: any) => {
+          data.stageNumber.should.be.equal(2);
+
+          client.emit('getTeamState', { teamName: 'masters' });
+          client.once('mastersTeamState', (data: any) => {
+            data.isInGame.should.be.equal(true);
+            data.hasLost.should.be.equal(false);
+            data.accountBalance.should.be.equal(10000);
+
+            client.emit('getTeamState', { teamName: 'red' });
+            client.once('redTeamState', (data: any) => {
+              data.isInGame.should.be.equal(true);
+              data.hasLost.should.be.equal(false);
+              data.accountBalance.should.be.equal(5000);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
 });

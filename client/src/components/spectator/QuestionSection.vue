@@ -42,6 +42,7 @@ export default {
   methods: {
     fillData(data) {
       this.question.number = data.roundNumber;
+      this.stageNumber = data.stageNumber;
       switch (data.roundStage) {
         case 'auction':
           this.question.category = this.transformCategory(data.category);
@@ -92,6 +93,9 @@ export default {
     hintUsed(data) {
       this.question.hintUsed = true;
       this.question.hints = data.hints;
+    },
+    secondStageStarted() {
+      this.stageNumber = 2;
     }
   },
   filters: {
