@@ -22,7 +22,6 @@ enum Outgoing {
   CURRENT_QUESTION = 'currentQuestion',
   AVAILABLE_CATEGORIES = 'availableCategories',
   NEXT_QUESTION = 'nextQuestion',
-  HINT_USED = 'hintUsed',
 
   // team
   TEAM_STATE = 'TeamState',
@@ -34,19 +33,24 @@ enum Outgoing {
   HAS_LOST_CHANGED = 'HasLostChanged',
 
   // game
+  GAME_RESET = 'gameReset',
   GAME_STATE = 'gameState',
   GAME_SETTINGS = 'gameSettings',
-  GAME_RESET = 'gameReset',
-  MONEY_POOL_CHANGED = 'moneyPoolChanged',
-  HINT_AMOUNT_CHANGED = 'hintAmountChanged',
-  AUCTION_STARTED = 'auctionStarted',
-  AUCTION_FINISHED = 'auctionFinished',
   ROUND_FINISHED = 'roundFinished',
   CORRECT_ANSWER = 'correctAnswer',
   WRONG_ANSWER = 'wrongAnswer',
+  MONEY_POOL_CHANGED = 'moneyPoolChanged',
+  SECOND_STAGE_STARTED = 'secondStageStarted',
+
+  // auction
+  AUCTION_STARTED = 'auctionStarted',
+  AUCTION_FINISHED = 'auctionFinished',
+
+  // hint
+  HINT_USED = 'hintUsed',
+  HINT_AMOUNT_CHANGED = 'hintAmountChanged',
   HINT_AUCTION_STARTED = 'hintAuctionStarted',
   HINT_AUCTION_FINISHED = 'hintAuctionFinished',
-  SECOND_STAGE_STARTED = 'secondStageStarted',
 
   // time
   TIME_STARTED = 'timeStarted',
@@ -73,7 +77,6 @@ enum Incoming {
   ADD_QUESTION_SET = 'addQuestionSet',
   CHANGE_QUESTION_SET = 'changeQuestionSet',
   SKIP_QUESTION = 'skipQuestion',
-  USE_HINT = 'useHint',
 
   // team
   GET_TEAM_STATE = 'getTeamState',
@@ -85,20 +88,25 @@ enum Incoming {
   RESET_ACCOUNT_BALANCES = 'resetAccountBalances',
 
   // game
+  RESET_GAME = 'resetGame',
   GET_GAME_STATE = 'getGameState',
   GET_GAME_SETTINGS = 'getGameSettings',
-  RESET_GAME = 'resetGame',
   CHANGE_MONEY_POOL = 'changeMoneyPool',
-  CHANGE_HINT_AMOUNT = 'changeHintAmount',
-  START_AUCTION = 'startAuction',
-  FINISH_AUCTION = 'finishAuction',
-  CANCEL_AUCTION = 'cancelAuction',
-  START_HINT_AUCTION = 'startHintAuction',
-  ACCEPT_HINT_AMOUNT = 'acceptHintAmount',
-  DISCARD_HINT_AMOUNT = 'discardHintAmount',
   MARK_CORRECT_ANSWER = 'markCorrectAnswer',
   MARK_WRONG_ANSWER = 'markWrongAnswer',
   START_SECOND_STAGE = 'startSecondStage',
+
+  // auction
+  START_AUCTION = 'startAuction',
+  FINISH_AUCTION = 'finishAuction',
+  CANCEL_AUCTION = 'cancelAuction',
+
+  // hint
+  USE_HINT = 'useHint',
+  CHANGE_HINT_AMOUNT = 'changeHintAmount',
+  START_HINT_AUCTION = 'startHintAuction',
+  ACCEPT_HINT_AMOUNT = 'acceptHintAmount',
+  DISCARD_HINT_AMOUNT = 'discardHintAmount',
 
   // time
   START_TIME = 'startTime',

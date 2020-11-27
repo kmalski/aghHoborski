@@ -1,4 +1,4 @@
-export { TeamName, TeamData, TeamShared, Team };
+export { TeamName, Team };
 
 enum TeamName {
   BLUE = 'blue',
@@ -6,26 +6,6 @@ enum TeamName {
   YELLOW = 'yellow',
   RED = 'red',
   MASTERS = 'masters'
-}
-
-interface TeamData {
-  teamName: string;
-  newIsInGame?: boolean;
-  newAuctionAmount?: number;
-  newAccountBalance?: number;
-  newHintsCount?: number;
-  newHasBlackBox?: boolean;
-}
-
-interface TeamShared {
-  name: TeamName;
-  auctionAmount: number;
-  accountBalance: number;
-  hasBlackBox: boolean;
-  hintsCount: number;
-  isAuction?: boolean;
-  isInGame?: boolean;
-  hasLost?: boolean;
 }
 
 class Team {

@@ -1,13 +1,12 @@
-import { Team, TeamName } from './team.model';
-import { RoundStage } from '../constans/game.constants';
+import { Team, TeamName } from './team';
 
-export { Game, GameData };
+export { Game, RoundStage };
 
-interface GameData {
-  categoryName?: string;
-  newMoneyPool?: number;
-  newHintAmount?: number;
-  auctionFinishAction?: string;
+enum RoundStage {
+  AUCTION = 'auction',
+  ANSWERING = 'answering',
+  HINT_AUCTION = 'hintAuction',
+  IDLE = 'idle'
 }
 
 class Game {

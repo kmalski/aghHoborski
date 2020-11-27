@@ -5,11 +5,11 @@ import http from 'http';
 import path from 'path';
 import mongoose from 'mongoose';
 import SocketIO from 'socket.io';
-
-import * as room from './sockets/room.socket';
-import { UserSocket } from './utils/socket.utils';
-import { Incoming } from './constans/event.constants';
 import { AddressInfo } from 'net';
+
+import { Incoming } from './events/event.constants';
+import { ClashSocket } from './utils/socket.util';
+import { RoomListener } from './events/listeners/room.listener';
 
 export { ClashServer };
 
@@ -65,10 +65,10 @@ class ClashServer {
     this.app.use(express.json());
     this.app.use(cors());
 
-    this.io.on(Incoming.CONNECT, (socket: UserSocket) => {
+    this.io.on(Incoming.CONNECT, (socket: ClashSocket) => {
       console.log(`New user connected: ${socket.id}`);
 
-      room.listen(this.io, socket);
+      RoomListener.listen(this.io, socket);
     });
 
     this.app.use((_req: Request, res: Response, _next: NextFunction) => {

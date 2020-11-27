@@ -1,21 +1,26 @@
 import { Server } from 'socket.io';
-import { UserSocket } from '../utils/socket.utils';
-import { Outgoing } from '../constans/event.constants';
-import { TimeData } from '../models/time.model';
+import { Outgoing } from '../events/event.constants';
+import { ClashSocket } from '../utils/socket.util';
 
-export { startTime, stopTime };
+export { TimeService, TimeData };
 
-function startTime(timeData: TimeData, socket: UserSocket, io: Server) {
-  if (!timeData || !Number.isInteger(timeData.newValue) || timeData.newValue < 1) {
-    return socket.emit(Outgoing.WARNING, 'Błędny czas, nie można rozpocząć odliczania.');
-  }
-  if (timeData.newValue > 3600) {
-    return socket.emit(Outgoing.WARNING, 'W tyle czasu to każdy może zgadnąć, spróbuj troszkę mniej.');
-  }
-
-  io.in(socket.room.name).emit(Outgoing.TIME_STARTED, { value: timeData.newValue });
+interface TimeData {
+  newValue: number; // in seconds
 }
 
-function stopTime(socket: UserSocket, io: Server) {
-  io.in(socket.room.name).emit(Outgoing.TIME_STOPPED);
+class TimeService {
+  static startTime(data: TimeData, socket: ClashSocket, io: Server) {
+    if (!data || !Number.isInteger(data.newValue) || data.newValue < 1) {
+      return socket.emit(Outgoing.WARNING, 'Błędny czas, nie można rozpocząć odliczania.');
+    }
+    if (data.newValue > 3600) {
+      return socket.emit(Outgoing.WARNING, 'W tyle czasu to każdy może zgadnąć, spróbuj troszkę mniej.');
+    }
+
+    io.in(socket.room.name).emit(Outgoing.TIME_STARTED, { value: data.newValue });
+  }
+
+  static stopTime(socket: ClashSocket, io: Server) {
+    io.in(socket.room.name).emit(Outgoing.TIME_STOPPED);
+  }
 }

@@ -1,119 +1,135 @@
 import bcrypt from 'bcrypt';
 import { Server } from 'socket.io';
-import { RoomModel, RoomData, Room } from '../models/room.model';
-import { QuestionSet, QuestionSetSchema } from '../models/question.model';
-import { Outgoing } from '../constans/event.constants';
-import { UserSocket } from '../utils/socket.utils';
-import * as game from '../sockets/game.socket';
-import * as team from '../sockets/team.socket';
-import * as question from '../sockets/question.socket';
-import * as time from '../sockets/time.socket';
+import { Room } from '../models/room';
+import { RoomModel } from '../models/schemas/room.schema';
+import { QuestionSetSchema } from '../models/schemas/question.schema';
+import { QuestionSet } from '../models/question';
+import { ClashSocket } from '../utils/socket.util';
+import { Outgoing } from '../events/event.constants';
+import { GameListener } from '../events/listeners/game.listener';
+import { TeamListener } from '../events/listeners/team.listener';
+import { TimeListener } from '../events/listeners/time.listener';
+import { HintListener } from '../events/listeners/hint.listener';
+import { AuctionListener } from '../events/listeners/auction.listener';
+import { QuestionListener } from '../events/listeners/question.listener';
 
-export { join, adminJoin, create, authorize };
+export { RoomData, RoomService };
 
-const saltRounds = 8;
-const activeRooms: Room[] = [];
-
-async function create(roomData: RoomData, socket: UserSocket) {
-  if (!roomData.name || !roomData.password) {
-    return socket.emit(Outgoing.WARNING, `Błędne dane.`);
-  }
-
-  const name = roomData.name;
-  const dbRoom = await RoomModel.findOne({ name });
-
-  if (dbRoom) {
-    return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
-  }
-
-  const hash = bcrypt.hashSync(roomData.password, saltRounds);
-  await new RoomModel({ name, hash }).save();
-
-  const room = new Room(name);
-  activeRooms.push(room);
-
-  socket.room = room;
-  socket.join(socket.room.name);
-  socket.emit(Outgoing.ROOM_CREATED, {
-    msg: `Pokój o nazwie ${name} został utworzony.`,
-    name,
-    token: room.token
-  });
+interface RoomData {
+  name: string;
+  token?: string;
+  readonly password?: string;
 }
 
-function join(roomData: RoomData, socket: UserSocket, io: Server) {
-  if (!roomData.name) {
-    return socket.emit(Outgoing.WARNING, `Błędne dane.`);
-  }
+class RoomService {
+  private static ACTIVE_ROOMS: Room[] = [];
+  private static SALT_ROUNDS: number = 0;
 
-  const name = roomData.name;
-  const room = activeRooms.find(e => e.name === name);
-
-  if (!room) {
-    return socket.emit(Outgoing.WARNING, `Podany pokój nie istnieje lub gra nie jest aktywna.`);
-  }
-
-  socket.room = room;
-  socket.join(socket.room.name);
-  socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name });
-
-  question.listen(io, socket);
-  game.listen(io, socket);
-  team.listen(io, socket);
-}
-
-async function adminJoin(roomData: RoomData, socket: UserSocket) {
-  if (!roomData.name || !roomData.password) {
-    return socket.emit(Outgoing.WARNING, `Błędne dane.`);
-  }
-
-  const name = roomData.name;
-  const dbRoom = await RoomModel.findOne({ name }).populate('questions');
-
-  if (!dbRoom || !bcrypt.compareSync(roomData.password, dbRoom.hash)) {
-    return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
-  }
-
-  let room = activeRooms.find(e => e.name === name);
-  if (!room) {
-    const questions = dbRoom.questions as QuestionSetSchema;
-    room = new Room(name);
-    if (questions) {
-      room.withQuestions(new QuestionSet(questions.name, questions.categories));
+  static async create(data: RoomData, socket: ClashSocket) {
+    if (!data.name || !data.password) {
+      return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
-    activeRooms.push(room);
+
+    const name = data.name;
+    const dbRoom = await RoomModel.findOne({ name });
+
+    if (dbRoom) {
+      return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
+    }
+
+    const hash = bcrypt.hashSync(data.password, this.SALT_ROUNDS);
+    await new RoomModel({ name, hash }).save();
+
+    const room = new Room(name);
+    this.ACTIVE_ROOMS.push(room);
+
+    socket.room = room;
+    socket.join(socket.room.name);
+    socket.emit(Outgoing.ROOM_CREATED, {
+      msg: `Pokój o nazwie ${name} został utworzony.`,
+      name,
+      token: room.token
+    });
   }
 
-  socket.room = room;
-  socket.join(socket.room.name);
-  socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
-}
+  static join(data: RoomData, socket: ClashSocket, io: Server) {
+    if (!data.name) {
+      return socket.emit(Outgoing.WARNING, `Błędne dane.`);
+    }
 
-function authorize(roomData: RoomData, socket: UserSocket, io: Server) {
-  if (!roomData.token || !roomData.name) {
-    return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
+    const name = data.name;
+    const room = this.ACTIVE_ROOMS.find(e => e.name === name);
+
+    if (!room) {
+      return socket.emit(Outgoing.WARNING, `Podany pokój nie istnieje lub gra nie jest aktywna.`);
+    }
+
+    socket.room = room;
+    socket.join(socket.room.name);
+    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name });
+
+    // order is important
+    QuestionListener.listen(io, socket);
+    GameListener.listen(io, socket);
+    TeamListener.listen(io, socket);
   }
 
-  const name = roomData.name;
-  const room = activeRooms.find(e => e.name === name);
+  static async adminJoin(data: RoomData, socket: ClashSocket) {
+    if (!data.name || !data.password) {
+      return socket.emit(Outgoing.WARNING, `Błędne dane.`);
+    }
 
-  if (room == null) {
-    return socket.emit(Outgoing.UNAUTHORIZED, `Pokój nie jest już aktywny.`);
+    const name = data.name;
+    const dbRoom = await RoomModel.findOne({ name }).populate('questions');
+
+    if (!dbRoom || !bcrypt.compareSync(data.password, dbRoom.hash)) {
+      return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
+    }
+
+    let room = this.ACTIVE_ROOMS.find(e => e.name === name);
+    if (!room) {
+      const questions = dbRoom.questions as QuestionSetSchema;
+      room = new Room(name);
+      if (questions) {
+        room.withQuestions(new QuestionSet(questions.name, questions.categories));
+      }
+      this.ACTIVE_ROOMS.push(room);
+    }
+
+    socket.room = room;
+    socket.join(socket.room.name);
+    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
   }
-  if (room.token !== roomData.token) {
-    return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
+
+  static authorize(data: RoomData, socket: ClashSocket, io: Server) {
+    if (!data.token || !data.name) {
+      return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
+    }
+
+    const name = data.name;
+    const room = this.ACTIVE_ROOMS.find(e => e.name === name);
+
+    if (room == null) {
+      return socket.emit(Outgoing.UNAUTHORIZED, `Pokój nie jest już aktywny.`);
+    }
+    if (room.token !== data.token) {
+      return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
+    }
+
+    socket.room = room;
+    socket.join(socket.room.name);
+    socket.emit(Outgoing.AUTHORIZED);
+
+    // now we are sure that only authorized sockets will be able to emit game events
+    // order is important
+    QuestionListener.listen(io, socket);
+    QuestionListener.listenAdmin(io, socket);
+    GameListener.listen(io, socket);
+    GameListener.listenAdmin(io, socket);
+    TeamListener.listen(io, socket);
+    TeamListener.listenAdmin(io, socket);
+    HintListener.listenAdmin(io, socket);
+    TimeListener.listenAdmin(io, socket);
+    AuctionListener.listenAdmin(io, socket);
   }
-
-  socket.room = room;
-  socket.join(socket.room.name);
-  socket.emit(Outgoing.AUTHORIZED);
-
-  // now we are sure that only authorized sockets will be able to emit game events
-  question.listen(io, socket);
-  question.listenAdmin(io, socket);
-  game.listen(io, socket);
-  game.listenAdmin(io, socket);
-  team.listen(io, socket);
-  team.listenAdmin(io, socket);
-  time.listenAdmin(io, socket);
 }
