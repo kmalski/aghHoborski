@@ -13,7 +13,7 @@ import { HintListener } from '../events/listeners/hint.listener';
 import { AuctionListener } from '../events/listeners/auction.listener';
 import { QuestionListener } from '../events/listeners/question.listener';
 
-export { RoomData, RoomService };
+export { RoomData, RoomService, LocalRoomService };
 
 interface RoomData {
   name: string;
@@ -22,10 +22,12 @@ interface RoomData {
 }
 
 class RoomService {
-  private static ACTIVE_ROOMS: Room[] = [];
-  private static SALT_ROUNDS: number = 0;
+  protected static ACTIVE_ROOMS: Room[] = [];
+  protected static SALT_ROUNDS: number = 8;
 
-  static async create(data: RoomData, socket: ClashSocket) {
+  protected useDatabase: boolean = true;
+
+  async create(data: RoomData, socket: ClashSocket) {
     if (!data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -37,11 +39,11 @@ class RoomService {
       return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
     }
 
-    const hash = bcrypt.hashSync(data.password, this.SALT_ROUNDS);
+    const hash = bcrypt.hashSync(data.password, RoomService.SALT_ROUNDS);
     await new RoomModel({ name, hash }).save();
 
-    const room = new Room(name);
-    this.ACTIVE_ROOMS.push(room);
+    const room = new Room(name, hash);
+    RoomService.ACTIVE_ROOMS.push(room);
 
     socket.room = room;
     socket.join(socket.room.name);
@@ -52,13 +54,13 @@ class RoomService {
     });
   }
 
-  static join(data: RoomData, socket: ClashSocket, io: Server) {
+  join(data: RoomData, socket: ClashSocket, io: Server) {
     if (!data.name) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
 
     const name = data.name;
-    const room = this.ACTIVE_ROOMS.find(e => e.name === name);
+    const room = RoomService.ACTIVE_ROOMS.find(e => e.name === name);
 
     if (!room) {
       return socket.emit(Outgoing.WARNING, `Podany pokój nie istnieje lub gra nie jest aktywna.`);
@@ -69,12 +71,13 @@ class RoomService {
     socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name });
 
     // order is important
+    QuestionListener.configure({ useDatabase: this.useDatabase });
     QuestionListener.listen(io, socket);
     GameListener.listen(io, socket);
     TeamListener.listen(io, socket);
   }
 
-  static async adminJoin(data: RoomData, socket: ClashSocket) {
+  async adminJoin(data: RoomData, socket: ClashSocket) {
     if (!data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -86,14 +89,14 @@ class RoomService {
       return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
     }
 
-    let room = this.ACTIVE_ROOMS.find(e => e.name === name);
+    let room = RoomService.ACTIVE_ROOMS.find(e => e.name === name);
     if (!room) {
       const questions = dbRoom.questions as QuestionSetSchema;
-      room = new Room(name);
+      room = new Room(name, dbRoom.hash);
       if (questions) {
         room.withQuestions(new QuestionSet(questions.name, questions.categories));
       }
-      this.ACTIVE_ROOMS.push(room);
+      RoomService.ACTIVE_ROOMS.push(room);
     }
 
     socket.room = room;
@@ -101,13 +104,13 @@ class RoomService {
     socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
   }
 
-  static authorize(data: RoomData, socket: ClashSocket, io: Server) {
+  authorize(data: RoomData, socket: ClashSocket, io: Server) {
     if (!data.token || !data.name) {
       return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
     }
 
     const name = data.name;
-    const room = this.ACTIVE_ROOMS.find(e => e.name === name);
+    const room = RoomService.ACTIVE_ROOMS.find(e => e.name === name);
 
     if (room == null) {
       return socket.emit(Outgoing.UNAUTHORIZED, `Pokój nie jest już aktywny.`);
@@ -118,10 +121,10 @@ class RoomService {
 
     socket.room = room;
     socket.join(socket.room.name);
-    socket.emit(Outgoing.AUTHORIZED);
 
     // now we are sure that only authorized sockets will be able to emit game events
     // order is important
+    QuestionListener.configure({ useDatabase: this.useDatabase });
     QuestionListener.listen(io, socket);
     QuestionListener.listenAdmin(io, socket);
     GameListener.listen(io, socket);
@@ -131,5 +134,52 @@ class RoomService {
     HintListener.listenAdmin(io, socket);
     TimeListener.listenAdmin(io, socket);
     AuctionListener.listenAdmin(io, socket);
+
+    socket.emit(Outgoing.AUTHORIZED);
+  }
+}
+
+class LocalRoomService extends RoomService {
+  protected useDatabase: boolean = false;
+
+  async create(data: RoomData, socket: ClashSocket) {
+    if (!data || !data.name || !data.password) {
+      return socket.emit(Outgoing.WARNING, `Błędne dane.`);
+    }
+
+    const name = data.name;
+
+    if (LocalRoomService.ACTIVE_ROOMS.some(r => r.name === name)) {
+      return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
+    }
+
+    const hash = bcrypt.hashSync(data.password, LocalRoomService.SALT_ROUNDS);
+    const room = new Room(name, hash);
+    LocalRoomService.ACTIVE_ROOMS.push(room);
+
+    socket.room = room;
+    socket.join(socket.room.name);
+    socket.emit(Outgoing.ROOM_CREATED, {
+      msg: `Pokój o nazwie ${name} został utworzony.`,
+      name,
+      token: room.token
+    });
+  }
+
+  async adminJoin(data: RoomData, socket: ClashSocket) {
+    if (!data.name || !data.password) {
+      return socket.emit(Outgoing.WARNING, `Błędne dane.`);
+    }
+
+    const name = data.name;
+    const room = LocalRoomService.ACTIVE_ROOMS.find(e => e.name === name);
+
+    if (!room || !bcrypt.compareSync(data.password, room.hash)) {
+      return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
+    }
+
+    socket.room = room;
+    socket.join(socket.room.name);
+    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
   }
 }

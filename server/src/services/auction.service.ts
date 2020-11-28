@@ -12,7 +12,7 @@ interface AuctionData {
 }
 
 class AuctionService {
-  static startAuction(data: AuctionData, socket: ClashSocket, io: Server) {
+  startAuction(data: AuctionData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const questions = socket.room.questions;
 
@@ -45,7 +45,7 @@ class AuctionService {
     });
   }
 
-  static finishAuction(socket: ClashSocket, io: Server) {
+  finishAuction(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const questions = socket.room.questions;
 
@@ -86,7 +86,7 @@ class AuctionService {
     }
   }
 
-  static cancelAuction(socket: ClashSocket, io: Server) {
+  cancelAuction(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     if (!game.isAuction()) {
@@ -107,7 +107,7 @@ class AuctionService {
     });
   }
 
-  private static emitAuctionAmountChanged(game: Game, room: string, io: Server) {
+  private emitAuctionAmountChanged(game: Game, room: string, io: Server) {
     game.activeTeams.forEach(team => {
       io.in(room).emit(team.name + Outgoing.AUCTION_AMOUNT_CHANGED, { auctionAmount: team.auctionAmount });
     });

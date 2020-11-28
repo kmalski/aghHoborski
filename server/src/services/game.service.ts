@@ -10,7 +10,7 @@ interface GameData {
 }
 
 class GameService {
-  static getGameState(socket: ClashSocket) {
+  getGameState(socket: ClashSocket) {
     const game = socket.room.game;
 
     socket.emit(Outgoing.GAME_STATE, {
@@ -22,7 +22,7 @@ class GameService {
     });
   }
 
-  static getGameSettings(socket: ClashSocket, io: Server) {
+  getGameSettings(socket: ClashSocket, io: Server) {
     const roomName = socket.room.name;
     const peopleInRoom = io.sockets.adapter.rooms[roomName].length;
     const questionSetName = socket.room.questions ? socket.room.questions.name : 'Nie wybrano';
@@ -34,7 +34,7 @@ class GameService {
     ]);
   }
 
-  static resetGame(socket: ClashSocket, io: Server) {
+  resetGame(socket: ClashSocket, io: Server) {
     socket.room.game = new Game();
     if (socket.room.questions) {
       socket.room.questions.reset();
@@ -43,7 +43,7 @@ class GameService {
     io.in(socket.room.name).emit(Outgoing.GAME_RESET);
   }
 
-  static changeMoneyPool(gameData: GameData, socket: ClashSocket, io: Server) {
+  changeMoneyPool(gameData: GameData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     if (!Number.isInteger(gameData.newMoneyPool)) {
@@ -55,7 +55,7 @@ class GameService {
     io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
   }
 
-  static markCorrectAnswer(socket: ClashSocket, io: Server) {
+  markCorrectAnswer(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const team = game.auctionWinningTeam;
 
@@ -69,10 +69,10 @@ class GameService {
     io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
     io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
     io.in(socket.room.name).emit(team.name + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: team.accountBalance });
-    GameService.emitAuctionAmountChanged(game, socket.room.name, io);
+    this.emitAuctionAmountChanged(game, socket.room.name, io);
   }
 
-  static markWrongAnswer(socket: ClashSocket, io: Server) {
+  markWrongAnswer(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     if (!game.isAnswering()) {
@@ -87,10 +87,10 @@ class GameService {
     this.emitAuctionAmountChanged(game, socket.room.name, io);
   }
 
-  static startSecondStage(socket: ClashSocket, io: Server) {
+  startSecondStage(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
-    if (!game.isIdle() || game.roundNumber === 2) {
+    if (!game.isIdle() || game.stageNumber === 2) {
       return socket.emit(Outgoing.WARNING, 'Nie można teraz rozpocząć drugiego etapu.');
     }
 
@@ -112,7 +112,7 @@ class GameService {
     });
   }
 
-  private static emitAuctionAmountChanged(game: Game, room: string, io: Server) {
+  private emitAuctionAmountChanged(game: Game, room: string, io: Server) {
     game.activeTeams.forEach(team => {
       io.in(room).emit(team.name + Outgoing.AUCTION_AMOUNT_CHANGED, { auctionAmount: team.auctionAmount });
     });

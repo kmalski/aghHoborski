@@ -6,7 +6,7 @@ import { QuestionSet } from '../models/question';
 import { QuestionSetModel } from '../models/schemas/question.schema';
 import { ClashSocket } from '../utils/socket.util';
 
-export { QuestionService, QuestionData };
+export { QuestionService, LocalQuestionService, QuestionData };
 
 interface QuestionData {
   categoryName?: string;
@@ -15,13 +15,13 @@ interface QuestionData {
 }
 
 class QuestionService {
-  static async getAllQuestionSets(socket: ClashSocket) {
+  async getAllQuestionSets(socket: ClashSocket) {
     const questionSetDb = await QuestionSetModel.find().select('name createdAt -_id');
 
     socket.emit(Outgoing.ALL_QUESTION_SETS, questionSetDb);
   }
 
-  static getCurrentQuestion(socket: ClashSocket) {
+  getCurrentQuestion(socket: ClashSocket) {
     const game = socket.room.game;
     const questions = socket.room.questions;
 
@@ -47,7 +47,7 @@ class QuestionService {
     return socket.emit(Outgoing.CURRENT_QUESTION, currentQuestion);
   }
 
-  static getAvailableCategories(socket: ClashSocket) {
+  getAvailableCategories(socket: ClashSocket) {
     const questions = socket.room.questions;
 
     if (!questions) {
@@ -65,7 +65,7 @@ class QuestionService {
     return socket.emit(Outgoing.AVAILABLE_CATEGORIES, { categories });
   }
 
-  static async addQuestionSet(data: QuestionData, socket: ClashSocket) {
+  async addQuestionSet(data: QuestionData, socket: ClashSocket) {
     const questionSet = await QuestionSetModel.findOne({ name: data.name });
 
     if (questionSet) {
@@ -82,7 +82,7 @@ class QuestionService {
     socket.emit(Outgoing.SUCCESS);
   }
 
-  static async changeQuestionSet(data: QuestionData, socket: ClashSocket) {
+  async changeQuestionSet(data: QuestionData, socket: ClashSocket) {
     const questionSetDb = await QuestionSetModel.findOne({ name: data.name });
 
     if (!questionSetDb) {
@@ -94,7 +94,7 @@ class QuestionService {
     socket.emit(Outgoing.SUCCESS);
   }
 
-  static skipQuestion(socket: ClashSocket, io: Server) {
+  skipQuestion(socket: ClashSocket, io: Server) {
     const questions = socket.room.questions;
     const game = socket.room.game;
 
@@ -112,5 +112,47 @@ class QuestionService {
       question: question.content,
       hints: question.hints
     });
+  }
+}
+
+class LocalQuestionService extends QuestionService {
+  static QUESTION_SETS: { name: string; strData: string; createdAt: Date }[] = [];
+
+  async getAllQuestionSets(socket: ClashSocket) {
+    const questionsPruned = [];
+
+    LocalQuestionService.QUESTION_SETS.forEach(question => {
+      questionsPruned.push({ name: question.name, createdAt: question.createdAt });
+    });
+
+    socket.emit(Outgoing.ALL_QUESTION_SETS, questionsPruned);
+  }
+
+  async addQuestionSet(data: QuestionData, socket: ClashSocket) {
+    let questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
+    
+    if (questionSet) {
+      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} już istnieje.`);
+    }
+
+    const fileData = JSON.parse(data.file);
+    LocalQuestionService.QUESTION_SETS.push({ name: data.name, strData: data.file, createdAt: new Date() });
+
+    socket.room.questions = new QuestionSet(data.name, fileData.categories);
+
+    socket.emit(Outgoing.SUCCESS);
+  }
+
+  async changeQuestionSet(data: QuestionData, socket: ClashSocket) {
+    let questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
+
+    if (!questionSet) {
+      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} nie istnieje.`);
+    }
+
+    const parsed = JSON.parse(questionSet.strData);
+
+    socket.room.questions = new QuestionSet(questionSet.name, parsed.categories);
+    socket.emit(Outgoing.SUCCESS);
   }
 }

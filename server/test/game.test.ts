@@ -47,7 +47,7 @@ describe('Test game socket events', function () {
         client.once('roomCreated', (roomData: any) => {
           client.emit('authorize', { name: 'GameTestName', token: roomData.token });
           client.once('authorized', () => {
-            client.emit('addQuestionSet', { name: 'testSet', file: questionSet });
+            client.emit('addQuestionSet', { name: 'gameTestSet', file: questionSet });
             client.once('success', () => done());
           });
         });
@@ -160,7 +160,7 @@ describe('Test game socket events', function () {
       data.should.have.deep.members([
         { name: 'Nazwa pokoju', value: 'GameTestName' },
         { name: 'Ilość osób w pokoju', value: 1 },
-        { name: 'Nazwa puli pytań', value: 'testSet' }
+        { name: 'Nazwa puli pytań', value: 'gameTestSet' }
       ]);
       done();
     });

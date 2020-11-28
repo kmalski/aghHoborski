@@ -15,7 +15,7 @@ interface TeamData {
 }
 
 class TeamService {
-  static getTeamState(data: TeamData, socket: ClashSocket) {
+  getTeamState(data: TeamData, socket: ClashSocket) {
     const game = socket.room.game;
     const teamName = data.teamName as TeamName;
 
@@ -32,7 +32,7 @@ class TeamService {
     socket.emit(teamName + Outgoing.TEAM_STATE, teamState);
   }
 
-  static changeTeamStatus(data: TeamData, socket: ClashSocket, io: Server) {
+  changeTeamStatus(data: TeamData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const teamName = data.teamName as TeamName;
 
@@ -51,7 +51,7 @@ class TeamService {
     io.in(socket.room.name).emit(teamName + Outgoing.TEAM_STATUS_CHANGED, { isInGame: data.newIsInGame });
   }
 
-  static changeAuctionAmount(data: TeamData, socket: ClashSocket, io: Server) {
+  changeAuctionAmount(data: TeamData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const teamName = data.teamName as TeamName;
 
@@ -74,7 +74,7 @@ class TeamService {
     io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
   }
 
-  static changeAccountBalance(data: TeamData, socket: ClashSocket, io: Server) {
+  changeAccountBalance(data: TeamData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const teamName = data.teamName as TeamName;
 
@@ -97,7 +97,7 @@ class TeamService {
     });
   }
 
-  static changeHintsCount(data: TeamData, socket: ClashSocket, io: Server) {
+  changeHintsCount(data: TeamData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const teamName = data.teamName as TeamName;
 
@@ -113,7 +113,7 @@ class TeamService {
     io.in(socket.room.name).emit(teamName + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: data.newHintsCount });
   }
 
-  static changeBlackBox(data: TeamData, socket: ClashSocket, io: Server) {
+  changeBlackBox(data: TeamData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const teamName = data.teamName as TeamName;
 
@@ -125,7 +125,7 @@ class TeamService {
     io.in(socket.room.name).emit(teamName + Outgoing.BLACK_BOX_CHANGED, { hasBlackBox: data.newHasBlackBox });
   }
 
-  static resetAccountBalances(data: TeamData, socket: ClashSocket) {
+  resetAccountBalances(data: TeamData, socket: ClashSocket) {
     const game = socket.room.game;
 
     if (!Number.isInteger(data.newAccountBalance)) {

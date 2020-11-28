@@ -9,7 +9,7 @@ interface HintData {
 }
 
 class HintService {
-  static startHintAuction(socket: ClashSocket, io: Server) {
+  startHintAuction(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     if (!game.isAnswering() || game.isHintAuction()) {
@@ -25,7 +25,7 @@ class HintService {
     io.in(socket.room.name).emit(Outgoing.HINT_AUCTION_STARTED, { hintAmount: game.hintAmount });
   }
 
-  static acceptHintAmount(socket: ClashSocket, io: Server) {
+  acceptHintAmount(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
     const team = game.auctionWinningTeam;
 
@@ -37,7 +37,7 @@ class HintService {
     io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
   }
 
-  static discardHintAmount(socket: ClashSocket, io: Server) {
+  discardHintAmount(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     game.discardHintAuction();
@@ -46,7 +46,7 @@ class HintService {
     io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
   }
 
-  static changeHintAmount(data: HintData, socket: ClashSocket, io: Server) {
+  changeHintAmount(data: HintData, socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     if (!Number.isInteger(data.newHintAmount)) {
@@ -61,7 +61,7 @@ class HintService {
     io.in(socket.room.name).emit(Outgoing.HINT_AMOUNT_CHANGED, { hintAmount: game.hintAmount });
   }
 
-  static useHint(socket: ClashSocket, io: Server) {
+  useHint(socket: ClashSocket, io: Server) {
     const game = socket.room.game;
 
     if (!game.isAnswering() || socket.room.questions.current.hintUsed) {

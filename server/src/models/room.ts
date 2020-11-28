@@ -6,19 +6,16 @@ export { Room };
 
 class Room {
   public name: string;
+  public hash: string;
   public token: string;
   public game: Game;
   public questions?: QuestionSet;
 
-  constructor(name: string) {
+  constructor(name: string, hash: string) {
     this.name = name;
+    this.hash = hash;
     this.token = generateToken();
     this.game = new Game();
-  }
-
-  withToken() {
-    this.token = generateToken();
-    return this;
   }
 
   withQuestions(questions: QuestionSet) {

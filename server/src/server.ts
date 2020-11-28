@@ -20,6 +20,7 @@ class ClashServer {
   private server: http.Server;
   private io: SocketIO.Server;
   private port: number;
+  private useDatabase: boolean = false;
 
   constructor() {
     this.app = express();
@@ -36,6 +37,7 @@ class ClashServer {
       await this.listen(0);
       this.port = (this.server.address() as AddressInfo).port;
     }
+    if (!this.useDatabase) console.log('[INFO] Starting without MongoDB');
     console.log(`[INFO] Server listening at port ${this.port}`);
   }
 
@@ -50,10 +52,12 @@ class ClashServer {
       useNewUrlParser: true,
       useFindAndModify: false
     });
+    this.useDatabase = true;
+    console.log('[INFO] Connected to MongoDB');
   }
 
   async disconnectMongo() {
-    await mongoose.disconnect();
+    if (this.useDatabase) await mongoose.disconnect();
   }
 
   getPort() {
@@ -68,6 +72,7 @@ class ClashServer {
     this.io.on(Incoming.CONNECT, (socket: ClashSocket) => {
       console.log(`New user connected: ${socket.id}`);
 
+      RoomListener.configure({ useDatabase: this.useDatabase });
       RoomListener.listen(this.io, socket);
     });
 
@@ -90,10 +95,12 @@ if (require.main === module) {
   const port = parseInt(process.env.SERVER_PORT);
   const mongoUri = process.env.MONGODB_URI;
 
-  server
-    .connectMongo(mongoUri)
-    .then(() => server.start(port))
-    .catch((err: Error) => {
-      console.log(err);
-    });
+  if (mongoUri) {
+    server
+      .connectMongo(mongoUri)
+      .then(() => server.start(port))
+      .catch((err: Error) => console.log(new Date(), err));
+  } else {
+    server.start(port).catch((err: Error) => console.log(new Date(), err));
+  }
 }
