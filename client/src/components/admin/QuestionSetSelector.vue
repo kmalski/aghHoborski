@@ -1,27 +1,30 @@
 <template>
-  <b-modal :id="id" hide-footer size="lg" title="Wybierz pytania">
-    <b-alert class="modal-alert" v-model="showAlert" variant="warning" dismissible>
-      {{ msg }}
+  <b-modal :id="id" v-model="visible" hide-footer size="lg" lazy title="Wybierz pytania">
+    <b-alert class="modal-alert" v-model="alert.show" variant="warning" dismissible>
+      {{ alert.msg }}
     </b-alert>
-    <b-table :fields="fields" :items="questions" sticky-header small striped hover head-variant="light">
+    <b-table :fields="fields" :items="questions" sticky-header small striped hover head-variant="light" sort-icon-left>
       <template #cell(actions)="row">
-        <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary" class="mr-1">
-          Wybierz
-        </b-button>
+        <div class="centered-col">
+          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary">
+            Wybierz
+          </b-button>
+          <b-button size="sm" @click="downloadQuestionSet(row.index)" variant="primary">
+            Pobierz
+          </b-button>
+        </div>
       </template>
     </b-table>
   </b-modal>
 </template>
 
 <script>
+import ModalMixin from '@/components/shared/ModalMixin';
+import DownloadMixin from '@/components/shared/DownloadMixin';
+
 export default {
   name: 'QuestionSetSelector',
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
+  mixins: [ModalMixin, DownloadMixin],
   data() {
     return {
       questions: [],
@@ -37,10 +40,9 @@ export default {
             return date.toLocaleString('pl-PL');
           }
         },
-        { key: 'actions', label: '' }
-      ],
-      msg: '',
-      showAlert: false
+        { key: 'owner', label: 'Pokój', sortable: true, sortDirection: 'desc' },
+        { key: 'actions', label: '', sortable: false }
+      ]
     };
   },
   mounted() {
@@ -53,21 +55,32 @@ export default {
   methods: {
     changeQuestionSet(index) {
       this.$socket.client.emit('changeQuestionSet', { name: this.questions[index].name });
+    },
+    downloadQuestionSet(index) {
+      this.$socket.client.emit('getQuestionSet', { name: this.questions[index].name });
     }
   },
   sockets: {
-    fail(msg) {
-      this.msg = msg;
-      this.showAlert = true;
-    },
-    success() {
-      this.$bvModal.hide(this.id);
-    },
     allQuestionSets(questionSets) {
       this.questions = questionSets;
+    },
+    questionSet(data) {
+      if (this.visible && data.name) {
+        this.download(JSON.stringify(data.questionSet, null, 2), data.name, 'text/plain');
+      }
     }
   }
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.centered-col {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  > :first-child {
+    margin-right: 1rem;
+  }
+}
+</style>

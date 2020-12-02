@@ -53,7 +53,7 @@ export default {
   width: 100%;
 
   label {
-    font-weight: 500;
+    font-weight: 600;
     margin: 0;
   }
 

@@ -16,7 +16,7 @@ interface QuestionData {
 
 class QuestionService {
   async getAllQuestionSets(socket: ClashSocket) {
-    const questionSetDb = await QuestionSetModel.find().select('name createdAt -_id');
+    const questionSetDb = await QuestionSetModel.find().select('name owner createdAt -_id');
 
     socket.emit(Outgoing.ALL_QUESTION_SETS, questionSetDb);
   }
@@ -65,16 +65,51 @@ class QuestionService {
     return socket.emit(Outgoing.AVAILABLE_CATEGORIES, { categories });
   }
 
+  async getQuestionSet(data: QuestionData, socket: ClashSocket) {
+    const questions = socket.room.questions;
+    let name: string;
+
+    if (data && data.name) {
+      name = data.name;
+    } else if (questions) {
+      name = questions.name;
+    }
+
+    if (name) {
+      const questionSet = await QuestionSetModel.findOne({ name }).select('name owner categories -_id');
+
+      socket.emit(Outgoing.QUESTION_SET, {
+        name,
+        owner: questionSet.owner,
+        questionSet: { categories: questionSet.categories }
+      });
+    } else {
+      socket.emit(Outgoing.QUESTION_SET, {});
+    }
+  }
+
   async addQuestionSet(data: QuestionData, socket: ClashSocket) {
     const questionSet = await QuestionSetModel.findOne({ name: data.name });
 
-    if (questionSet) {
+    if (questionSet && questionSet.owner !== socket.room.name) {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} już istnieje.`);
     }
 
     const fileData = JSON.parse(data.file);
-    const questionSetDb = await QuestionSetModel.create({ name: data.name, categories: fileData.categories });
-    await questionSetDb.save();
+    let questionSetDb;
+
+    if (questionSet) {
+      questionSet.categories = fileData.categories;
+      await questionSet.save();
+      questionSetDb = questionSet;
+    } else {
+      questionSetDb = await QuestionSetModel.create({
+        name: data.name,
+        owner: socket.room.name,
+        categories: fileData.categories
+      });
+      await questionSetDb.save();
+    }
 
     await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
@@ -116,28 +151,57 @@ class QuestionService {
 }
 
 class LocalQuestionService extends QuestionService {
-  static QUESTION_SETS: { name: string; strData: string; createdAt: Date }[] = [];
+  static QUESTION_SETS: { name: string; owner: string; strData: string; createdAt: Date }[] = [];
 
   async getAllQuestionSets(socket: ClashSocket) {
     const questionsPruned = [];
 
     LocalQuestionService.QUESTION_SETS.forEach(question => {
-      questionsPruned.push({ name: question.name, createdAt: question.createdAt });
+      questionsPruned.push({ name: question.name, owner: question.owner, createdAt: question.createdAt });
     });
 
     socket.emit(Outgoing.ALL_QUESTION_SETS, questionsPruned);
   }
 
+  async getQuestionSet(data: QuestionData, socket: ClashSocket) {
+    const questions = socket.room.questions;
+    let name: string;
+
+    if (data && data.name) {
+      name = data.name;
+    } else if (questions) {
+      name = questions.name;
+    }
+
+    if (name) {
+      const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === name);
+      const parsedData = JSON.parse(questionSet.strData);
+
+      socket.emit(Outgoing.QUESTION_SET, { name, owner: questionSet.owner, questionSet: parsedData });
+    } else {
+      socket.emit(Outgoing.QUESTION_SET, {});
+    }
+  }
+
   async addQuestionSet(data: QuestionData, socket: ClashSocket) {
     let questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
-    
-    if (questionSet) {
+
+    if (questionSet && questionSet.owner !== socket.room.name) {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} już istnieje.`);
     }
 
-    const fileData = JSON.parse(data.file);
-    LocalQuestionService.QUESTION_SETS.push({ name: data.name, strData: data.file, createdAt: new Date() });
+    if (questionSet) {
+      questionSet.strData = data.file;
+    } else {
+      LocalQuestionService.QUESTION_SETS.push({
+        name: data.name,
+        owner: socket.room.name,
+        strData: data.file,
+        createdAt: new Date()
+      });
+    }
 
+    const fileData = JSON.parse(data.file);
     socket.room.questions = new QuestionSet(data.name, fileData.categories);
 
     socket.emit(Outgoing.SUCCESS);

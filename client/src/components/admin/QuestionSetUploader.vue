@@ -1,7 +1,7 @@
 <template>
-  <b-modal :id="id" hide-footer title="Dodaj własne pytania">
-    <b-alert class="modal-alert" v-model="showAlert" variant="warning" dismissible>
-      {{ msg }}
+  <b-modal :id="id" v-model="visible" hide-footer title="Dodaj własne pytania">
+    <b-alert class="modal-alert" v-model="alert.show" variant="warning" dismissible>
+      {{ alert.msg }}
     </b-alert>
     <b-form @submit.stop.prevent="onSubmit">
       <b-form-file
@@ -25,19 +25,14 @@
 </template>
 
 <script>
+import ModalMixin from '@/components/shared/ModalMixin';
+
 export default {
   name: 'QuestionSetUploader',
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
+  mixins: [ModalMixin],
   data() {
     return {
-      questionFile: null,
-      msg: '',
-      showAlert: false
+      questionFile: null
     };
   },
   computed: {
@@ -49,15 +44,6 @@ export default {
   methods: {
     onSubmit() {
       this.$socket.client.emit('addQuestionSet', { name: this.questionFile.name, file: this.questionFile });
-    }
-  },
-  sockets: {
-    fail(msg) {
-      this.msg = msg;
-      this.showAlert = true;
-    },
-    success() {
-      this.$bvModal.hide(this.id);
     }
   }
 };

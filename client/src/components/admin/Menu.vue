@@ -22,6 +22,7 @@
     </b-button>
     <app-game-settings :id="settingsId"></app-game-settings>
     <app-category-selector :id="categoryId"></app-category-selector>
+    <app-question-set-editor :id="editorId"></app-question-set-editor>
     <app-question-set-uploader :id="uploaderId"></app-question-set-uploader>
     <app-question-set-selector :id="selectorId"></app-question-set-selector>
   </section>
@@ -30,6 +31,7 @@
 <script>
 import GameSettings from '@/components/admin/GameSettings';
 import CategorySelector from '@/components/admin/CategorySelector';
+import QuestionSetEditor from '@/components/admin/QuestionSetEditor';
 import QuestionSetUploader from '@/components/admin/QuestionSetUploader';
 import QuestionSetSelector from '@/components/admin/QuestionSetSelector';
 
@@ -37,6 +39,7 @@ export default {
   name: 'Menu',
   data() {
     return {
+      editorId: 'editor',
       uploaderId: 'uploader',
       categoryId: 'category',
       selectorId: 'selector',
@@ -119,6 +122,10 @@ export default {
               action: this.uploadQuestions
             },
             {
+              name: 'Edytuj pule pytań...',
+              action: this.editQuestionSet
+            },
+            {
               name: 'Wybierz pule pytań spośród istniejących...',
               action: this.getAllQuestions
             },
@@ -166,6 +173,9 @@ export default {
     uploadQuestions() {
       this.$bvModal.show(this.uploaderId);
     },
+    editQuestionSet() {
+      this.$bvModal.show(this.editorId);
+    },
     getAllQuestions() {
       this.$bvModal.show(this.selectorId);
     },
@@ -191,6 +201,7 @@ export default {
   components: {
     AppGameSettings: GameSettings,
     AppCategorySelector: CategorySelector,
+    AppQuestionSetEditor: QuestionSetEditor,
     AppQuestionSetUploader: QuestionSetUploader,
     AppQuestionSetSelector: QuestionSetSelector
   }

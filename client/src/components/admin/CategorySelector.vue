@@ -1,7 +1,7 @@
 <template>
-  <b-modal :id="id" hide-footer title="Wybierz kategorię">
-    <b-alert class="modal-alert" v-model="showAlert" variant="warning" dismissible>
-      {{ msg }}
+  <b-modal :id="id" v-model="visible" hide-footer title="Wybierz kategorię">
+    <b-alert class="modal-alert" v-model="alert.show" variant="warning" dismissible>
+      {{ alert.msg }}
     </b-alert>
     <div class="categories">
       <p @click="startAuction('blackBox')">Czarna skrzynka</p>
@@ -13,19 +13,14 @@
 </template>
 
 <script>
+import ModalMixin from '@/components/shared/ModalMixin';
+
 export default {
   name: 'CategorySelector',
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
+  mixins: [ModalMixin],
   data() {
     return {
-      categories: [],
-      msg: '',
-      showAlert: false
+      categories: []
     };
   },
   mounted() {
@@ -41,13 +36,6 @@ export default {
     }
   },
   sockets: {
-    fail(msg) {
-      this.msg = msg;
-      this.showAlert = true;
-    },
-    success() {
-      this.$bvModal.hide(this.id);
-    },
     availableCategories(data) {
       this.categories = data.categories;
     }

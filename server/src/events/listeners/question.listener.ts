@@ -26,6 +26,7 @@ class QuestionListener extends EventListener {
   }
 
   static listenAdmin(io: Server, socket: ClashSocket) {
+    socket.on(Incoming.GET_QUESTION_SET, questionData => this.SERVICE.getQuestionSet(questionData, socket));
     socket.on(Incoming.ADD_QUESTION_SET, questionData => this.SERVICE.addQuestionSet(questionData, socket));
     socket.on(Incoming.CHANGE_QUESTION_SET, questionData => this.SERVICE.changeQuestionSet(questionData, socket));
     socket.on(Incoming.GET_ALL_QUESTION_SETS, () => this.SERVICE.getAllQuestionSets(socket));

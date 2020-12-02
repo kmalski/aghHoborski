@@ -20,7 +20,7 @@ export default {
   p {
     margin: 0;
     font-size: 4.25rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 </style>

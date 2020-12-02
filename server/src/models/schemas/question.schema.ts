@@ -14,7 +14,7 @@ class CategorySchema {
   @prop()
   public name!: string;
 
-  @prop({ type: () => [QuestionSchema] })
+  @prop({ type: () => [QuestionSchema], _id: false })
   public questions!: QuestionSchema[];
 }
 
@@ -22,7 +22,10 @@ class QuestionSetSchema {
   @prop({ unique: true })
   public name!: string;
 
-  @prop({ type: () => [CategorySchema] })
+  @prop()
+  public owner!: string;
+
+  @prop({ type: () => [CategorySchema], _id: false })
   public categories!: CategorySchema[];
 }
 

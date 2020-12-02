@@ -132,7 +132,7 @@ export default {
   color: $font-color;
 
   .timer {
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 

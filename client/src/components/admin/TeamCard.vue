@@ -183,7 +183,7 @@ export default {
   margin: auto;
 
   .team-name {
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .card-row {

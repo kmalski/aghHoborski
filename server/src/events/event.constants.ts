@@ -18,6 +18,7 @@ enum Outgoing {
   AUTHORIZED = 'authorized',
 
   // questions
+  QUESTION_SET = 'questionSet',
   ALL_QUESTION_SETS = 'allQuestionSets',
   CURRENT_QUESTION = 'currentQuestion',
   AVAILABLE_CATEGORIES = 'availableCategories',
@@ -71,6 +72,7 @@ enum Incoming {
   AUTHORIZE = 'authorize',
 
   // questions
+  GET_QUESTION_SET = 'getQuestionSet',
   GET_ALL_QUESTION_SETS = 'getAllQuestionSets',
   GET_CURRENT_QUESTION = 'getCurrentQuestion',
   GET_AVAILABLE_CATEGORIES = 'getAvailableCategories',

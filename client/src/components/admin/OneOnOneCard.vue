@@ -66,7 +66,7 @@ export default {
   label {
     text-align: left;
     width: 100%;
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 </style>
