@@ -68,8 +68,8 @@ export default {
   }
 
   p {
-    margin: 0 0.25rem;
     display: inline-block;
+    margin: 0 0.25rem;
   }
 }
 </style>

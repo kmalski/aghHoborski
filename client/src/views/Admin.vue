@@ -28,8 +28,8 @@
       >
         {{ alert.msg }}
       </b-alert>
-      <app-game-phase />
-      <app-status-icon />
+      <app-game-phase></app-game-phase>
+      <app-status-icon></app-status-icon>
     </section>
   </section>
 </template>
@@ -65,8 +65,8 @@ export default {
   methods: {
     forceLogout(msg) {
       this.$router.push({
-        name: 'Login',
-        params: { initialShowAlert: true, initialMsg: msg }
+        name: 'AdminLogin',
+        params: { initialMsg: msg }
       });
     },
     countDownChanged(dismissCountDown) {

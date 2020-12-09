@@ -1,11 +1,10 @@
-import chai from 'chai';
-import mocha from 'mocha';
+import { should } from 'chai';
 import SocketIOClient from 'socket.io-client';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
 import { ClashServer } from '../src/server';
 
-const should = chai.should();
+should();
 
 describe('Test team socket events', function () {
   const options = { transports: ['websocket'] };
@@ -38,7 +37,7 @@ describe('Test team socket events', function () {
     client.disconnect();
     await server.disconnectMongo();
     await mongo.stop();
-    server.stop();
+    await server.stop();
   });
 
   it('Get state of active team', function (done) {

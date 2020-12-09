@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
-import store from './store';
 import socket from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
 import VueShortkey from 'vue-shortkey';
@@ -12,13 +11,12 @@ const io = socket(serverAddress, {
   transports: ['websocket']
 });
 
-Vue.use(VueSocketIOExt, io, { store });
+Vue.use(VueSocketIOExt, io);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueShortkey);
 
 new Vue({
   router,
-  store,
   render: h => h(App)
 }).$mount('#app');

@@ -38,10 +38,8 @@ export default {
 
 <style scoped lang="scss">
 .status-icon {
-  &__position {
-    position: absolute;
-    top: 2vh;
-    right: 2vh;
-  }
+  position: absolute;
+  top: 2vh;
+  right: 2vh;
 }
 </style>

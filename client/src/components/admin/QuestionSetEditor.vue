@@ -34,7 +34,7 @@
 <script>
 import VJsoneditor from 'v-jsoneditor';
 import questionSetSchema from '@/assets/questionSetSchema.json';
-import ModalMixin from '@/components/shared/ModalMixin';
+import ModalMixin from '@/mixins/ModalMixin';
 
 export default {
   name: 'QuestionSetEditor',

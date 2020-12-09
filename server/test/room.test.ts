@@ -1,5 +1,4 @@
-import chai, { should } from 'chai';
-import mocha from 'mocha';
+import { should } from 'chai';
 import SocketIOClient from 'socket.io-client';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
@@ -32,7 +31,7 @@ describe('Test room socket events', function () {
     client.disconnect();
     await server.disconnectMongo();
     await mongo.stop();
-    server.stop();
+    await server.stop();
   });
 
   it('Fail to join not created room', function (done) {

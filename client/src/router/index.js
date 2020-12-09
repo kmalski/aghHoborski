@@ -16,15 +16,26 @@ const routes = [
     props: true
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: lazyLoad('Login'),
+    path: '/login-admin',
+    name: 'AdminLogin',
+    component: lazyLoad('AdminLogin'),
+    props: true
+  },
+  {
+    path: '/login-host',
+    name: 'HostLogin',
+    component: lazyLoad('HostLogin'),
     props: true
   },
   {
     path: '/:room/admin',
     name: 'Admin',
     component: lazyLoad('Admin')
+  },
+  {
+    path: '/:room/host',
+    name: 'Host',
+    component: lazyLoad('Host')
   },
   {
     path: '/:room/spectator',

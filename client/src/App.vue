@@ -8,7 +8,7 @@
 @import './scss/main.scss';
 
 #app {
-  font-family: Robot, Segoe UI, Arial;
+  font-family: Robot, Segoe UI, Arial, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

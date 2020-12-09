@@ -193,7 +193,7 @@ export default {
       if (confirmation) this.$socket.client.emit('resetGame');
     },
     logout() {
-      this.$router.push({ name: 'Login' });
+      this.$router.push({ name: 'AdminLogin' });
       localStorage.removeItem('awanturaToken');
     },
     dummy() {}

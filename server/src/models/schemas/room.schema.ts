@@ -1,5 +1,5 @@
 import { prop, getModelForClass, Ref } from '@typegoose/typegoose';
-import { QuestionSetSchema } from '../../models/schemas/question.schema';
+import { QuestionSetSchema } from './question.schema';
 
 export { RoomModel, RoomSchema };
 

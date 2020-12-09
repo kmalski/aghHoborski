@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import ModalMixin from '@/components/shared/ModalMixin';
-import DownloadMixin from '@/components/shared/DownloadMixin';
+import ModalMixin from '@/mixins/ModalMixin';
+import DownloadMixin from '@/mixins/DownloadMixin';
 
 export default {
   name: 'QuestionSetSelector',

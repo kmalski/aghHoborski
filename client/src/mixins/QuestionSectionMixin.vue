@@ -1,25 +1,8 @@
-<template>
-  <section class="question-section">
-    <app-separator>
-      <p class="ml-5">PYTANIE {{ question.number }}</p>
-      <p class="timer">{{ this.seconds | timeFormat }}</p>
-      <p class="mr-5">ETAP {{ stageNumber }}</p>
-    </app-separator>
-    <div class="question" :class="{ [backgroundColor + '-background']: backgroundColor }">
-      <p v-show="question.category" class="question__category">{{ question.category }}</p>
-      <p v-show="question.content" class="question__content">{{ question.content }}</p>
-      <div v-show="question.hintUsed" class="question__hints">
-        <p v-for="hint in question.hints" :key="hint">{{ hint }}</p>
-      </div>
-    </div>
-  </section>
-</template>
-
 <script>
 import Separator from '@/components/shared/Separator.vue';
 
 export default {
-  name: 'QuestionSection',
+  name: 'QuestionSectionMixin',
   data() {
     return {
       question: {
@@ -37,10 +20,22 @@ export default {
   },
   created() {
     this.$socket.client.emit('getCurrentQuestion');
-    this.$socket.client.on('currentQuestion', this.fillData);
   },
   methods: {
-    fillData(data) {
+    transformCategory(category) {
+      if (category === 'blackBox') return 'Czarna skrzynka';
+      else if (category === 'hint') return 'Podpowiedź';
+      else return category;
+    },
+    resetQuestionData() {
+      this.question.category = '';
+      this.question.content = '';
+      this.question.hints = [];
+      this.hintUsed = false;
+    }
+  },
+  sockets: {
+    currentQuestion(data) {
       this.question.number = data.roundNumber;
       this.stageNumber = data.stageNumber;
       switch (data.roundStage) {
@@ -56,13 +51,6 @@ export default {
           break;
       }
     },
-    transformCategory(category) {
-      if (category === 'blackBox') return 'Czarna skrzynka';
-      else if (category === 'hint') return 'Podpowiedź';
-      else return category;
-    }
-  },
-  sockets: {
     auctionStarted(data) {
       this.question.category = this.transformCategory(data.category);
       this.question.number = data.roundNumber;
@@ -77,10 +65,7 @@ export default {
     },
     roundFinished() {
       this.backgroundColor = null;
-      this.question.category = null;
-      this.question.content = null;
-      this.question.hints = [];
-      this.question.hintUsed = false;
+      this.resetQuestionData();
     },
     timeStarted(data) {
       this.seconds = data.value;
@@ -89,10 +74,6 @@ export default {
     timeStopped() {
       clearInterval(this.timeIntervalID);
       this.seconds = null;
-    },
-    hintUsed(data) {
-      this.question.hintUsed = true;
-      this.question.hints = data.hints;
     },
     secondStageStarted() {
       this.stageNumber = 2;
@@ -116,47 +97,3 @@ export default {
   }
 };
 </script>
-
-<style scoped lang="scss">
-@import '../../scss/main.scss';
-
-.question-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 3rem;
-  width: 90%;
-  overflow: hidden;
-  border-radius: 20px;
-  color: $font-color;
-
-  .timer {
-    font-weight: 600;
-  }
-}
-
-.question {
-  width: 100%;
-  font-size: 2rem;
-  margin: 0;
-
-  &__category {
-    text-align: center;
-    padding: 0.15rem 0;
-  }
-
-  &__content {
-    text-align: center;
-    padding: 0.15rem 0;
-  }
-
-  &__hints {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 1rem;
-  }
-}
-</style>

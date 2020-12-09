@@ -2,62 +2,70 @@
   <div class="question-card">
     <div class="card-row">
       <label>Kategoria</label>
-      <p>{{ category }}</p>
+      <p>{{ question.category }}</p>
     </div>
     <div class="card-row">
       <label>Pytanie</label>
-      <p>{{ question }}</p>
+      <p>{{ question.content }}</p>
     </div>
     <div class="card-row">
       <label>Podpowiedzi</label>
       <div class="hint-list">
-        <p v-for="hint in hints" :key="hint">{{ hint }}</p>
+        <p v-for="hint in question.hints" :key="hint.value" :class="{ answer: hint.isAnswer }">{{ hint.value }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AnswerMixin from '@/mixins/AnswerMixin';
+
 export default {
   name: 'QuestionCard',
+  mixins: [AnswerMixin],
   data() {
     return {
-      category: '',
-      question: '',
-      hints: []
+      question: {
+        category: '',
+        content: '',
+        hints: []
+      }
     };
   },
   created() {
     this.$socket.client.emit('getCurrentQuestion');
-    this.$socket.client.on('currentQuestion', this.fillData);
   },
   methods: {
-    fillData(data) {
-      this.category = this.transformCategory(data.category);
-      this.question = data.content;
-      this.hints = data.hints;
-    },
     transformCategory(category) {
       if (category === 'blackBox') return 'Czarna skrzynka';
       else if (category === 'hint') return 'Podpowiedź';
       else return category;
     },
     resetData() {
-      this.category = '';
-      this.question = '';
-      this.hints = [];
+      this.question.category = '';
+      this.question.content = '';
+      this.question.hints = [];
     }
   },
   sockets: {
+    currentQuestion(data) {
+      this.question.category = this.transformCategory(data.category);
+      this.question.content = data.content;
+      if (data.content) {
+        this.setHints(data.hints);
+        this.getAnswer();
+      }
+    },
     auctionStarted(data) {
-      this.category = this.transformCategory(data.category);
+      this.question.category = this.transformCategory(data.category);
     },
     roundFinished() {
       this.resetData();
     },
     nextQuestion(data) {
-      this.question = data.question;
-      this.hints = data.hints;
+      this.question.content = data.question;
+      this.setHints(data.hints);
+      this.getAnswer();
     }
   }
 };
@@ -105,6 +113,11 @@ export default {
       flex-flow: row wrap;
       justify-content: space-between;
       width: 100%;
+
+      .answer {
+        color: $blue-button-color;
+        font-weight: 900;
+      }
 
       * {
         flex: 1 0 40%;

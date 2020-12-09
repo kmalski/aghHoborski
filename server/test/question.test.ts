@@ -1,11 +1,10 @@
-import chai from 'chai';
-import mocha from 'mocha';
+import { should } from 'chai';
 import SocketIOClient from 'socket.io-client';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
 import { ClashServer } from '../src/server';
 
-const should = chai.should();
+should();
 
 const validQuestionSet = `
 {
@@ -68,7 +67,7 @@ describe('Test question socket events', function () {
     client.disconnect();
     await server.disconnectMongo();
     await mongo.stop();
-    server.stop();
+    await server.stop();
   });
 
   it('Add new question set', function (done) {

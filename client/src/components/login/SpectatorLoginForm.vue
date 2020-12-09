@@ -1,5 +1,5 @@
 <template>
-  <div class="spectator-form">
+  <div class="login-form">
     <b-form @submit.stop.prevent="onSubmit" class="w-75">
       <b-form-group id="room-name-group">
         <b-form-input
@@ -11,19 +11,22 @@
           trim
         ></b-form-input>
         <b-form-invalid-feedback id="room-name-feedback" :state="nameValid"
-          >Nazwa musi mieć co najmniej 3 znaki długości.</b-form-invalid-feedback
-        >
+          >Nazwa musi mieć co najmniej 3 znaki długości.
+        </b-form-invalid-feedback>
       </b-form-group>
 
       <b-button class="blue-shadow" block type="submit" variant="primary">Dołącz</b-button>
-      <b-link to="/login" class="mt-2 d-block">Stwórz pokój lub dołącz jako administrator</b-link>
+      <div class="links">
+        <b-link to="/login-admin" class="mt-2 d-block">Stwórz pokój lub dołącz jako administrator</b-link>
+        <b-link to="/login-host" class="mt-2 d-block">Dołącz jako prowadzący</b-link>
+      </div>
     </b-form>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'SpectatorForm',
+  name: 'SpectatorLoginForm',
   data() {
     return {
       room: {
@@ -53,14 +56,3 @@ export default {
   }
 };
 </script>
-
-<style scoped lang="scss">
-.spectator-form {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  width: 90%;
-  justify-content: center;
-  align-items: center;
-}
-</style>

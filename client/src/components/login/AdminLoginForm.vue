@@ -34,58 +34,32 @@
           >Stwórz</b-button
         >
       </b-button-group>
-      <b-link to="/" class="mt-2 d-block">Dołącz jako widz</b-link>
+      <div class="links">
+        <b-link to="/login-host" class="mt-2 d-block">Dołącz jako prowadzący</b-link>
+        <b-link to="/" class="mt-2 d-block">Dołącz jako widz</b-link>
+      </div>
     </b-form>
   </div>
 </template>
 
 <script>
+import LoginFormMixin from '@/mixins/LoginFormMixin';
+
 export default {
-  name: 'LoginForm',
-  data() {
-    return {
-      room: {
-        name: null,
-        password: null
-      }
-    };
-  },
+  name: 'AdminLoginForm',
+  mixins: [LoginFormMixin],
   methods: {
-    onSubmit(action) {
-      if (this.room.name == null) this.room.name = '';
-      if (this.room.password == null) this.room.password = '';
-      if (this.nameValid && this.passwordValid) action();
-    },
-    joinRoom() {
-      this.$socket.client.emit('adminJoinRoom', this.room);
-    },
     createRoom() {
       this.$socket.client.emit('createRoom', this.room);
     }
   },
-  computed: {
-    nameValid() {
-      if (this.room.name == null) return null;
-      return this.room.name.length >= 3;
-    },
-    passwordValid() {
-      if (this.room.password == null) return null;
-      return this.room.password.length >= 5;
-    }
-  },
   sockets: {
     roomCreated(room) {
-      localStorage.awanturaToken = room.token;
-
-      this.$router.push({ name: 'Admin', params: { room: room.name } });
+      this.routeRoom('Admin', room);
     },
     roomJoined(room) {
-      localStorage.awanturaToken = room.token;
-
-      this.$router.push({ name: 'Admin', params: { room: room.name } });
+      this.routeRoom('Admin', room);
     }
   }
 };
 </script>
-
-<style scoped lang="scss"></style>

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ModalMixin from '@/components/shared/ModalMixin';
+import ModalMixin from '@/mixins/ModalMixin';
 
 export default {
   name: 'CategorySelector',

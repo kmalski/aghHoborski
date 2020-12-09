@@ -1,12 +1,12 @@
 <script>
 import LoginMixin from '@/mixins/LoginMixin';
-import SpectatorLoginForm from '@/components/login/SpectatorLoginForm.vue';
+import AdminLoginForm from '@/components/login/AdminLoginForm.vue';
 
 export default {
-  name: 'Home',
+  name: 'AdminLogin',
   mixins: [LoginMixin],
   components: {
-    AppLoginForm: SpectatorLoginForm
+    AppLoginForm: AdminLoginForm
   }
 };
 </script>

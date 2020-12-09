@@ -1,5 +1,5 @@
 <template>
-  <section class="spectator">
+  <section class="host">
     <app-status-icon></app-status-icon>
     <app-question-section></app-question-section>
     <app-amounts-section></app-amounts-section>
@@ -9,31 +9,27 @@
 <script>
 import StatusIcon from '@/components/shared/StatusIcon.vue';
 import AmountsSection from '@/components/spectator/AmountsSection.vue';
-import SpectatorQuestionSection from '@/components/spectator/SpectatorQuestionSection.vue';
+import HostQuestionSection from '@/components/host/HostQuestionSection';
 
 export default {
-  name: 'Spectator',
-  data() {
-    return {
-      example: ''
-    };
-  },
+  name: 'Host',
   created() {
-    this.$socket.client.emit('joinRoom', {
-      name: this.$route.params.room
+    this.$socket.client.emit('authorize', {
+      name: this.$route.params.room,
+      token: localStorage.awanturaToken
     });
   },
   methods: {
-    returnHome(msg) {
+    forceLogout(msg) {
       this.$router.push({
-        name: 'Home',
+        name: 'HostLogin',
         params: { initialMsg: msg }
       });
     }
   },
   sockets: {
-    warning(msg) {
-      this.returnHome(msg);
+    unauthorized(msg) {
+      this.forceLogout(msg);
     },
     gameReset() {
       this.$router.go(0);
@@ -42,13 +38,13 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppAmountsSection: AmountsSection,
-    AppQuestionSection: SpectatorQuestionSection
+    AppQuestionSection: HostQuestionSection
   }
 };
 </script>
 
 <style scoped lang="scss">
-.spectator {
+.host {
   display: flex;
   flex-direction: column;
   align-items: center;

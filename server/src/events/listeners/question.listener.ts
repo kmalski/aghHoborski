@@ -31,5 +31,6 @@ class QuestionListener extends EventListener {
     socket.on(Incoming.CHANGE_QUESTION_SET, questionData => this.SERVICE.changeQuestionSet(questionData, socket));
     socket.on(Incoming.GET_ALL_QUESTION_SETS, () => this.SERVICE.getAllQuestionSets(socket));
     socket.on(Incoming.SKIP_QUESTION, () => this.SERVICE.skipQuestion(socket, io));
+    socket.on(Incoming.GET_ANSWER, () => this.SERVICE.getAnswer(socket));
   }
 }

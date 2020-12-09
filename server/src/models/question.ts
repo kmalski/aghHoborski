@@ -1,5 +1,5 @@
 import { shuffle } from '../utils';
-import { CategorySchema } from '../models/schemas/question.schema';
+import { CategorySchema } from './schemas/question.schema';
 
 export { QuestionSet, Question };
 

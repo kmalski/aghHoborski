@@ -16,9 +16,9 @@ export { ClashServer };
 dotenv.config();
 
 class ClashServer {
-  private app: express.Application;
-  private server: http.Server;
-  private io: SocketIO.Server;
+  private readonly app: express.Application;
+  private readonly server: http.Server;
+  private readonly io: SocketIO.Server;
   private port: number;
   private useDatabase: boolean = false;
 

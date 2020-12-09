@@ -37,6 +37,7 @@ class QuestionService {
         currentQuestion.category = questions.current.category;
         break;
       case RoundStage.ANSWERING:
+        currentQuestion.category = questions.current.category;
         currentQuestion.content = questions.current.question.content;
         currentQuestion.hints = questions.current.question.hints;
         currentQuestion.winningTeam = game.auctionWinningTeam.name;
@@ -147,6 +148,15 @@ class QuestionService {
       question: question.content,
       hints: question.hints
     });
+  }
+
+  getAnswer(socket: ClashSocket) {
+    const questions = socket.room.questions;
+    const game = socket.room.game;
+
+    if (game.isAnswering() || game.isHintAuction()) {
+      socket.emit(Outgoing.ANSWER, { answer: questions.current.question.answer })
+    }
   }
 }
 

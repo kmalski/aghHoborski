@@ -23,6 +23,7 @@ enum Outgoing {
   CURRENT_QUESTION = 'currentQuestion',
   AVAILABLE_CATEGORIES = 'availableCategories',
   NEXT_QUESTION = 'nextQuestion',
+  ANSWER = 'answer',
 
   // team
   TEAM_STATE = 'TeamState',
@@ -79,6 +80,7 @@ enum Incoming {
   ADD_QUESTION_SET = 'addQuestionSet',
   CHANGE_QUESTION_SET = 'changeQuestionSet',
   SKIP_QUESTION = 'skipQuestion',
+  GET_ANSWER = 'getAnswer',
 
   // team
   GET_TEAM_STATE = 'getTeamState',
