@@ -4,6 +4,7 @@ import { ClashSocket } from '../../utils/socket.util';
 import { normalizeString } from '../../utils';
 import { RoomService, LocalRoomService, RoomData } from '../../services/room.service';
 import { EventListener, Options } from './event.listener';
+import {Logger} from "../../utils/logger";
 
 export { RoomListener };
 
@@ -12,8 +13,10 @@ class RoomListener extends EventListener {
 
   static configure(options: Options): void {
     if (options.useDatabase) {
+      Logger.info('Configuring Room Service in online mode.')
       this.SERVICE = new RoomService();
     } else {
+      Logger.info('Configuring Room Service in offline mode.')
       this.SERVICE = new LocalRoomService();
     }
   }

@@ -9,6 +9,7 @@ import { AddressInfo } from 'net';
 
 import { Incoming } from './events/event.constants';
 import { ClashSocket } from './utils/socket.util';
+import { Logger } from './utils/logger';
 import { RoomListener } from './events/listeners/room.listener';
 
 export { ClashServer };
@@ -37,8 +38,8 @@ class ClashServer {
       await this.listen(0);
       this.port = (this.server.address() as AddressInfo).port;
     }
-    if (!this.useDatabase) console.log('[INFO] Starting without MongoDB');
-    console.log(`[INFO] Server listening at port ${this.port}`);
+    if (!this.useDatabase) Logger.info('Starting without MongoDB');
+    Logger.info(`Server listening at port ${this.port}`);
   }
 
   async stop() {
@@ -53,7 +54,7 @@ class ClashServer {
       useFindAndModify: false
     });
     this.useDatabase = true;
-    console.log('[INFO] Connected to MongoDB');
+    Logger.info('Connected to MongoDB');
   }
 
   async disconnectMongo() {
@@ -70,7 +71,7 @@ class ClashServer {
     this.app.use(cors());
 
     this.io.on(Incoming.CONNECT, (socket: ClashSocket) => {
-      console.log(`New user connected: ${socket.id}`);
+      Logger.info(`New user connected: ${socket.id}`);
 
       RoomListener.configure({ useDatabase: this.useDatabase });
       RoomListener.listen(this.io, socket);
@@ -99,8 +100,8 @@ if (require.main === module) {
     server
       .connectMongo(mongoUri)
       .then(() => server.start(port))
-      .catch((err: Error) => console.log(new Date(), err));
+      .catch((err: Error) => Logger.error(err));
   } else {
-    server.start(port).catch((err: Error) => console.log(new Date(), err));
+    server.start(port).catch((err: Error) => Logger.error(err));
   }
 }

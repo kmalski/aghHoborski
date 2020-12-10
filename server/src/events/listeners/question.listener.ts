@@ -3,6 +3,7 @@ import { Incoming } from '../event.constants';
 import { QuestionService, LocalQuestionService } from '../../services/question.service';
 import { ClashSocket } from '../../utils/socket.util';
 import { EventListener, Options } from './event.listener';
+import { Logger } from "../../utils/logger";
 
 export { QuestionListener };
 
@@ -14,8 +15,10 @@ class QuestionListener extends EventListener {
     if (this.USE_DATABASE == options.useDatabase) return;
 
     if (options.useDatabase) {
+      Logger.info('Configuring Question Service in online mode.')
       this.SERVICE = new QuestionService();
     } else {
+      Logger.info('Configuring Question Service in offline mode.')
       this.SERVICE = new LocalQuestionService();
     }
   }
