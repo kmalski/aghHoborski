@@ -14,7 +14,7 @@ function generateToken(): string {
   return rand() + rand();
 }
 
-function shuffle(array: any[]) {
+function shuffle(array: any[]): any[] {
   // Durstenfeld shuffle algorithm
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

@@ -18,7 +18,7 @@ class Room {
     this.game = new Game();
   }
 
-  withQuestions(questions: QuestionSet) {
+  withQuestions(questions: QuestionSet): Room {
     this.questions = questions;
     return this;
   }

@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import path from 'path';
@@ -21,7 +21,7 @@ class ClashServer {
   private readonly server: http.Server;
   private readonly io: SocketIO.Server;
   private port: number;
-  private useDatabase: boolean = false;
+  private useDatabase = false;
 
   constructor() {
     this.app = express();
@@ -29,7 +29,7 @@ class ClashServer {
     this.io = SocketIO(this.server, { serveClient: false });
   }
 
-  async start(port?: number) {
+  async start(port?: number): Promise<void> {
     this.configure();
     if (port) {
       await this.listen(port);
@@ -42,11 +42,11 @@ class ClashServer {
     Logger.info(`Server listening at port ${this.port}`);
   }
 
-  async stop() {
+  async stop(): Promise<void> {
     await this.close();
   }
 
-  async connectMongo(uri: string) {
+  async connectMongo(uri: string): Promise<void> {
     await mongoose.connect(uri, {
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -57,11 +57,11 @@ class ClashServer {
     Logger.info('Connected to MongoDB');
   }
 
-  async disconnectMongo() {
+  async disconnectMongo(): Promise<void> {
     if (this.useDatabase) await mongoose.disconnect();
   }
 
-  getPort() {
+  getPort(): number {
     return this.port;
   }
 
@@ -77,8 +77,8 @@ class ClashServer {
       RoomListener.listen(this.io, socket);
     });
 
-    this.app.use((_req: Request, res: Response, _next: NextFunction) => {
-      res.status(404).sendFile(path.join(__dirname, '/../public/index.html'));
+    this.app.use((req: Request, res: Response) => {
+      res.status(404).sendFile(path.join(__dirname, '../../public/index.html'));
     });
   }
 

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 import { Server } from 'socket.io';
 import { ClashSocket } from '../../utils/socket.util';
 

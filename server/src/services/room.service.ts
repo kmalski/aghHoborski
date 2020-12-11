@@ -23,11 +23,11 @@ interface RoomData {
 
 class RoomService {
   protected static ACTIVE_ROOMS: Room[] = [];
-  protected static SALT_ROUNDS: number = 8;
+  protected static SALT_ROUNDS = 8;
 
-  protected useDatabase: boolean = true;
+  protected useDatabase = true;
 
-  async create(data: RoomData, socket: ClashSocket) {
+  async create(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
     if (!data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -54,7 +54,7 @@ class RoomService {
     });
   }
 
-  join(data: RoomData, socket: ClashSocket, io: Server) {
+  join(data: RoomData, socket: ClashSocket, io: Server): void | boolean {
     if (!data.name) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -77,7 +77,7 @@ class RoomService {
     TeamListener.listen(io, socket);
   }
 
-  async adminJoin(data: RoomData, socket: ClashSocket) {
+  async adminJoin(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
     if (!data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -104,7 +104,7 @@ class RoomService {
     socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
   }
 
-  authorize(data: RoomData, socket: ClashSocket, io: Server) {
+  authorize(data: RoomData, socket: ClashSocket, io: Server): void | boolean {
     if (!data.token || !data.name) {
       return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
     }
@@ -140,9 +140,9 @@ class RoomService {
 }
 
 class LocalRoomService extends RoomService {
-  protected useDatabase: boolean = false;
+  protected useDatabase = false;
 
-  async create(data: RoomData, socket: ClashSocket) {
+  async create(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
     if (!data || !data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -166,7 +166,7 @@ class LocalRoomService extends RoomService {
     });
   }
 
-  async adminJoin(data: RoomData, socket: ClashSocket) {
+  async adminJoin(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
     if (!data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }

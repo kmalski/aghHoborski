@@ -9,7 +9,7 @@ export { HintListener };
 class HintListener extends EventListener {
   private static SERVICE: HintService = new HintService();
 
-  static listenAdmin(io: Server, socket: ClashSocket) {
+  static listenAdmin(io: Server, socket: ClashSocket): void {
     socket.on(Incoming.START_HINT_AUCTION, () => this.SERVICE.startHintAuction(socket, io));
     socket.on(Incoming.ACCEPT_HINT_AMOUNT, () => this.SERVICE.acceptHintAmount(socket, io));
     socket.on(Incoming.DISCARD_HINT_AMOUNT, () => this.SERVICE.discardHintAmount(socket, io));

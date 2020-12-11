@@ -1,4 +1,5 @@
 import { should } from 'chai';
+import { describe, before, after, it } from 'mocha';
 import SocketIOClient from 'socket.io-client';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
@@ -23,15 +24,15 @@ const validQuestionSet = `
       ]
     },
     {
-    "name": "Geografia",
-    "questions": [
+      "name": "Geografia",
+      "questions": [
         {
-        "content": "Jakie jezioro jest największe na świecie?",
-        "hints": ["Morze Kaspijskie", "Jezioro Wiktorii", "Bajkał", "Jezioro Górne"]
+          "content": "Jakie jezioro jest największe na świecie?",
+          "hints": ["Morze Kaspijskie", "Jezioro Wiktorii", "Bajkał", "Jezioro Górne"]
         },
         {
-        "content": "Ile łącznie szczytów liczy Korona Gór Polski?",
-        "hints": ["28", "22", "26", "30"]
+          "content": "Ile łącznie szczytów liczy Korona Gór Polski?",
+          "hints": ["28", "22", "26", "30"]
         }
       ]
     }

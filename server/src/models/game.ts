@@ -12,12 +12,12 @@ enum RoundStage {
 class Game {
   public activeTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public inactiveTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
-  public moneyPool: number = 0;
-  public hintAmount: number = 0;
   public auctionWinningTeam?: Team;
   public roundStage: RoundStage = RoundStage.IDLE;
-  public roundNumber: number = 0;
-  public stageNumber: number = 1;
+  public moneyPool = 0;
+  public hintAmount = 0;
+  public roundNumber = 0;
+  public stageNumber = 1;
 
   constructor() {
     for (const name in TeamName) {
@@ -28,7 +28,7 @@ class Game {
     this.activeTeams.delete(TeamName.MASTERS);
   }
 
-  startAuction() {
+  startAuction(): number {
     this.activeTeams.forEach(team => {
       if (team.ableToPlay()) {
         this.moneyPool += team.startAuction();
@@ -40,7 +40,7 @@ class Game {
     return this.moneyPool;
   }
 
-  finishAuction() {
+  finishAuction(): Team {
     this.roundStage = RoundStage.ANSWERING;
     this.activeTeams.forEach(team => {
       team.auctionAmount = 0;
@@ -48,7 +48,7 @@ class Game {
     return this.auctionWinningTeam;
   }
 
-  cancelAuction() {
+  cancelAuction(): void {
     this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam = null;
     this.activeTeams.forEach(team => {
@@ -59,7 +59,7 @@ class Game {
     this.roundNumber -= 1;
   }
 
-  bidAmount(teamName: TeamName, amount: number) {
+  bidAmount(teamName: TeamName, amount: number): boolean {
     const team = this.activeTeams.get(teamName);
     if (team.getAllMoney() >= amount && (!this.auctionWinningTeam || amount > this.auctionWinningTeam.auctionAmount)) {
       this.auctionWinningTeam = team;
@@ -69,42 +69,42 @@ class Game {
     return false;
   }
 
-  correctAnswer() {
+  correctAnswer(): void {
     this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam.grantPrize(this.moneyPool);
     this.auctionWinningTeam = null;
     this.moneyPool = 0;
   }
 
-  wrongAnswer() {
+  wrongAnswer(): void {
     this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam = null;
   }
 
-  noAnswerNeeded() {
+  noAnswerNeeded(): void {
     this.roundStage = RoundStage.IDLE;
     this.auctionWinningTeam = null;
     this.moneyPool = 0;
   }
 
-  startHintAuction() {
+  startHintAuction(): void {
     this.hintAmount = 0;
     this.roundStage = RoundStage.HINT_AUCTION;
   }
 
-  acceptHintAuction() {
+  acceptHintAuction(): void {
     this.roundStage = RoundStage.ANSWERING;
     this.auctionWinningTeam.hintsCount += 1;
     this.auctionWinningTeam.accountBalance -= this.hintAmount;
     this.hintAmount = 0;
   }
 
-  discardHintAuction() {
+  discardHintAuction(): void {
     this.roundStage = RoundStage.ANSWERING;
     this.hintAmount = 0;
   }
 
-  startSecondStage() {
+  startSecondStage(): void {
     const winningTeam = this.findWinningTeam();
     this.inactiveTeams = new Map([...this.inactiveTeams, ...this.activeTeams]);
     this.activeTeams = new Map<TeamName, Team>();
@@ -114,51 +114,47 @@ class Game {
     this.stageNumber = 2;
   }
 
-  changeTeamStatus(teamName: TeamName, inGame: boolean) {
+  changeTeamStatus(teamName: TeamName, inGame: boolean): Team {
     if (!inGame) {
       return this.moveToInactive(teamName);
     }
     return this.moveToActive(teamName);
   }
 
-  isInGame(teamName: TeamName) {
+  isInGame(teamName: TeamName): boolean {
     return this.activeTeams.get(teamName) != null;
   }
 
-  exists(teamName: TeamName) {
+  exists(teamName: TeamName): boolean {
     return this.activeTeams.get(teamName) != null || this.inactiveTeams.get(teamName) != null;
   }
 
-  isAuction() {
+  isAuction(): boolean {
     return this.roundStage === RoundStage.AUCTION;
   }
 
-  isAnswering() {
+  isAnswering(): boolean {
     return this.roundStage === RoundStage.ANSWERING;
   }
 
-  isHintAuction() {
+  isHintAuction(): boolean {
     return this.roundStage === RoundStage.HINT_AUCTION;
   }
 
-  isIdle() {
+  isIdle(): boolean {
     return this.roundStage === RoundStage.IDLE;
   }
 
-  getTeam(teamName: TeamName) {
+  getTeam(teamName: TeamName): Team {
     if (this.isInGame(teamName)) return this.activeTeams.get(teamName);
     else return this.inactiveTeams.get(teamName);
   }
 
-  getActiveTeam(teamName: TeamName) {
+  getActiveTeam(teamName: TeamName): Team {
     return this.activeTeams.get(teamName);
   }
 
-  getInactiveTeam(teamName: TeamName) {
-    return this.inactiveTeams.get(teamName);
-  }
-
-  getAbleToPlaySize() {
+  getAbleToPlaySize(): number {
     let count = 0;
     this.activeTeams.forEach(team => {
       if (team.ableToPlay()) count++;

@@ -12,7 +12,7 @@ interface AuctionData {
 }
 
 class AuctionService {
-  startAuction(data: AuctionData, socket: ClashSocket, io: Server) {
+  startAuction(data: AuctionData, socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
     const questions = socket.room.questions;
 
@@ -45,7 +45,7 @@ class AuctionService {
     });
   }
 
-  finishAuction(socket: ClashSocket, io: Server) {
+  finishAuction(socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
     const questions = socket.room.questions;
 
@@ -61,21 +61,23 @@ class AuctionService {
     }
 
     switch (questions.current.category) {
-      case QuestionSet.BLACK_BOX_CATEGORY:
+      case QuestionSet.BLACK_BOX_CATEGORY: {
         game.noAnswerNeeded();
         io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
-        io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
-        io.in(socket.room.name).emit(team.name + Outgoing.BLACK_BOX_CHANGED, { hasBlackBox: team.grantBlackBox() });
+        io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, {moneyPool: game.moneyPool});
+        io.in(socket.room.name).emit(team.name + Outgoing.BLACK_BOX_CHANGED, {hasBlackBox: team.grantBlackBox()});
         this.emitAuctionAmountChanged(game, socket.room.name, io);
         break;
-      case QuestionSet.HINT_CATEGORY:
+      }
+      case QuestionSet.HINT_CATEGORY: {
         game.noAnswerNeeded();
         io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
-        io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
-        io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: team.grantHint() });
+        io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, {moneyPool: game.moneyPool});
+        io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, {hintsCount: team.grantHint()});
         this.emitAuctionAmountChanged(game, socket.room.name, io);
         break;
-      default:
+      }
+      default: {
         const question = questions.drawQuestion();
         io.in(socket.room.name).emit(Outgoing.NEXT_QUESTION, {
           category: questions.current.category,
@@ -83,10 +85,11 @@ class AuctionService {
           hints: question.hints
         });
         break;
+      }
     }
   }
 
-  cancelAuction(socket: ClashSocket, io: Server) {
+  cancelAuction(socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
 
     if (!game.isAuction()) {

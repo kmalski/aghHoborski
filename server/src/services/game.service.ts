@@ -10,7 +10,7 @@ interface GameData {
 }
 
 class GameService {
-  getGameState(socket: ClashSocket) {
+  getGameState(socket: ClashSocket): void {
     const game = socket.room.game;
 
     socket.emit(Outgoing.GAME_STATE, {
@@ -22,7 +22,7 @@ class GameService {
     });
   }
 
-  getGameSettings(socket: ClashSocket, io: Server) {
+  getGameSettings(socket: ClashSocket, io: Server): void {
     const roomName = socket.room.name;
     const peopleInRoom = io.sockets.adapter.rooms[roomName].length;
     const questionSetName = socket.room.questions ? socket.room.questions.name : 'Nie wybrano';
@@ -34,7 +34,7 @@ class GameService {
     ]);
   }
 
-  resetGame(socket: ClashSocket, io: Server) {
+  resetGame(socket: ClashSocket, io: Server): void {
     socket.room.game = new Game();
     if (socket.room.questions) {
       socket.room.questions.reset();
@@ -43,7 +43,7 @@ class GameService {
     io.in(socket.room.name).emit(Outgoing.GAME_RESET);
   }
 
-  changeMoneyPool(gameData: GameData, socket: ClashSocket, io: Server) {
+  changeMoneyPool(gameData: GameData, socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
 
     if (!Number.isInteger(gameData.newMoneyPool)) {
@@ -55,7 +55,7 @@ class GameService {
     io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
   }
 
-  markCorrectAnswer(socket: ClashSocket, io: Server) {
+  markCorrectAnswer(socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
     const team = game.auctionWinningTeam;
 
@@ -72,7 +72,7 @@ class GameService {
     this.emitAuctionAmountChanged(game, socket.room.name, io);
   }
 
-  markWrongAnswer(socket: ClashSocket, io: Server) {
+  markWrongAnswer(socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
 
     if (!game.isAnswering()) {
@@ -87,7 +87,7 @@ class GameService {
     this.emitAuctionAmountChanged(game, socket.room.name, io);
   }
 
-  startSecondStage(socket: ClashSocket, io: Server) {
+  startSecondStage(socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
 
     if (!game.isIdle() || game.stageNumber === 2) {

@@ -10,49 +10,49 @@ enum TeamName {
 
 class Team {
   public name: TeamName;
-  public auctionAmount: number = 0;
-  public accountBalance: number = 5000;
-  public hasBlackBox: boolean = false;
-  public hintsCount: number = 0;
+  public auctionAmount = 0;
+  public accountBalance = 5000;
+  public hasBlackBox = false;
+  public hintsCount = 0;
 
   constructor(name: TeamName) {
     this.name = name;
   }
 
-  startAuction() {
+  startAuction(): number {
     const startAmount = 200;
     this.accountBalance -= startAmount;
     this.auctionAmount = startAmount;
     return startAmount;
   }
 
-  bidAmount(amount: number) {
+  bidAmount(amount: number): number {
     const amountDiff = amount - this.auctionAmount;
     this.accountBalance -= amountDiff;
     this.auctionAmount += amountDiff;
     return amountDiff;
   }
 
-  grantPrize(amount: number) {
+  grantPrize(amount: number): number {
     this.accountBalance += amount;
     return this.accountBalance;
   }
 
-  grantHint() {
+  grantHint(): number {
     this.hintsCount += 1;
     return this.hintsCount;
   }
 
-  grantBlackBox() {
+  grantBlackBox(): boolean {
     this.hasBlackBox = true;
     return this.hasBlackBox;
   }
 
-  ableToPlay() {
+  ableToPlay(): boolean {
     return this.getAllMoney() > 200;
   }
 
-  getAllMoney() {
+  getAllMoney(): number {
     return this.accountBalance + this.auctionAmount;
   }
 }

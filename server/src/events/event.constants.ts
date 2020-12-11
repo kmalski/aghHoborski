@@ -2,7 +2,8 @@ export { Incoming, Outgoing };
 
 /*
 These are all events that the server can emit. 
-Those beginning with a capital letter requires team name prefix. 
+Those beginning with a capital letter requires team name prefix.
+Currently this is only team section.
 Example: redTeamState
 */
 enum Outgoing {

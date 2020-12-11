@@ -4,24 +4,28 @@ import { ClashSocket } from '../../utils/socket.util';
 import { normalizeString } from '../../utils';
 import { RoomService, LocalRoomService, RoomData } from '../../services/room.service';
 import { EventListener, Options } from './event.listener';
-import {Logger} from "../../utils/logger";
+import { Logger } from '../../utils/logger';
 
 export { RoomListener };
 
 class RoomListener extends EventListener {
   private static SERVICE: RoomService;
+  private static USE_DATABASE: boolean;
 
   static configure(options: Options): void {
+    if (this.USE_DATABASE === options.useDatabase) return;
+
+    this.USE_DATABASE = options.useDatabase;
     if (options.useDatabase) {
-      Logger.info('Configuring Room Service in online mode.')
+      Logger.info('Configuring Room Service in online mode.');
       this.SERVICE = new RoomService();
     } else {
-      Logger.info('Configuring Room Service in offline mode.')
+      Logger.info('Configuring Room Service in offline mode.');
       this.SERVICE = new LocalRoomService();
     }
   }
 
-  static listen(io: Server, socket: ClashSocket) {
+  static listen(io: Server, socket: ClashSocket): void {
     socket.on(Incoming.CREATE_ROOM, roomData => this.SERVICE.create(this.normalize(roomData), socket));
     socket.on(Incoming.JOIN_ROOM, roomData => this.SERVICE.join(this.normalize(roomData), socket, io));
     socket.on(Incoming.AUTHORIZE, roomData => this.SERVICE.authorize(this.normalize(roomData), socket, io));

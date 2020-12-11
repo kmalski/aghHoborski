@@ -9,7 +9,7 @@ interface TimeData {
 }
 
 class TimeService {
-  startTime(data: TimeData, socket: ClashSocket, io: Server) {
+  startTime(data: TimeData, socket: ClashSocket, io: Server): void | boolean {
     if (!data || !Number.isInteger(data.newValue) || data.newValue < 1) {
       return socket.emit(Outgoing.WARNING, 'Błędny czas, nie można rozpocząć odliczania.');
     }
@@ -20,7 +20,7 @@ class TimeService {
     io.in(socket.room.name).emit(Outgoing.TIME_STARTED, { value: data.newValue });
   }
 
-  stopTime(socket: ClashSocket, io: Server) {
+  stopTime(socket: ClashSocket, io: Server): void | boolean {
     io.in(socket.room.name).emit(Outgoing.TIME_STOPPED);
   }
 }

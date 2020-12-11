@@ -9,11 +9,11 @@ export { TeamListener };
 class TeamListener extends EventListener {
   private static SERVICE: TeamService = new TeamService();
 
-  static listen(io: Server, socket: ClashSocket) {
+  static listen(io: Server, socket: ClashSocket): void {
     socket.on(Incoming.GET_TEAM_STATE, teamData => this.SERVICE.getTeamState(teamData, socket));
   }
 
-  static listenAdmin(io: Server, socket: ClashSocket) {
+  static listenAdmin(io: Server, socket: ClashSocket): void {
     socket.on(Incoming.CHANGE_TEAM_STATUS, teamData => this.SERVICE.changeTeamStatus(teamData, socket, io));
     socket.on(Incoming.CHANGE_AUCTION_AMOUNT, teamData => this.SERVICE.changeAuctionAmount(teamData, socket, io));
     socket.on(Incoming.CHANGE_ACCOUNT_BALANCE, teamData => this.SERVICE.changeAccountBalance(teamData, socket, io));

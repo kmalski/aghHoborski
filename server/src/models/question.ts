@@ -7,7 +7,7 @@ class Question {
   public content: string;
   public hints: string[];
   public answer: string;
-  public used: boolean = false;
+  public used = false;
 
   constructor(content: string, hints: string[]) {
     this.content = content;
@@ -15,14 +15,14 @@ class Question {
     this.hints = shuffle(hints);
   }
 
-  public markUsed() {
+  public markUsed(): void {
     this.used = true;
   }
 }
 
 class QuestionSet {
-  public static BLACK_BOX_CATEGORY: string = 'blackBox';
-  public static HINT_CATEGORY: string = 'hint';
+  public static BLACK_BOX_CATEGORY = 'blackBox';
+  public static HINT_CATEGORY = 'hint';
 
   public name: string;
   public categories: Map<string, Question[]>;
@@ -42,11 +42,11 @@ class QuestionSet {
     );
   }
 
-  setCategory(categoryName: string) {
+  setCategory(categoryName: string): void {
     this.current = { category: categoryName, hintUsed: false };
   }
 
-  drawQuestion() {
+  drawQuestion(): Question {
     if (this.categories.has(this.current.category)) {
       const category = this.categories.get(this.current.category);
       const question = category.find(quest => !quest.used);
@@ -59,7 +59,7 @@ class QuestionSet {
     }
   }
 
-  categoryExists(categoryName: string) {
+  categoryExists(categoryName: string): boolean {
     return (
       this.categories.has(categoryName) ||
       categoryName === QuestionSet.BLACK_BOX_CATEGORY ||
@@ -67,7 +67,7 @@ class QuestionSet {
     );
   }
 
-  reset() {
+  reset(): void {
     this.current = null;
     this.categories.forEach(questions => questions.forEach(question => (question.used = false)));
   }

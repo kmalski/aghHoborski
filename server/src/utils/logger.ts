@@ -1,20 +1,41 @@
-import winston from 'winston';
+import winston, { transports, format } from 'winston';
 
-const colorizer = winston.format.colorize();
-const formatting = winston.format.combine(
-  winston.format.timestamp(),
-  winston.format.simple(),
-  winston.format.printf(msg => {
-    const prefix = colorizer.colorize(msg.level, `[${ msg.timestamp }] [${ msg.level.toUpperCase() }]: `);
-    return prefix + msg.message;
-  })
+// TODO: add handleRejections to logger, when it will be exposed in ts api
+
+const fileFormatting =  format.combine(
+  format.timestamp(),
+  format.json()
 );
 
 const logger = winston.createLogger({
   level: 'info',
   transports: [
-    new winston.transports.Console({ format: formatting })
-  ]
+    new transports.File({
+      filename: 'combined.log',
+      format: fileFormatting
+    }),
+  ],
+  exceptionHandlers: [
+    new transports.File({
+      filename: 'exceptions.log'.toLowerCase(),
+      format: fileFormatting
+    })
+  ],
+  handleExceptions: true,
+  exitOnError: false
 });
+
+if (process.env.NODE_ENV !== 'production') {
+  const colorizer = format.colorize();
+  const formatting = format.combine(
+    format.timestamp(),
+    format.simple(),
+    format.printf(msg => {
+      const prefix = colorizer.colorize(msg.level, `[${ msg.timestamp }] [${ msg.level.toUpperCase() }]: `);
+      return prefix + msg.message;
+    })
+  );
+  logger.add(new transports.Console({ format: formatting }));
+}
 
 export { logger as Logger };

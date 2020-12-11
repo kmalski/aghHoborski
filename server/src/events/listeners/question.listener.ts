@@ -12,23 +12,24 @@ class QuestionListener extends EventListener {
   private static USE_DATABASE: boolean;
 
   static configure(options: Options): void {
-    if (this.USE_DATABASE == options.useDatabase) return;
+    if (this.USE_DATABASE === options.useDatabase) return;
 
+    this.USE_DATABASE = options.useDatabase;
     if (options.useDatabase) {
-      Logger.info('Configuring Question Service in online mode.')
+      Logger.info('Configuring Question Service in online mode.');
       this.SERVICE = new QuestionService();
     } else {
-      Logger.info('Configuring Question Service in offline mode.')
+      Logger.info('Configuring Question Service in offline mode.');
       this.SERVICE = new LocalQuestionService();
     }
   }
 
-  static listen(io: Server, socket: ClashSocket) {
+  static listen(io: Server, socket: ClashSocket): void {
     socket.on(Incoming.GET_CURRENT_QUESTION, () => this.SERVICE.getCurrentQuestion(socket));
     socket.on(Incoming.GET_AVAILABLE_CATEGORIES, () => this.SERVICE.getAvailableCategories(socket));
   }
 
-  static listenAdmin(io: Server, socket: ClashSocket) {
+  static listenAdmin(io: Server, socket: ClashSocket): void {
     socket.on(Incoming.GET_QUESTION_SET, questionData => this.SERVICE.getQuestionSet(questionData, socket));
     socket.on(Incoming.ADD_QUESTION_SET, questionData => this.SERVICE.addQuestionSet(questionData, socket));
     socket.on(Incoming.CHANGE_QUESTION_SET, questionData => this.SERVICE.changeQuestionSet(questionData, socket));
