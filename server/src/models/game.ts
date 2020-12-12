@@ -1,4 +1,6 @@
 import { Team, TeamName } from './team';
+import { OneOnOne } from './oneOnOne';
+import { logger } from '@typegoose/typegoose/lib/logSettings';
 
 export { Game, RoundStage };
 
@@ -6,6 +8,7 @@ enum RoundStage {
   AUCTION = 'auction',
   ANSWERING = 'answering',
   HINT_AUCTION = 'hintAuction',
+  ONE_ON_ONE = 'oneOnOne',
   IDLE = 'idle'
 }
 
@@ -13,6 +16,7 @@ class Game {
   public activeTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public inactiveTeams: Map<TeamName, Team> = new Map<TeamName, Team>();
   public auctionWinningTeam?: Team;
+  public oneOnOne?: OneOnOne;
   public roundStage: RoundStage = RoundStage.IDLE;
   public moneyPool = 0;
   public hintAmount = 0;
@@ -28,10 +32,10 @@ class Game {
     this.activeTeams.delete(TeamName.MASTERS);
   }
 
-  startAuction(): number {
+  startAuction(amount = 200): number {
     this.activeTeams.forEach(team => {
       if (team.ableToPlay()) {
-        this.moneyPool += team.startAuction();
+        this.moneyPool += team.startAuction(amount);
       }
     });
     this.auctionWinningTeam = null;
@@ -57,6 +61,23 @@ class Game {
       team.auctionAmount = 0;
     });
     this.roundNumber -= 1;
+  }
+
+  startOneOnOne(categories: string[]): number {
+    const activeTeams = [...this.activeTeams.values()];
+    if (activeTeams.length !== 2) {
+      logger.error(`Invalid OneOnOne teams count: ${ activeTeams.length }`);
+    }
+    const moneyPool = this.startAuction(500);
+    this.roundStage = RoundStage.ONE_ON_ONE;
+    this.oneOnOne = new OneOnOne(categories, [activeTeams[0], activeTeams[1]]);
+    return moneyPool;
+  }
+
+  finishOneOnOne(team: TeamName): Team {
+    this.finishAuction();
+    this.auctionWinningTeam = this.activeTeams.get(team);
+    return this.auctionWinningTeam;
   }
 
   bidAmount(teamName: TeamName, amount: number): boolean {
@@ -139,6 +160,10 @@ class Game {
 
   isHintAuction(): boolean {
     return this.roundStage === RoundStage.HINT_AUCTION;
+  }
+
+  isOneOnOne(): boolean {
+    return this.roundStage === RoundStage.ONE_ON_ONE;
   }
 
   isIdle(): boolean {

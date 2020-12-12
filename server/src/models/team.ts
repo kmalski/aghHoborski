@@ -19,11 +19,10 @@ class Team {
     this.name = name;
   }
 
-  startAuction(): number {
-    const startAmount = 200;
-    this.accountBalance -= startAmount;
-    this.auctionAmount = startAmount;
-    return startAmount;
+  startAuction(amount: number): number {
+    this.accountBalance -= amount;
+    this.auctionAmount = amount;
+    return amount;
   }
 
   bidAmount(amount: number): number {

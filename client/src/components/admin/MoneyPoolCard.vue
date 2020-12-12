@@ -1,7 +1,13 @@
 <template>
-  <div class="bid-card">
-    <label>Pula licytacji</label>
-    <b-form-input v-model="moneyPool" @keydown.enter="changeMoneyPool" @focus="event => event.target.select()" number />
+  <div class="money-pool-card">
+    <label class="card-title">Pula licytacji</label>
+    <b-form-input
+      class="rectangle-input"
+      v-model="moneyPool"
+      @keydown.enter="changeMoneyPool"
+      @focus="event => event.target.select()"
+      number
+    />
     <b-button class="blue-shadow rectangle-btn" variant="primary" @click="changeMoneyPool">
       Zmień
     </b-button>
@@ -39,7 +45,7 @@ export default {
 <style scoped lang="scss">
 @import '../../scss/main.scss';
 
-.bid-card {
+.money-pool-card {
   @extend .small-card;
 }
 </style>

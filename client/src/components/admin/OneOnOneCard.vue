@@ -1,38 +1,126 @@
 <template>
   <div class="one-on-one-card">
-    <label>Kategorie 1:1</label>
+    <label class="ooo-label">Jeden na jeden</label>
     <div class="categories">
-      <b-form-checkbox v-for="category in categories" :key="category" :disabled="disabled">{{
-        category
-      }}</b-form-checkbox>
+      <b-form-checkbox
+        v-for="category in categories"
+        v-model="category.enabled"
+        :key="category.name"
+        :disabled="!isOneOnOne || isSelectedTeam"
+        @input="toggleCategory(category)"
+        >{{ category.name }}
+      </b-form-checkbox>
+    </div>
+    <div class="buttons">
+      <b-button
+        class="blue-shadow default-btn"
+        variant="primary"
+        @click="confirmCategory"
+        :disabled="!oneCategoryLeft || isSelectedTeam"
+      >
+        Zatwierdź kategorię
+      </b-button>
+      <b-form-select
+        class="default-input"
+        v-model="selectedTeam"
+        :options="teams"
+        :disabled="!isOneOnOne || !selectedCategory"
+        @change="chooseTeam"
+      ></b-form-select>
     </div>
   </div>
 </template>
 
 <script>
+import TeamNameMixin from '@/mixins/TeamNameMixin';
+
 export default {
   name: 'OneOnOneCard',
-  props: {
-    disabled: {
-      type: Boolean,
-      default: true
-    }
-  },
+  mixins: [TeamNameMixin],
   data() {
     return {
-      categories: [
-        'Kategoria 1',
-        'Kategoria 2',
-        'Kategoria 3',
-        'Kategoria 4',
-        'Kategoria 5',
-        'Kategoria 6',
-        'Kategoria 7',
-        'Kategoria 8',
-        'Kategoria 9',
-        'Kategoria 10'
-      ]
+      isOneOnOne: false,
+      categories: [],
+      teams: [],
+      selectedTeam: null,
+      selectedCategory: null
     };
+  },
+  created() {
+    this.$socket.client.emit('getOneOnOneState');
+  },
+  computed: {
+    oneCategoryLeft() {
+      const enabled = this.categories.filter(category => category.enabled === true);
+      return enabled.length === 1;
+    },
+    isSelectedTeam() {
+      return this.selectedTeam != null;
+    }
+  },
+  methods: {
+    toggleCategory(category) {
+      this.$socket.client.emit('changeCategoryState', { category: category.name, enabled: category.enabled });
+    },
+    confirmCategory() {
+      this.$socket.client.emit('confirmCategory');
+    },
+    chooseTeam(team) {
+      this.$socket.client.emit('chooseTeam', { teamName: team });
+    },
+    setTeams(teams) {
+      this.teams = this.dumpTeams();
+      teams.forEach(team => this.teams.push({ value: team, text: this.translateTeamName(team) }));
+    },
+    dumpCategories() {
+      const dumpCategories = [];
+      for (let i = 0; i <= 7; i++) {
+        dumpCategories.push({ name: `Kategoria ${i}`, enabled: false });
+      }
+      return dumpCategories;
+    },
+    dumpTeams() {
+      return [{ value: null, text: 'Wybierz zespół', disabled: true }];
+    }
+  },
+  sockets: {
+    oneOnOneState(data) {
+      this.isOneOnOne = data.roundStage === 'oneOnOne';
+      if (this.isOneOnOne) {
+        this.categories = data.categories;
+        this.selectedTeam = data.team;
+        this.selectedCategory = data.category;
+        this.setTeams(data.teams);
+      } else {
+        this.categories = this.dumpCategories();
+        this.teams = this.dumpTeams();
+      }
+    },
+    oneOnOneStarted(data) {
+      this.isOneOnOne = true;
+      this.categories = data.categories;
+      this.setTeams(data.teams);
+    },
+    categoryStateChanged(data) {
+      const category = this.categories.find(category => category.name === data.category);
+      if (category) {
+        category.enabled = data.enabled;
+      }
+    },
+    categoryConfirmed(data) {
+      this.selectedCategory = data.category;
+    },
+    oneOnOneFinished(data) {
+      this.selectedTeam = data.team;
+    },
+    roundFinished() {
+      if (!this.isOneOnOne) return;
+      this.isOneOnOne = false;
+      this.categories = this.dumpCategories();
+      this.teams = this.dumpTeams();
+      this.selectedTeam = null;
+      this.selectedCategory = null;
+    }
   }
 };
 </script>
@@ -44,12 +132,17 @@ export default {
   @extend .base-card;
 
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
   align-items: center;
-  justify-content: center;
-  max-height: fit-content;
-  max-width: 20vw;
+  justify-content: space-evenly;
+  height: 30vh;
+  width: 25vw;
   margin: auto;
+
+  .ooo-label {
+    @extend .card-title;
+    margin: 0.5rem 0;
+  }
 
   .categories {
     display: flex;
@@ -58,15 +151,30 @@ export default {
     justify-content: center;
 
     * {
-      flex: 1 0 34%;
+      flex: 1 0 49%;
       text-align: left;
     }
   }
 
-  label {
-    text-align: left;
+  .buttons {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    font-weight: 600;
+
+    * {
+      flex: 1 0 35%;
+      text-align: center;
+    }
+
+    > :first-child {
+      margin-right: 0.35rem;
+    }
+
+    > :last-child {
+      margin-left: 0.35rem;
+    }
   }
 }
 </style>

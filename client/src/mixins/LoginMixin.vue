@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import Logo from '@/components/shared/Logo.vue';
-import Scene from '@/components/three/Scene.vue';
-import StatusIcon from '@/components/shared/StatusIcon.vue';
+import Logo from '@/components/shared/Logo';
+import Scene from '@/components/three/Scene';
+import StatusIcon from '@/components/shared/StatusIcon';
 import LoginFormMixin from '@/mixins/LoginFormMixin';
 
 export default {

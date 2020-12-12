@@ -5,7 +5,7 @@
       <app-timer></app-timer>
       <div class="admin__row">
         <app-question-card></app-question-card>
-        <app-one-on-one-card :disabled="true"></app-one-on-one-card>
+        <app-one-on-one-card></app-one-on-one-card>
       </div>
       <div class="admin__row">
         <app-team-card team-name="Niebiescy" variant="blue" shortcut="1"></app-team-card>

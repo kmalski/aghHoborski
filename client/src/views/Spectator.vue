@@ -2,22 +2,19 @@
   <section class="spectator">
     <app-status-icon></app-status-icon>
     <app-question-section></app-question-section>
+    <app-one-on-one-section></app-one-on-one-section>
     <app-amounts-section></app-amounts-section>
   </section>
 </template>
 
 <script>
-import StatusIcon from '@/components/shared/StatusIcon.vue';
-import AmountsSection from '@/components/spectator/AmountsSection.vue';
-import SpectatorQuestionSection from '@/components/spectator/SpectatorQuestionSection.vue';
+import StatusIcon from '@/components/shared/StatusIcon';
+import OneOnOneSection from '@/components/spectator/OneOnOneSection';
+import AmountsSection from '@/components/spectator/AmountsSection';
+import SpectatorQuestionSection from '@/components/spectator/SpectatorQuestionSection';
 
 export default {
   name: 'Spectator',
-  data() {
-    return {
-      example: ''
-    };
-  },
   created() {
     this.$socket.client.emit('joinRoom', {
       name: this.$route.params.room
@@ -42,6 +39,7 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppAmountsSection: AmountsSection,
+    AppOneOnOneSection: OneOnOneSection,
     AppQuestionSection: SpectatorQuestionSection
   }
 };

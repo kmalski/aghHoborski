@@ -2,13 +2,15 @@
   <section class="host">
     <app-status-icon></app-status-icon>
     <app-question-section></app-question-section>
+    <app-one-on-one-section></app-one-on-one-section>
     <app-amounts-section></app-amounts-section>
   </section>
 </template>
 
 <script>
-import StatusIcon from '@/components/shared/StatusIcon.vue';
-import AmountsSection from '@/components/spectator/AmountsSection.vue';
+import StatusIcon from '@/components/shared/StatusIcon';
+import AmountsSection from '@/components/spectator/AmountsSection';
+import OneOnOneSection from '@/components/spectator/OneOnOneSection';
 import HostQuestionSection from '@/components/host/HostQuestionSection';
 
 export default {
@@ -38,6 +40,7 @@ export default {
   components: {
     AppStatusIcon: StatusIcon,
     AppAmountsSection: AmountsSection,
+    AppOneOnOneSection: OneOnOneSection,
     AppQuestionSection: HostQuestionSection
   }
 };

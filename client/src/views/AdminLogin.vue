@@ -1,6 +1,6 @@
 <script>
 import LoginMixin from '@/mixins/LoginMixin';
-import AdminLoginForm from '@/components/login/AdminLoginForm.vue';
+import AdminLoginForm from '@/components/login/AdminLoginForm';
 
 export default {
   name: 'AdminLogin',

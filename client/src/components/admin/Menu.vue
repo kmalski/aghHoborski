@@ -104,12 +104,12 @@ export default {
           isActive: false,
           actions: [
             {
-              name: 'Zacznij 1:1',
-              action: this.dummy
+              name: 'Zacznij finał',
+              action: this.startSecondStage
             },
             {
-              name: 'Zacznij mistrzów',
-              action: this.startSecondStage
+              name: 'Zacznij 1:1',
+              action: this.startOneOnOne
             }
           ]
         },
@@ -169,6 +169,9 @@ export default {
     },
     startSecondStage() {
       this.$socket.client.emit('startSecondStage');
+    },
+    startOneOnOne() {
+      this.$socket.client.emit('startOneOnOne');
     },
     uploadQuestions() {
       this.$bvModal.show(this.uploaderId);

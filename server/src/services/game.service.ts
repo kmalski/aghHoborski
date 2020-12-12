@@ -64,6 +64,7 @@ class GameService {
     }
 
     game.correctAnswer();
+    socket.room.questions.resetCurrent();
 
     io.in(socket.room.name).emit(Outgoing.CORRECT_ANSWER);
     io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
@@ -80,6 +81,7 @@ class GameService {
     }
 
     game.wrongAnswer();
+    socket.room.questions.resetCurrent();
 
     io.in(socket.room.name).emit(Outgoing.WRONG_ANSWER);
     io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);

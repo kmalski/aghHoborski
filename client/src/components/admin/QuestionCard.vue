@@ -1,15 +1,15 @@
 <template>
   <div class="question-card">
     <div class="card-row">
-      <label>Kategoria</label>
+      <label class="card-label">Kategoria</label>
       <p>{{ question.category }}</p>
     </div>
     <div class="card-row">
-      <label>Pytanie</label>
+      <label class="card-label">Pytanie</label>
       <p>{{ question.content }}</p>
     </div>
     <div class="card-row">
-      <label>Podpowiedzi</label>
+      <label class="card-label">Podpowiedzi</label>
       <div class="hint-list">
         <p v-for="hint in question.hints" :key="hint.value" :class="{ answer: hint.isAnswer }">{{ hint.value }}</p>
       </div>
@@ -59,6 +59,9 @@ export default {
     auctionStarted(data) {
       this.question.category = this.transformCategory(data.category);
     },
+    categoryConfirmed(data) {
+      this.question.category = data.category;
+    },
     roundFinished() {
       this.resetData();
     },
@@ -81,14 +84,9 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-height: fit-content;
-  min-height: 25vh;
+  height: 30vh;
   width: 35vw;
   margin: auto;
-
-  label {
-    font-weight: 600;
-  }
 
   .card-row {
     display: grid;

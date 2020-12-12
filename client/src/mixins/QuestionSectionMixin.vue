@@ -1,5 +1,5 @@
 <script>
-import Separator from '@/components/shared/Separator.vue';
+import Separator from '@/components/shared/Separator';
 
 export default {
   name: 'QuestionSectionMixin',
@@ -28,27 +28,39 @@ export default {
       else return category;
     },
     resetQuestionData() {
-      this.question.category = '';
-      this.question.content = '';
+      this.question.category = null;
+      this.question.content = null;
       this.question.hints = [];
       this.hintUsed = false;
     }
+  },
+  filters: {
+    timeFormat(seconds) {
+      if (seconds === null) return null;
+      if (seconds < 0) return '00:00';
+
+      let minutes = Math.floor(seconds / 60);
+      seconds = seconds % 60;
+
+      minutes = minutes > 9 ? minutes : '0' + minutes;
+      seconds = seconds > 9 ? seconds : '0' + seconds;
+      return `${minutes}:${seconds}`;
+    }
+  },
+  components: {
+    AppSeparator: Separator
   },
   sockets: {
     currentQuestion(data) {
       this.question.number = data.roundNumber;
       this.stageNumber = data.stageNumber;
-      switch (data.roundStage) {
-        case 'auction':
-          this.question.category = this.transformCategory(data.category);
-          this.backgroundColor = 'neutral';
-          break;
-        case 'answering':
-          this.question.content = data.content;
-          this.question.hintUsed = data.hintUsed;
-          this.question.hints = data.hints;
-          this.backgroundColor = data.winningTeam;
-          break;
+      this.question.category = this.transformCategory(data.category);
+      this.backgroundColor = 'neutral';
+      if (data.roundStage === 'answering') {
+        this.question.content = data.content;
+        this.question.hintUsed = data.hintUsed;
+        this.question.hints = data.hints;
+        this.backgroundColor = data.winningTeam;
       }
     },
     auctionStarted(data) {
@@ -77,23 +89,18 @@ export default {
     },
     secondStageStarted() {
       this.stageNumber = 2;
+    },
+    oneOnOneStarted(data) {
+      this.question.number = data.roundNumber;
+    },
+    categoryConfirmed(data) {
+      this.question.category = data.category;
+      this.backgroundColor = 'neutral';
+    },
+    oneOnOneFinished(data) {
+      this.backgroundColor = data.team;
+      this.question.category = null;
     }
-  },
-  filters: {
-    timeFormat(seconds) {
-      if (seconds === null) return null;
-      if (seconds < 0) return '00:00';
-
-      let minutes = Math.floor(seconds / 60);
-      seconds = seconds % 60;
-
-      minutes = minutes > 9 ? minutes : '0' + minutes;
-      seconds = seconds > 9 ? seconds : '0' + seconds;
-      return `${minutes}:${seconds}`;
-    }
-  },
-  components: {
-    AppSeparator: Separator
   }
 };
 </script>

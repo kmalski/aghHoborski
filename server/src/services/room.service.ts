@@ -12,6 +12,7 @@ import { TimeListener } from '../events/listeners/time.listener';
 import { HintListener } from '../events/listeners/hint.listener';
 import { AuctionListener } from '../events/listeners/auction.listener';
 import { QuestionListener } from '../events/listeners/question.listener';
+import { OneOnOneListener } from '../events/listeners/oneOnOne.listener';
 
 export { RoomData, RoomService, LocalRoomService };
 
@@ -75,6 +76,7 @@ class RoomService {
     QuestionListener.listen(io, socket);
     GameListener.listen(io, socket);
     TeamListener.listen(io, socket);
+    OneOnOneListener.listen(io, socket);
   }
 
   async adminJoin(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
@@ -132,6 +134,8 @@ class RoomService {
     TeamListener.listen(io, socket);
     TeamListener.listenAdmin(io, socket);
     HintListener.listenAdmin(io, socket);
+    OneOnOneListener.listen(io, socket);
+    OneOnOneListener.listenAdmin(io, socket);
     TimeListener.listenAdmin(io, socket);
     AuctionListener.listenAdmin(io, socket);
 

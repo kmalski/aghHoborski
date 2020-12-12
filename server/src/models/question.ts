@@ -59,6 +59,20 @@ class QuestionSet {
     }
   }
 
+  drawCategories(limit = 7): string[] {
+    let count = 0;
+    const result: string[] = [];
+    for (const category of this.categories.keys()) {
+      if (this.hasNotUsedQuestion(category)) {
+        result.push(category);
+        count += 1;
+      }
+      if (count >= limit) break;
+    }
+    if (count % 2 === 0) result.pop();
+    return result;
+  }
+
   categoryExists(categoryName: string): boolean {
     return (
       this.categories.has(categoryName) ||
@@ -70,5 +84,14 @@ class QuestionSet {
   reset(): void {
     this.current = null;
     this.categories.forEach(questions => questions.forEach(question => (question.used = false)));
+  }
+
+  resetCurrent(): void {
+    this.current = null;
+  }
+
+  private hasNotUsedQuestion(category: string): boolean {
+    const categoryQuestions = this.categories.get(category);
+    return categoryQuestions.some(quest => !quest.used);
   }
 }

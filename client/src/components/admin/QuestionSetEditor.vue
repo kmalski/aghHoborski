@@ -61,11 +61,7 @@ export default {
   },
   methods: {
     onValidationError(errors) {
-      if (errors.length === 0) {
-        this.jsonValid = true;
-      } else {
-        this.jsonValid = false;
-      }
+      this.jsonValid = errors.length === 0;
     },
     saveChanges() {
       const file = JSON.stringify(this.questionSet);
@@ -102,8 +98,7 @@ export default {
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin: 0;
-    margin-top: 1rem;
+    margin: 1rem 0 0;
     justify-content: flex-start;
 
     p {

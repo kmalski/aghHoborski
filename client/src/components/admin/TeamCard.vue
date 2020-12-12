@@ -9,6 +9,7 @@
     <div class="card-row">
       <label>Licytacja</label>
       <b-form-input
+        class="rectangle-input"
         :disabled="!isInGame || !isAuction || hasLost"
         v-shortkey.focus="['ctrl', shortcut]"
         @focus="event => event.target.select()"
@@ -20,6 +21,7 @@
     <div class="card-row">
       <label>Stan konta</label>
       <b-form-input
+        class="rectangle-input"
         :disabled="!isInGame"
         @keyup.enter="emitAccountBalanceChange"
         @focus="event => event.target.select()"
@@ -30,6 +32,7 @@
     <div class="card-row">
       <label>Podpowiedzi</label>
       <b-form-input
+        class="rectangle-input"
         :disabled="!isInGame"
         @keyup.enter="emitHintsCountChange"
         @focus="event => event.target.select()"

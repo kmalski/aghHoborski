@@ -1,13 +1,14 @@
 .question-section {
+  @extend .default-shadow;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 3rem;
+  margin-top: 3rem;
   width: 90%;
   overflow: hidden;
-  border-radius: 20px;
   color: $font-color;
+  border-radius: 20px;
 
   .timer {
     font-weight: 600;
@@ -21,12 +22,12 @@
 
   &__category {
     text-align: center;
-    padding: 0.15rem 0;
+    padding: 0.9rem 0;
   }
 
   &__content {
     text-align: center;
-    padding: 0.15rem 0;
+    padding: 0.9rem 0;
   }
 
   &__hints {
@@ -34,6 +35,10 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    margin-top: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    margin: 0;
   }
 }

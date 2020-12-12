@@ -49,6 +49,13 @@ enum Outgoing {
   AUCTION_STARTED = 'auctionStarted',
   AUCTION_FINISHED = 'auctionFinished',
 
+  // one on one
+  ONE_ON_ONE_STATE = 'oneOnOneState',
+  ONE_ON_ONE_STARTED = 'oneOnOneStarted',
+  ONE_ON_ONE_FINISHED = 'oneOnOneFinished',
+  CATEGORY_STATE_CHANGED = 'categoryStateChanged',
+  CATEGORY_CONFIRMED = 'categoryConfirmed',
+
   // hint
   HINT_USED = 'hintUsed',
   HINT_AMOUNT_CHANGED = 'hintAmountChanged',
@@ -105,6 +112,13 @@ enum Incoming {
   START_AUCTION = 'startAuction',
   FINISH_AUCTION = 'finishAuction',
   CANCEL_AUCTION = 'cancelAuction',
+
+  // one on one
+  GET_ONE_ON_ONE_STATE = 'getOneOnOneState',
+  START_ONE_ON_ONE = 'startOneOnOne',
+  CHANGE_CATEGORY_STATE = 'changeCategoryState',
+  CONFIRM_CATEGORY = 'confirmCategory',
+  CHOOSE_TEAM = 'chooseTeam',
 
   // hint
   USE_HINT = 'useHint',

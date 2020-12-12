@@ -79,6 +79,5 @@ class HintService {
 
     io.in(socket.room.name).emit(Outgoing.HINT_USED, { hints });
     io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: team.hintsCount });
-    // io.in(socket.room.name).emit(Outgoing.TIME_STARTED, { value: 60 });
   }
 }

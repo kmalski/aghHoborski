@@ -1,11 +1,11 @@
 <template>
   <div class="timer">
-    <label>Czas</label>
-    <b-form-input number v-model="time" />
-    <b-button class="blue-shadow" variant="primary" @click="startStopTime">
+    <label class="card-label">Czas</label>
+    <b-form-input class="rectangle-input" number v-model="time" />
+    <b-button class="default-btn blue-shadow" variant="primary" @click="startStopTime">
       {{ isTimePassing ? 'Stop' : 'Start' }}
     </b-button>
-    <b-button class="blue-shadow" variant="primary" @click="resetTime">
+    <b-button class="default-btn blue-shadow" variant="primary" @click="resetTime">
       Reset
     </b-button>
   </div>

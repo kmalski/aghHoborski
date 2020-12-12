@@ -28,21 +28,15 @@ class QuestionService {
     const currentQuestion = {
       roundStage: game.roundStage,
       roundNumber: game.roundNumber,
-      stageNumber: game.stageNumber
+      stageNumber: game.stageNumber,
+      category: questions?.current?.category
     } as any;
-    switch (game.roundStage) {
-      case RoundStage.IDLE:
-        break;
-      case RoundStage.AUCTION:
-        currentQuestion.category = questions.current.category;
-        break;
-      case RoundStage.ANSWERING:
-        currentQuestion.category = questions.current.category;
-        currentQuestion.content = questions.current.question.content;
-        currentQuestion.hints = questions.current.question.hints;
-        currentQuestion.winningTeam = game.auctionWinningTeam.name;
-        currentQuestion.hintUsed = questions.current.hintUsed;
-        break;
+
+    if (game.isAnswering()) {
+      currentQuestion.content = questions.current.question.content;
+      currentQuestion.hints = questions.current.question.hints;
+      currentQuestion.winningTeam = game.auctionWinningTeam.name;
+      currentQuestion.hintUsed = questions.current.hintUsed;
     }
 
     return socket.emit(Outgoing.CURRENT_QUESTION, currentQuestion);

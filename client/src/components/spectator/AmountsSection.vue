@@ -45,11 +45,11 @@
 </template>
 
 <script>
-import AccountBalance from '@/components/spectator/AccountBalance.vue';
-import AuctionAmount from '@/components/spectator/AuctionAmount.vue';
-import HintAmount from '@/components/spectator/HintAmount.vue';
-import MoneyPool from '@/components/spectator/MoneyPool.vue';
-import Separator from '@/components/shared/Separator.vue';
+import AccountBalance from '@/components/spectator/AccountBalance';
+import AuctionAmount from '@/components/spectator/AuctionAmount';
+import HintAmount from '@/components/spectator/HintAmount';
+import MoneyPool from '@/components/spectator/MoneyPool';
+import Separator from '@/components/shared/Separator';
 
 export default {
   name: 'AmountsSection',
@@ -94,10 +94,11 @@ export default {
 @import '../../scss/main.scss';
 
 .amounts-section {
+  @extend .default-shadow;
   display: flex;
   flex-direction: row;
   width: 90%;
-  margin: 3rem;
+  margin-bottom: 3rem;
   overflow: hidden;
   border-radius: 20px;
 

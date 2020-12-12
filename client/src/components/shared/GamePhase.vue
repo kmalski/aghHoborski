@@ -34,6 +34,9 @@ export default {
     },
     roundFinished() {
       this.stage = 'idle';
+    },
+    oneOnOneStarted() {
+      this.stage = 'oneOnOne';
     }
   },
   filters: {
@@ -47,6 +50,8 @@ export default {
           return 'Licytacja podpowiedzi';
         case 'idle':
           return 'Pomiędzy rundami';
+        case 'oneOnOne':
+          return 'Jeden na jeden';
         default:
           return 'Nieznana faza gry';
       }

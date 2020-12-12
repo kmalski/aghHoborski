@@ -1,7 +1,8 @@
 <template>
   <div class="reset-card">
-    <label>Reset kont</label>
+    <label class="card-title">Reset kont</label>
     <b-form-input
+      class="rectangle-input"
       v-model="newAccountBalance"
       @keydown.enter="resetAmounts"
       @focus="event => event.target.select()"
@@ -25,8 +26,8 @@ export default {
   methods: {
     async resetAmounts() {
       if (this.newAccountBalance < 100) this.newAccountBalance *= 100;
-      if (await this.confirm());
-      this.$socket.client.emit('resetAccountBalances', { newAccountBalance: this.newAccountBalance });
+      if (await this.confirm())
+        this.$socket.client.emit('resetAccountBalances', { newAccountBalance: this.newAccountBalance });
     },
     async confirm() {
       return await this.$bvModal.msgBoxConfirm(

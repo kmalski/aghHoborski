@@ -37,8 +37,7 @@ class TeamService {
     const teamName = data.teamName as TeamName;
 
     if (
-      game.isAuction() ||
-      game.isAnswering() ||
+      !game.isIdle() ||
       !game.exists(teamName) ||
       typeof data.newIsInGame !== 'boolean' ||
       game.isInGame(teamName) === data.newIsInGame
@@ -102,7 +101,7 @@ class TeamService {
     const teamName = data.teamName as TeamName;
 
     if (!Number.isInteger(data.newHintsCount) || !game.isInGame(teamName)) {
-      socket.emit(teamName + Outgoing.ACCOUNT_BALANCE_CHANGED, { hintsCount: game.getTeam(teamName).hintsCount });
+      socket.emit(teamName + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: game.getTeam(teamName).hintsCount });
       return socket.emit(
         Outgoing.WARNING,
         `Zmiana ilości podpowiedzi na ${data.newHintsCount} jest w tym momencie niedozwolona.`

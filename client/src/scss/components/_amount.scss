@@ -1,6 +1,10 @@
 .amount {
   text-align: center;
-  padding: 0.25rem 0;
+  padding: 1rem 0;
   font-size: 2rem;
   color: $font-color;
+
+ p {
+   margin: 0;
+ }
 }
