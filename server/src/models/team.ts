@@ -14,6 +14,7 @@ class Team {
   public accountBalance = 5000;
   public hasBlackBox = false;
   public hintsCount = 0;
+  public lastPrize: number | string =  0;
 
   constructor(name: TeamName) {
     this.name = name;
@@ -33,16 +34,19 @@ class Team {
   }
 
   grantPrize(amount: number): number {
+    this.lastPrize = amount;
     this.accountBalance += amount;
     return this.accountBalance;
   }
 
   grantHint(): number {
+    this.lastPrize = 'hint';
     this.hintsCount += 1;
     return this.hintsCount;
   }
 
   grantBlackBox(): boolean {
+    this.lastPrize = 'blackBox';
     this.hasBlackBox = true;
     return this.hasBlackBox;
   }

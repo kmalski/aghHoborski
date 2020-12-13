@@ -18,7 +18,9 @@ class GameService {
       roundNumber: game.roundNumber,
       stageNumber: game.stageNumber,
       moneyPool: game.moneyPool,
-      hintAmount: game.hintAmount
+      hintAmount: game.hintAmount,
+      team: game.auctionWinningTeam?.name,
+      prize: game.auctionWinningTeam?.lastPrize
     });
   }
 
@@ -48,7 +50,7 @@ class GameService {
 
     if (!Number.isInteger(gameData.newMoneyPool)) {
       socket.emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
-      return socket.emit(Outgoing.WARNING, `Zmiana puli licytacji na ${gameData.newMoneyPool} nie jest dozwolona.`);
+      return socket.emit(Outgoing.WARNING, `Zmiana puli licytacji na ${ gameData.newMoneyPool } nie jest dozwolona.`);
     }
 
     game.moneyPool = gameData.newMoneyPool;
@@ -63,11 +65,12 @@ class GameService {
       return socket.emit(Outgoing.WARNING, 'Operacja możliwa do wykonania jedynie w fazie pytań.');
     }
 
-    game.correctAnswer();
+    const winner = game.auctionWinningTeam.name;
+    const prize = game.correctAnswer();
     socket.room.questions.resetCurrent();
 
     io.in(socket.room.name).emit(Outgoing.CORRECT_ANSWER);
-    io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
+    io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED, { prize, winner });
     io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
     io.in(socket.room.name).emit(team.name + Outgoing.ACCOUNT_BALANCE_CHANGED, { accountBalance: team.accountBalance });
     this.emitAuctionAmountChanged(game, socket.room.name, io);
@@ -80,13 +83,26 @@ class GameService {
       return socket.emit(Outgoing.WARNING, 'Operacja możliwa do wykonania jedynie w fazie pytań.');
     }
 
-    game.wrongAnswer();
+    const loser = game.auctionWinningTeam.name;
+    const prize = game.wrongAnswer();
     socket.room.questions.resetCurrent();
 
     io.in(socket.room.name).emit(Outgoing.WRONG_ANSWER);
-    io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
+    io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED, { prize, winner: loser });
     io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
     this.emitAuctionAmountChanged(game, socket.room.name, io);
+  }
+
+  startNewRound(socket: ClashSocket, io: Server): void | boolean {
+    const game = socket.room.game;
+
+    if (!game.isCelebration()) {
+      return socket.emit(Outgoing.WARNING, 'Nie można teraz rozpocząć nowej rundy.');
+    }
+
+    game.startNewRound();
+
+    io.in(socket.room.name).emit(Outgoing.NEW_ROUND, { roundNumber: game.roundNumber });
   }
 
   startSecondStage(socket: ClashSocket, io: Server): void | boolean {

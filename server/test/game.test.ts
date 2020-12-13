@@ -1,11 +1,11 @@
-import { should } from 'chai';
+import chai from 'chai';
 import { describe, before, after, it } from 'mocha';
 import SocketIOClient from 'socket.io-client';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
 import { ClashServer } from '../src/server';
 
-should();
+const should = chai.should();
 
 const questionSet = `
 {
@@ -75,12 +75,15 @@ describe('Test game socket events', function () {
           client.once('redAuctionAmountChanged', (data: any) => {
             data.auctionAmount.should.be.equal(4900);
             client.emit('finishAuction');
+            client.once('auctionFinished', () => {
+              client.emit('startNewRound');
+              client.once('newRound', () => done());
+            });
             client.once('redHasLostChanged', (data: any) => {
               data.hasLost.should.be.equal(true);
             });
             client.once('redBlackBoxChanged', (data: any) => {
               data.hasBlackBox.should.be.equal(true);
-              done();
             });
           });
         });
@@ -104,9 +107,12 @@ describe('Test game socket events', function () {
             client.once('greenAuctionAmountChanged', (data: any) => {
               data.auctionAmount.should.be.equal(4100);
               client.emit('finishAuction');
+              client.once('auctionFinished', () => {
+                client.emit('startNewRound');
+                client.once('newRound', () => done());
+              });
               client.once('greenHintsCountChanged', (data: any) => {
                 data.hintsCount.should.be.equal(1);
-                done();
               });
             });
           });
@@ -130,7 +136,8 @@ describe('Test game socket events', function () {
             client.once('blueAuctionAmountChanged', (data: any) => {
               data.auctionAmount.should.be.equal(3100);
               client.emit('cancelAuction');
-              client.once('roundFinished', () => {
+              client.once('auctionFinished', (data: any) => {
+                should.not.exist(data.winningTeam);
                 client.emit('getGameState');
                 client.once('gameState', (data: any) => {
                   data.moneyPool.should.be.equal(0);

@@ -2,6 +2,7 @@
   <section class="host">
     <app-status-icon></app-status-icon>
     <app-question-section></app-question-section>
+    <app-prize-banner></app-prize-banner>
     <app-one-on-one-section></app-one-on-one-section>
     <app-amounts-section></app-amounts-section>
   </section>
@@ -9,6 +10,7 @@
 
 <script>
 import StatusIcon from '@/components/shared/StatusIcon';
+import PrizeBanner from '@/components/spectator/PrizeBanner';
 import AmountsSection from '@/components/spectator/AmountsSection';
 import OneOnOneSection from '@/components/spectator/OneOnOneSection';
 import HostQuestionSection from '@/components/host/HostQuestionSection';
@@ -39,6 +41,7 @@ export default {
   },
   components: {
     AppStatusIcon: StatusIcon,
+    AppPrizeBanner: PrizeBanner,
     AppAmountsSection: AmountsSection,
     AppOneOnOneSection: OneOnOneSection,
     AppQuestionSection: HostQuestionSection

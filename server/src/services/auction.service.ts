@@ -31,7 +31,6 @@ class AuctionService {
     socket.emit(Outgoing.SUCCESS);
     io.in(socket.room.name).emit(Outgoing.AUCTION_STARTED, {
       category: questions.current.category,
-      roundNumber: game.roundNumber
     });
     emitAccountChanges(game, socket.room.name, io);
   }
@@ -54,7 +53,7 @@ class AuctionService {
     switch (questions.current.category) {
       case QuestionSet.BLACK_BOX_CATEGORY: {
         game.noAnswerNeeded();
-        io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
+        io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED, { prize: 'blackBox', winner: team.name });
         io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
         io.in(socket.room.name).emit(team.name + Outgoing.BLACK_BOX_CHANGED, { hasBlackBox: team.grantBlackBox() });
         this.emitAuctionAmountChanged(game, socket.room.name, io);
@@ -62,7 +61,7 @@ class AuctionService {
       }
       case QuestionSet.HINT_CATEGORY: {
         game.noAnswerNeeded();
-        io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
+        io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED, { prize: 'hint', winner: team.name });
         io.in(socket.room.name).emit(Outgoing.MONEY_POOL_CHANGED, { moneyPool: game.moneyPool });
         io.in(socket.room.name).emit(team.name + Outgoing.HINTS_COUNT_CHANGED, { hintsCount: team.grantHint() });
         this.emitAuctionAmountChanged(game, socket.room.name, io);
@@ -91,7 +90,6 @@ class AuctionService {
     game.cancelAuction();
 
     io.in(socket.room.name).emit(Outgoing.AUCTION_FINISHED, { winningTeam: null });
-    io.in(socket.room.name).emit(Outgoing.ROUND_FINISHED);
     emitAccountChanges(game, socket.room.name, io);
   }
 

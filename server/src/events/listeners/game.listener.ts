@@ -19,6 +19,7 @@ class GameListener extends EventListener {
     socket.on(Incoming.CHANGE_MONEY_POOL, gameData => this.SERVICE.changeMoneyPool(gameData, socket, io));
     socket.on(Incoming.MARK_CORRECT_ANSWER, () => this.SERVICE.markCorrectAnswer(socket, io));
     socket.on(Incoming.MARK_WRONG_ANSWER, () => this.SERVICE.markWrongAnswer(socket, io));
+    socket.on(Incoming.START_NEW_ROUND, () => this.SERVICE.startNewRound(socket, io));
     socket.on(Incoming.START_SECOND_STAGE, () => this.SERVICE.startSecondStage(socket, io));
   }
 }

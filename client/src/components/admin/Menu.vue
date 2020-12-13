@@ -77,7 +77,7 @@ export default {
             },
             {
               name: 'Rozpocznij nową rundę',
-              action: this.dummy
+              action: this.startNewRound
             },
             {
               name: 'Pomiń pytanie',
@@ -158,6 +158,9 @@ export default {
     markWrongAnswer() {
       this.$socket.client.emit('markWrongAnswer');
     },
+    startNewRound() {
+      this.$socket.client.emit('startNewRound');
+    },
     skipQuestion() {
       this.$socket.client.emit('skipQuestion');
     },
@@ -198,8 +201,7 @@ export default {
     logout() {
       this.$router.push({ name: 'AdminLogin' });
       localStorage.removeItem('awanturaToken');
-    },
-    dummy() {}
+    }
   },
   components: {
     AppGameSettings: GameSettings,

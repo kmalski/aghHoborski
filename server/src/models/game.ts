@@ -1,14 +1,15 @@
 import { Team, TeamName } from './team';
 import { OneOnOne } from './oneOnOne';
-import { logger } from '@typegoose/typegoose/lib/logSettings';
+import { Logger } from '../utils/logger';
 
 export { Game, RoundStage };
 
 enum RoundStage {
   AUCTION = 'auction',
+  ONE_ON_ONE = 'oneOnOne',
   ANSWERING = 'answering',
   HINT_AUCTION = 'hintAuction',
-  ONE_ON_ONE = 'oneOnOne',
+  CELEBRATION = 'celebration',
   IDLE = 'idle'
 }
 
@@ -20,7 +21,7 @@ class Game {
   public roundStage: RoundStage = RoundStage.IDLE;
   public moneyPool = 0;
   public hintAmount = 0;
-  public roundNumber = 0;
+  public roundNumber = 1;
   public stageNumber = 1;
 
   constructor() {
@@ -40,7 +41,6 @@ class Game {
     });
     this.auctionWinningTeam = null;
     this.roundStage = RoundStage.AUCTION;
-    this.roundNumber += 1;
     return this.moneyPool;
   }
 
@@ -60,13 +60,12 @@ class Game {
       team.accountBalance += team.auctionAmount;
       team.auctionAmount = 0;
     });
-    this.roundNumber -= 1;
   }
 
   startOneOnOne(categories: string[]): number {
     const activeTeams = [...this.activeTeams.values()];
     if (activeTeams.length !== 2) {
-      logger.error(`Invalid OneOnOne teams count: ${ activeTeams.length }`);
+      Logger.error(`Invalid OneOnOne teams count: ${ activeTeams.length }`);
     }
     const moneyPool = this.startAuction(500);
     this.roundStage = RoundStage.ONE_ON_ONE;
@@ -90,21 +89,21 @@ class Game {
     return false;
   }
 
-  correctAnswer(): void {
-    this.roundStage = RoundStage.IDLE;
+  correctAnswer(): number {
+    const prize = this.moneyPool;
+    this.roundStage = RoundStage.CELEBRATION;
     this.auctionWinningTeam.grantPrize(this.moneyPool);
-    this.auctionWinningTeam = null;
     this.moneyPool = 0;
+    return prize;
   }
 
-  wrongAnswer(): void {
-    this.roundStage = RoundStage.IDLE;
-    this.auctionWinningTeam = null;
+  wrongAnswer(): number {
+    this.roundStage = RoundStage.CELEBRATION;
+    return 0;
   }
 
   noAnswerNeeded(): void {
-    this.roundStage = RoundStage.IDLE;
-    this.auctionWinningTeam = null;
+    this.roundStage = RoundStage.CELEBRATION;
     this.moneyPool = 0;
   }
 
@@ -125,6 +124,13 @@ class Game {
     this.hintAmount = 0;
   }
 
+  startNewRound(): number {
+    this.roundStage = RoundStage.IDLE;
+    this.auctionWinningTeam = null;
+    this.roundNumber += 1;
+    return this.roundNumber;
+  }
+
   startSecondStage(): void {
     const winningTeam = this.findWinningTeam();
     this.inactiveTeams = new Map([...this.inactiveTeams, ...this.activeTeams]);
@@ -132,6 +138,7 @@ class Game {
     this.moveToActive(winningTeam.name);
     this.moveToActive(TeamName.MASTERS);
     this.activeTeams.get(TeamName.MASTERS).accountBalance = 10000;
+    this.roundNumber = 1;
     this.stageNumber = 2;
   }
 
@@ -164,6 +171,10 @@ class Game {
 
   isOneOnOne(): boolean {
     return this.roundStage === RoundStage.ONE_ON_ONE;
+  }
+
+  isCelebration(): boolean {
+    return this.roundStage === RoundStage.CELEBRATION;
   }
 
   isIdle(): boolean {

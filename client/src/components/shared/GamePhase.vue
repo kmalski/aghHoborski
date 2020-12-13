@@ -23,8 +23,9 @@ export default {
     auctionStarted() {
       this.stage = 'auction';
     },
-    auctionFinished() {
-      this.stage = 'answering';
+    auctionFinished(data) {
+      if (data.winningTeam != null) this.stage = 'answering';
+      else this.stage = 'idle';
     },
     hintAuctionStarted() {
       this.stage = 'hintAuction';
@@ -33,6 +34,9 @@ export default {
       this.stage = 'answering';
     },
     roundFinished() {
+      this.stage = 'celebration';
+    },
+    newRound() {
       this.stage = 'idle';
     },
     oneOnOneStarted() {
@@ -52,6 +56,8 @@ export default {
           return 'Pomiędzy rundami';
         case 'oneOnOne':
           return 'Jeden na jeden';
+        case 'celebration':
+          return 'Cieszymy się nagrodą';
         default:
           return 'Nieznana faza gry';
       }

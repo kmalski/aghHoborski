@@ -46,7 +46,6 @@ class OneOnOneService {
 
     io.in(socket.room.name).emit(Outgoing.ONE_ON_ONE_STARTED, {
       categories: game.oneOnOne.categories,
-      roundNumber: game.roundNumber,
       teams: game.oneOnOne.teams.map(team => team.name)
     });
     emitAccountChanges(game, socket.room.name, io);

@@ -54,8 +54,10 @@ export default {
     currentQuestion(data) {
       this.question.number = data.roundNumber;
       this.stageNumber = data.stageNumber;
-      this.question.category = this.transformCategory(data.category);
       this.backgroundColor = 'neutral';
+      if (data.roundStage === 'auction' || data.roundStage === 'oneOnOne') {
+        this.question.category = this.transformCategory(data.category);
+      }
       if (data.roundStage === 'answering') {
         this.question.content = data.content;
         this.question.hintUsed = data.hintUsed;
@@ -65,7 +67,6 @@ export default {
     },
     auctionStarted(data) {
       this.question.category = this.transformCategory(data.category);
-      this.question.number = data.roundNumber;
       this.backgroundColor = 'neutral';
     },
     auctionFinished(data) {
@@ -79,6 +80,9 @@ export default {
       this.backgroundColor = null;
       this.resetQuestionData();
     },
+    newRound(data) {
+      this.question.number = data.roundNumber;
+    },
     timeStarted(data) {
       this.seconds = data.value;
       this.timeIntervalID = setInterval(() => (this.seconds -= 1), 1000);
@@ -89,9 +93,7 @@ export default {
     },
     secondStageStarted() {
       this.stageNumber = 2;
-    },
-    oneOnOneStarted(data) {
-      this.question.number = data.roundNumber;
+      this.question.number = 1;
     },
     categoryConfirmed(data) {
       this.question.category = data.category;

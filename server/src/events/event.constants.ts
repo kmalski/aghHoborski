@@ -39,9 +39,10 @@ enum Outgoing {
   GAME_RESET = 'gameReset',
   GAME_STATE = 'gameState',
   GAME_SETTINGS = 'gameSettings',
-  ROUND_FINISHED = 'roundFinished',
   CORRECT_ANSWER = 'correctAnswer',
   WRONG_ANSWER = 'wrongAnswer',
+  ROUND_FINISHED = 'roundFinished',
+  NEW_ROUND = 'newRound',
   MONEY_POOL_CHANGED = 'moneyPoolChanged',
   SECOND_STAGE_STARTED = 'secondStageStarted',
 
@@ -106,6 +107,7 @@ enum Incoming {
   CHANGE_MONEY_POOL = 'changeMoneyPool',
   MARK_CORRECT_ANSWER = 'markCorrectAnswer',
   MARK_WRONG_ANSWER = 'markWrongAnswer',
+  START_NEW_ROUND = 'startNewRound',
   START_SECOND_STAGE = 'startSecondStage',
 
   // auction
