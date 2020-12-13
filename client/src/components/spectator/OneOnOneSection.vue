@@ -78,5 +78,18 @@ export default {
       margin: 0;
     }
   }
+
+  @include media-breakpoint-down(md) {
+    .ooo-category {
+      flex: 0 0 calc((100% - 4 * 0.35rem) / 3);
+
+      padding: 0.8rem 1rem;
+      font-size: 1.15rem;
+
+      &:last-child {
+        margin: 0.35rem auto;
+      }
+    }
+  }
 }
 </style>

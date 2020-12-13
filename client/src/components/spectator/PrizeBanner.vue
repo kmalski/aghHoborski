@@ -4,7 +4,7 @@
       <p>WYGRANO</p>
     </app-separator>
     <div class="prize" :class="{ [backgroundColor + '-background']: backgroundColor }">
-      <p :style="{ 'font-size': fontSize }">{{ prize }}</p>
+      <p>{{ prize }}</p>
     </div>
   </div>
 </template>
@@ -23,12 +23,6 @@ export default {
   },
   created() {
     this.$socket.client.emit('getGameState');
-  },
-  computed: {
-    fontSize() {
-      if (Number.isInteger(this.prize)) return '3rem';
-      else return '2.5rem';
-    }
   },
   methods: {
     translatePrize(prize) {
@@ -86,6 +80,15 @@ export default {
     justify-content: center;
     height: 100%;
     width: 100%;
+    font-size: 3rem;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .prize-banner {
+    .prize {
+      font-size: 1.5rem;
+    }
   }
 }
 </style>

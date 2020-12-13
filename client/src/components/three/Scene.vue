@@ -1,6 +1,6 @@
 <template>
   <div class="scene" ref="scene">
-    <p>Kliknij nas!</p>
+    <p class="scene__hint">Kliknij nas!</p>
   </div>
 </template>
 
@@ -148,6 +148,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../scss/main.scss';
+
 .scene {
   position: relative;
   width: 100%;
@@ -155,15 +157,26 @@ export default {
   padding: 0;
   margin: 0;
 
-  p {
+  &__hint {
     position: absolute;
     left: 50%;
     bottom: 15%;
-    transform: translateX(-50%);
+    transform: translate(-50%, 0);
+    margin: 0;
     font-family: monospace;
     font-size: 15px;
     font-weight: 700;
     color: #bbbbbb;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .scene {
+    height: 50%;
+
+    &__hint {
+      bottom: 5%;
+    }
   }
 }
 </style>

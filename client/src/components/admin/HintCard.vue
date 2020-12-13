@@ -2,7 +2,7 @@
   <div class="hint-card">
     <label class="card-title">Podpowiedź</label>
     <b-form-input
-      class="rectangle-input"
+      class="hint-input"
       :disabled="!isHintAuction"
       v-model="hintAmount"
       @keydown.enter="changeHintAmount"
@@ -10,10 +10,18 @@
       number
     />
     <div>
-      <b-button class="blue-shadow hint-button" variant="primary" :disabled="!isHintAuction" @click="acceptAmount">
+      <b-button class="blue-shadow hint-btn" variant="primary" :disabled="!isHintAuction" @click="acceptAmount">
         <b-icon :icon="'check2'"></b-icon>
       </b-button>
-      <b-button class="blue-shadow hint-button" variant="primary" :disabled="!isHintAuction" @click="discardAmount">
+      <b-button
+        class="blue-shadow rectangle-btn"
+        variant="primary"
+        :disabled="!isHintAuction"
+        @click="changeHintAmount"
+      >
+        Zmień
+      </b-button>
+      <b-button class="blue-shadow hint-btn" variant="primary" :disabled="!isHintAuction" @click="discardAmount">
         <b-icon :icon="'x'"></b-icon>
       </b-button>
     </div>
@@ -68,8 +76,15 @@ export default {
 
 .hint-card {
   @extend .small-card;
+  padding: 0.5rem 0.5rem;
 
-  .hint-button {
+  .hint-input {
+    @extend .default-input;
+
+    width: 75%;
+  }
+
+  .hint-btn {
     @extend .square-btn;
 
     margin: auto 0.5rem;

@@ -21,18 +21,22 @@ class QuestionService {
     socket.emit(Outgoing.ALL_QUESTION_SETS, questionSetDb);
   }
 
-  getCurrentQuestion(socket: ClashSocket): void | boolean  {
+  getCurrentQuestion(socket: ClashSocket): void | boolean {
     const game = socket.room.game;
     const questions = socket.room.questions;
 
     const currentQuestion = {
       roundStage: game.roundStage,
       roundNumber: game.roundNumber,
-      stageNumber: game.stageNumber,
-      category: questions?.current?.category
+      stageNumber: game.stageNumber
     } as any;
 
+    if (game.isOneOnOne()) {
+      currentQuestion.category = questions?.current?.category;
+    }
+
     if (game.isAnswering()) {
+      currentQuestion.category = questions?.current?.category;
       currentQuestion.content = questions.current.question.content;
       currentQuestion.hints = questions.current.question.hints;
       currentQuestion.winningTeam = game.auctionWinningTeam.name;
@@ -87,7 +91,7 @@ class QuestionService {
     const questionSet = await QuestionSetModel.findOne({ name: data.name });
 
     if (questionSet && questionSet.owner !== socket.room.name) {
-      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} już istnieje.`);
+      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } już istnieje.`);
     }
 
     const fileData = JSON.parse(data.file);
@@ -116,7 +120,7 @@ class QuestionService {
     const questionSetDb = await QuestionSetModel.findOne({ name: data.name });
 
     if (!questionSetDb) {
-      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} nie istnieje.`);
+      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } nie istnieje.`);
     }
     await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
@@ -191,7 +195,7 @@ class LocalQuestionService extends QuestionService {
     const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
 
     if (questionSet && questionSet.owner !== socket.room.name) {
-      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} już istnieje.`);
+      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } już istnieje.`);
     }
 
     if (questionSet) {
@@ -215,7 +219,7 @@ class LocalQuestionService extends QuestionService {
     const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
 
     if (!questionSet) {
-      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${data.name} nie istnieje.`);
+      return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } nie istnieje.`);
     }
 
     const parsed = JSON.parse(questionSet.strData);

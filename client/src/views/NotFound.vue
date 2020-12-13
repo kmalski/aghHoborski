@@ -1,6 +1,6 @@
 <template>
   <section class="not-found">
-    <p class="not-found__title">Teleturniej chyba nie w tą stronę :(</p>
+    <p class="not-found__title">Teleturniej chyba nie w tę stronę :(</p>
   </section>
 </template>
 

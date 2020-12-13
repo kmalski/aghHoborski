@@ -42,3 +42,13 @@
     margin: 0;
   }
 }
+
+@include media-breakpoint-down(md) {
+  .question-section {
+    margin-top: 1.5rem;
+  }
+
+  .question {
+    font-size: 1.25rem;
+  }
+}

@@ -16,6 +16,19 @@
     width: 50vw;
     height: 100vh;
   }
+
+  @include media-breakpoint-down(md) {
+    &__left {
+      justify-content: flex-end;
+      width: 100vw;
+      height: 65vh;
+    }
+
+    &__right {
+      width: 100vw;
+      height: 35vh;
+    }
+  }
 }
 
 .flex-row {

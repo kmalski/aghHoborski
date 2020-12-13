@@ -141,4 +141,11 @@ export default {
     }
   }
 }
+
+@include media-breakpoint-down(md) {
+  .amounts-section {
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+  }
+}
 </style>
