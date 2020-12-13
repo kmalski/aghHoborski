@@ -1,7 +1,0 @@
-.blue-shadow {
-  @include element-shadow($blue-button-color);
-}
-
-.dark-shadow {
-  @include element-shadow($default-button-color);
-}

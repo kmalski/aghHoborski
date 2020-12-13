@@ -13,7 +13,7 @@
     </div>
     <div class="buttons">
       <b-button
-        class="blue-shadow default-btn"
+        class="blue-shadow confirm-btn"
         variant="primary"
         @click="confirmCategory"
         :disabled="!oneCategoryLeft || isSelectedTeam"
@@ -135,7 +135,7 @@ export default {
   flex-flow: column;
   align-items: center;
   justify-content: space-evenly;
-  height: 30vh;
+  height: 35vh;
   width: 25vw;
   margin: auto;
 
@@ -162,6 +162,11 @@ export default {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+
+    .confirm-btn {
+      @extend .default-btn;
+      font-size: 0.75rem;
+    }
 
     * {
       flex: 1 0 35%;

@@ -5,6 +5,11 @@
       <app-timer></app-timer>
       <div class="admin__row">
         <app-question-card></app-question-card>
+        <div class="admin__group">
+          <app-reset-card></app-reset-card>
+          <app-money-pool-card></app-money-pool-card>
+          <app-hint-card></app-hint-card>
+        </div>
         <app-one-on-one-card></app-one-on-one-card>
       </div>
       <div class="admin__row">
@@ -13,11 +18,6 @@
         <app-team-card team-name="Żółci" variant="yellow" shortcut="3"></app-team-card>
         <app-team-card team-name="Czerwoni" variant="red" shortcut="4"></app-team-card>
         <app-team-card team-name="Mistrzowie" variant="masters" shortcut="5"></app-team-card>
-      </div>
-      <div class="admin__row">
-        <app-reset-card></app-reset-card>
-        <app-hint-card></app-hint-card>
-        <app-money-pool-card></app-money-pool-card>
       </div>
       <b-alert
         class="alert-position"
@@ -117,9 +117,28 @@ export default {
 
   &__row {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row;
     width: 100%;
     margin: 1rem auto;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__group {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 35vh;
+    width: 25vw;
+
+    &:last-child {
+      margin: auto;
+    }
+
+    * {
+      flex: 0 0 min-content;
+    }
   }
 }
 </style>

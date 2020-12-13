@@ -8,6 +8,7 @@
 
   .default-btn {
     @include base-btn(0.8rem);
+    padding: 0.2rem 0.8rem;
   }
 
   .square-btn {
@@ -16,6 +17,7 @@
 
   .rectangle-btn {
     @include base-btn(0.8rem, 4rem);
+    padding-bottom: 0.2rem;
   }
 
   .default-input {

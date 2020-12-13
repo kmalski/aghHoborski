@@ -1,3 +1,11 @@
 .default-shadow {
   box-shadow: 0px 8px 13px -3px rgba(0, 0, 0, 0.15);
 }
+
+.blue-shadow {
+  @include element-shadow($blue-button-color);
+}
+
+.dark-shadow {
+  @include element-shadow($default-button-color);
+}

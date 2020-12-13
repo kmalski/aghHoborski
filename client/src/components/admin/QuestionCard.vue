@@ -84,8 +84,8 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 30vh;
-  width: 35vw;
+  height: 35vh;
+  width: 30vw;
   margin: auto;
 
   .card-row {
