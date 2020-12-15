@@ -67,8 +67,8 @@ export default {
   @extend .flex-column;
 
   text-align: center;
-  height: 25vh;
-  width: 30vw;
+  height: 25%;
+  width: 30%;
   overflow: hidden;
   border-radius: 20px;
 

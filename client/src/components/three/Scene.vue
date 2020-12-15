@@ -153,7 +153,7 @@ export default {
 .scene {
   position: relative;
   width: 100%;
-  height: 75vh;
+  height: 75%;
   padding: 0;
   margin: 0;
 

@@ -56,4 +56,10 @@ export default {
   justify-content: space-between;
   min-height: 100vh;
 }
+
+@media screen and (max-width: 767.98px) and (orientation: portrait) {
+  .spectator {
+    min-height: 100vw;
+  }
+}
 </style>

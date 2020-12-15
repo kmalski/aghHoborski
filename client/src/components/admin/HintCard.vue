@@ -9,7 +9,7 @@
       @focus="event => event.target.select()"
       number
     />
-    <div>
+    <div class="buttons">
       <b-button class="blue-shadow hint-btn" variant="primary" :disabled="!isHintAuction" @click="acceptAmount">
         <b-icon :icon="'check2'"></b-icon>
       </b-button>
@@ -22,7 +22,7 @@
         Zmień
       </b-button>
       <b-button class="blue-shadow hint-btn" variant="primary" :disabled="!isHintAuction" @click="discardAmount">
-        <b-icon :icon="'x'"></b-icon>
+        <b-icon icon="x"></b-icon>
       </b-button>
     </div>
   </div>
@@ -89,6 +89,10 @@ export default {
 
     margin: auto 0.5rem;
     max-height: 1.4rem;
+  }
+
+  .buttons {
+    display: flex;
   }
 }
 </style>

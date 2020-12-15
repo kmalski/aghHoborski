@@ -31,3 +31,7 @@ $separator-background-color: #1a1a1a;
 $separator-font-color: #f3f2ee;
 
 $home-background-image: radial-gradient(at 25vw 50vh, #fff, #f6f6f6);
+
+@media screen and (max-width: 767.98px) and (orientation: portrait) {
+  $home-background-image: radial-gradient(at 25vh 50vw, #fff, #f6f6f6);
+}
