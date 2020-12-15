@@ -73,12 +73,6 @@ class Game {
     return moneyPool;
   }
 
-  finishOneOnOne(team: TeamName): Team {
-    this.finishAuction();
-    this.auctionWinningTeam = this.activeTeams.get(team);
-    return this.auctionWinningTeam;
-  }
-
   bidAmount(teamName: TeamName, amount: number): boolean {
     const team = this.activeTeams.get(teamName);
     if (team.getAllMoney() >= amount && (!this.auctionWinningTeam || amount > this.auctionWinningTeam.auctionAmount)) {
@@ -170,7 +164,7 @@ class Game {
   }
 
   isOneOnOne(): boolean {
-    return this.roundStage === RoundStage.ONE_ON_ONE;
+    return this.roundStage === RoundStage.ONE_ON_ONE || this.oneOnOne != null;
   }
 
   isCelebration(): boolean {

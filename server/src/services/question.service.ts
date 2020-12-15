@@ -31,7 +31,7 @@ class QuestionService {
       stageNumber: game.stageNumber
     } as any;
 
-    if (game.isOneOnOne()) {
+    if (game.isOneOnOne() || game.isAuction()) {
       currentQuestion.category = questions?.current?.category;
     }
 
@@ -39,7 +39,7 @@ class QuestionService {
       currentQuestion.category = questions?.current?.category;
       currentQuestion.content = questions.current.question.content;
       currentQuestion.hints = questions.current.question.hints;
-      currentQuestion.winningTeam = game.auctionWinningTeam.name;
+      currentQuestion.winningTeam = game.auctionWinningTeam?.name;
       currentQuestion.hintUsed = questions.current.hintUsed;
     }
 

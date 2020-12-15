@@ -83,11 +83,11 @@ class ClashServer {
   }
 
   private async listen(port: number) {
-    return new Promise(resolve => this.server.listen(port, () => resolve()));
+    return new Promise<void>(resolve => this.server.listen(port, () => resolve()));
   }
 
   private async close() {
-    return new Promise(resolve => this.server.close(() => resolve()));
+    return new Promise<void>(resolve => this.server.close(() => resolve()));
   }
 }
 

@@ -76,28 +76,28 @@ class OneOnOneService {
 
     const category = game.oneOnOne.getCategory();
     questions.setCategory(category.name);
+    const question = questions.drawQuestion();
+    game.finishAuction();
 
     io.in(socket.room.name).emit(Outgoing.CATEGORY_CONFIRMED, { category: category.name });
+    io.in(socket.room.name).emit(Outgoing.NEXT_QUESTION, {
+      category: questions.current.category,
+      question: question.content,
+      hints: question.hints
+    });
   }
 
   chooseTeam(data: OneOnOneData, socket: ClashSocket, io: Server): void | boolean {
     const game = socket.room.game;
-    const questions = socket.room.questions;
 
     if (!game.isOneOnOne() && !game.isAnswering() || !game.isInGame(data?.teamName as TeamName)) {
       return socket.emit(Outgoing.WARNING, 'Nie można zmienić zespołu odpowiadającego w jeden na jeden.');
     }
 
-    const team = game.finishOneOnOne(data.teamName as TeamName);
-    if (!questions?.current?.question?.content) {
-      const question = questions.drawQuestion();
-      io.in(socket.room.name).emit(Outgoing.NEXT_QUESTION, {
-        category: questions.current.category,
-        question: question.content,
-        hints: question.hints
-      });
-    }
+    const team = game.getTeam(data.teamName as TeamName);
+    game.auctionWinningTeam = team;
+    game.oneOnOne = null;
 
-    io.in(socket.room.name).emit(Outgoing.ONE_ON_ONE_FINISHED, { team: team.name });
+    io.in(socket.room.name).emit(Outgoing.TEAM_CHOSEN, { team: team.name });
   }
 }

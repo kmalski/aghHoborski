@@ -26,18 +26,15 @@ export default {
     currentQuestion(data) {
       this.question.number = data.roundNumber;
       this.stageNumber = data.stageNumber;
-      switch (data.roundStage) {
-        case 'auction':
-          this.question.category = this.transformCategory(data.category);
-          this.backgroundColor = 'neutral';
-          break;
-        case 'answering':
-          this.question.content = data.content;
-          this.question.hintUsed = data.hintUsed;
-          this.setHints(data.hints);
-          this.backgroundColor = data.winningTeam;
-          this.getAnswer();
-          break;
+      if (data.roundStage === 'auction') {
+        this.question.category = this.transformCategory(data.category);
+        this.backgroundColor = 'neutral';
+      } else if (data.roundStage === 'answering') {
+        this.question.content = data.content;
+        this.question.hintUsed = data.hintUsed;
+        this.setHints(data.hints);
+        this.backgroundColor = data.winningTeam ? data.winningTeam : 'neutral';
+        this.getAnswer();
       }
     },
     nextQuestion(data) {

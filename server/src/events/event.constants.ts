@@ -53,9 +53,9 @@ enum Outgoing {
   // one on one
   ONE_ON_ONE_STATE = 'oneOnOneState',
   ONE_ON_ONE_STARTED = 'oneOnOneStarted',
-  ONE_ON_ONE_FINISHED = 'oneOnOneFinished',
   CATEGORY_STATE_CHANGED = 'categoryStateChanged',
   CATEGORY_CONFIRMED = 'categoryConfirmed',
+  TEAM_CHOSEN = 'teamChosen',
 
   // hint
   HINT_USED = 'hintUsed',

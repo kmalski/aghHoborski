@@ -54,15 +54,14 @@ export default {
     currentQuestion(data) {
       this.question.number = data.roundNumber;
       this.stageNumber = data.stageNumber;
-      this.backgroundColor = 'neutral';
-      if (data.roundStage === 'auction' || data.roundStage === 'oneOnOne') {
+      if (data.roundStage === 'auction') {
         this.question.category = this.transformCategory(data.category);
-      }
-      if (data.roundStage === 'answering') {
+        this.backgroundColor = 'neutral';
+      } else if (data.roundStage === 'answering') {
         this.question.content = data.content;
         this.question.hintUsed = data.hintUsed;
         this.question.hints = data.hints;
-        this.backgroundColor = data.winningTeam;
+        this.backgroundColor = data.winningTeam ? data.winningTeam : 'neutral';
       }
     },
     auctionStarted(data) {
@@ -95,13 +94,11 @@ export default {
       this.stageNumber = 2;
       this.question.number = 1;
     },
-    categoryConfirmed(data) {
-      this.question.category = data.category;
+    categoryConfirmed() {
       this.backgroundColor = 'neutral';
     },
-    oneOnOneFinished(data) {
+    teamChosen(data) {
       this.backgroundColor = data.team;
-      this.question.category = null;
     }
   }
 };

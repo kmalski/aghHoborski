@@ -85,7 +85,9 @@ export default {
   },
   sockets: {
     oneOnOneState(data) {
-      this.isOneOnOne = data.roundStage === 'oneOnOne';
+      if (data.roundStage === 'oneOnOne' || (data.roundStage === 'answering' && data.categories != null)) {
+        this.isOneOnOne = true;
+      }
       if (this.isOneOnOne) {
         this.categories = data.categories;
         this.selectedTeam = data.team;
@@ -110,7 +112,7 @@ export default {
     categoryConfirmed(data) {
       this.selectedCategory = data.category;
     },
-    oneOnOneFinished(data) {
+    teamChosen(data) {
       this.selectedTeam = data.team;
     },
     roundFinished() {

@@ -17,7 +17,7 @@ const logger = winston.createLogger({
   ],
   exceptionHandlers: [
     new transports.File({
-      filename: 'exceptions.log'.toLowerCase(),
+      filename: 'exceptions.log',
       format: fileFormatting
     })
   ],
