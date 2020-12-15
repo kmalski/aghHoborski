@@ -153,7 +153,7 @@ export default {
 .scene {
   position: relative;
   width: 100%;
-  height: 75%;
+  height: 75vh;
   padding: 0;
   margin: 0;
 
@@ -172,11 +172,7 @@ export default {
 
 @include media-breakpoint-down(md) {
   .scene {
-    height: 50%;
-
-    &__hint {
-      bottom: 5%;
-    }
+    height: 60vh;
   }
 }
 </style>

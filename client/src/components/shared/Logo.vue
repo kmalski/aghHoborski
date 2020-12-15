@@ -23,12 +23,14 @@ export default {
     margin: 0;
     font-size: 4.25rem;
     font-weight: 600;
+    line-height: 2.4rem;
   }
 
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-down(md) {
     .logo {
       &__text {
-        font-size: 3rem;
+        width: 80%;
+        font-size: 2.25rem;
       }
     }
   }

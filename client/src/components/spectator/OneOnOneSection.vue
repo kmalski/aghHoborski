@@ -63,12 +63,12 @@ export default {
     @extend .default-shadow;
     flex: 0 0 calc((100% - 4 * 0.75rem) / 3);
     margin: 0.75rem 0;
-    overflow: hidden;
     border-radius: 20px;
+    padding: 2.5rem 0;
     font-size: 1.5rem;
     color: $font-color;
     background-color: $neutral-color;
-    padding: 2.5rem 0;
+    overflow: hidden;
 
     &:last-child {
       margin: 0.75rem auto;
@@ -78,16 +78,25 @@ export default {
       margin: 0;
     }
   }
+}
 
-  @include media-breakpoint-down(md) {
+@include media-breakpoint-down(md) {
+  .one-on-one-section {
+    margin: 0.4rem 0;
+
     .ooo-category {
-      flex: 0 0 calc((100% - 4 * 0.35rem) / 3);
-
-      padding: 0.8rem 1rem;
-      font-size: 1.15rem;
+      flex: 0 0 calc((100% - 6 * 0.6rem) / 4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 4.5rem;
+      padding: 0;
+      margin: 0.6rem 0;
+      font-size: 0.95rem;
 
       &:last-child {
-        margin: 0.35rem auto;
+        margin: initial;
       }
     }
   }
