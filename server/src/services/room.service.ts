@@ -13,6 +13,7 @@ import { HintListener } from '../events/listeners/hint.listener';
 import { AuctionListener } from '../events/listeners/auction.listener';
 import { QuestionListener } from '../events/listeners/question.listener';
 import { OneOnOneListener } from '../events/listeners/oneOnOne.listener';
+import { Logger } from '../utils/logger';
 
 export { RoomData, RoomService, LocalRoomService };
 
@@ -37,7 +38,7 @@ class RoomService {
     const dbRoom = await RoomModel.findOne({ name });
 
     if (dbRoom) {
-      return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
+      return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${ name } już istnieje.`);
     }
 
     const hash = bcrypt.hashSync(data.password, RoomService.SALT_ROUNDS);
@@ -46,10 +47,12 @@ class RoomService {
     const room = new Room(name, hash);
     RoomService.ACTIVE_ROOMS.push(room);
 
+    Logger.info(`Created new room: ${ name }.`);
+
     socket.room = room;
     socket.join(socket.room.name);
     socket.emit(Outgoing.ROOM_CREATED, {
-      msg: `Pokój o nazwie ${name} został utworzony.`,
+      msg: `Pokój o nazwie ${ name } został utworzony.`,
       name,
       token: room.token
     });
@@ -69,7 +72,7 @@ class RoomService {
 
     socket.room = room;
     socket.join(socket.room.name);
-    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name });
+    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${ name }.`, name });
 
     // order is important
     QuestionListener.configure({ useDatabase: this.useDatabase });
@@ -103,7 +106,7 @@ class RoomService {
 
     socket.room = room;
     socket.join(socket.room.name);
-    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
+    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${ name }.`, name, token: room.token });
   }
 
   authorize(data: RoomData, socket: ClashSocket, io: Server): void | boolean {
@@ -154,17 +157,19 @@ class LocalRoomService extends RoomService {
     const name = data.name;
 
     if (LocalRoomService.ACTIVE_ROOMS.some(r => r.name === name)) {
-      return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${name} już istnieje.`);
+      return socket.emit(Outgoing.WARNING, `Pokój o nazwie ${ name } już istnieje.`);
     }
 
     const hash = bcrypt.hashSync(data.password, LocalRoomService.SALT_ROUNDS);
     const room = new Room(name, hash);
     LocalRoomService.ACTIVE_ROOMS.push(room);
 
+    Logger.info(`Created new room: ${ name }.`);
+
     socket.room = room;
     socket.join(socket.room.name);
     socket.emit(Outgoing.ROOM_CREATED, {
-      msg: `Pokój o nazwie ${name} został utworzony.`,
+      msg: `Pokój o nazwie ${ name } został utworzony.`,
       name,
       token: room.token
     });
@@ -184,6 +189,6 @@ class LocalRoomService extends RoomService {
 
     socket.room = room;
     socket.join(socket.room.name);
-    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${name}.`, name, token: room.token });
+    socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${ name }.`, name, token: room.token });
   }
 }

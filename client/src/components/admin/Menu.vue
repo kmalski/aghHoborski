@@ -76,8 +76,8 @@ export default {
               action: this.markWrongAnswer
             },
             {
-              name: 'Rozpocznij nową rundę',
-              action: this.startNewRound
+              name: 'Zakończ rundę',
+              action: this.finishRound
             },
             {
               name: 'Pomiń pytanie',
@@ -158,7 +158,7 @@ export default {
     markWrongAnswer() {
       this.$socket.client.emit('markWrongAnswer');
     },
-    startNewRound() {
+    finishRound() {
       this.$socket.client.emit('startNewRound');
     },
     skipQuestion() {

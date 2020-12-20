@@ -137,7 +137,7 @@ export default {
     }
 
     * {
-      flex: 0 0 min-content;
+      flex: 0 0 fit-content;
     }
   }
 }
