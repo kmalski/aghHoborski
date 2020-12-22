@@ -13,12 +13,7 @@
       <b-button class="blue-shadow hint-btn" variant="primary" :disabled="!isHintAuction" @click="acceptAmount">
         <b-icon :icon="'check2'"></b-icon>
       </b-button>
-      <b-button
-        class="blue-shadow rectangle-btn"
-        variant="primary"
-        :disabled="!isHintAuction"
-        @click="changeHintAmount"
-      >
+      <b-button class="blue-shadow default-btn" variant="primary" :disabled="!isHintAuction" @click="changeHintAmount">
         Zmień
       </b-button>
       <b-button class="blue-shadow hint-btn" variant="primary" :disabled="!isHintAuction" @click="discardAmount">
@@ -88,7 +83,7 @@ export default {
     @extend .square-btn;
 
     margin: auto 0.5rem;
-    max-height: 1.4rem;
+    max-height: 1.5rem;
   }
 
   .buttons {

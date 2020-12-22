@@ -136,10 +136,11 @@ export default {
   display: flex;
   flex-flow: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   height: 35vh;
   width: 25vw;
   margin: auto;
+  padding: 1.5rem 1.5rem;
 
   .ooo-label {
     @extend .card-title;
@@ -147,10 +148,12 @@ export default {
   }
 
   .categories {
+    flex-grow: 0.5;
     display: flex;
     flex-flow: row wrap;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
+    margin: 0.5rem 0;
 
     * {
       flex: 1 0 49%;
