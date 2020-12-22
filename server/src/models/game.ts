@@ -175,6 +175,10 @@ class Game {
     return this.roundStage === RoundStage.IDLE;
   }
 
+  isNewGame(): boolean {
+    return this.isIdle() && this.stageNumber === 1 && this.roundNumber === 1;
+  }
+
   getTeam(teamName: TeamName): Team {
     if (this.isInGame(teamName)) return this.activeTeams.get(teamName);
     else return this.inactiveTeams.get(teamName);

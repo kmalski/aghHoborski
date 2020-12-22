@@ -6,9 +6,10 @@ import VueSocketIOExt from 'vue-socket.io-extended';
 import VueShortkey from 'vue-shortkey';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
-const serverAddress = process.env.VUE_APP_SERVER_ADDRESS || 'https://awantura-server.malski.pl';
+const serverAddress = process.env.VUE_APP_SERVER_ADDRESS;
 const io = socket(serverAddress, {
-  transports: ['websocket']
+  transports: ['polling', 'websocket'],
+  allowUpgrades: true
 });
 
 Vue.use(VueSocketIOExt, io);

@@ -89,6 +89,7 @@ class QuestionService {
 
   async addQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSet = await QuestionSetModel.findOne({ name: data.name });
+    const game = socket.room.game;
 
     if (questionSet && questionSet.owner !== socket.room.name) {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } już istnieje.`);
@@ -110,18 +111,25 @@ class QuestionService {
       await questionSetDb.save();
     }
 
-    await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
+    if (game.isNewGame()) {
+      await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
+      socket.room.questions = new QuestionSet(data.name, fileData.categories);
+    }
 
-    socket.room.questions = new QuestionSet(data.name, fileData.categories);
     socket.emit(Outgoing.SUCCESS);
   }
 
   async changeQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSetDb = await QuestionSetModel.findOne({ name: data.name });
+    const game = socket.room.game;
 
+    if (!game.isNewGame()) {
+      return socket.emit(Outgoing.FAIL, `Nie można zmienić zbioru pytań w trakcie gry.`);
+    }
     if (!questionSetDb) {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } nie istnieje.`);
     }
+
     await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
 
     socket.room.questions = new QuestionSet(questionSetDb.name, questionSetDb.categories);
@@ -193,6 +201,7 @@ class LocalQuestionService extends QuestionService {
 
   async addQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
+    const game = socket.room.game;
 
     if (questionSet && questionSet.owner !== socket.room.name) {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } już istnieje.`);
@@ -209,15 +218,21 @@ class LocalQuestionService extends QuestionService {
       });
     }
 
-    const fileData = JSON.parse(data.file);
-    socket.room.questions = new QuestionSet(data.name, fileData.categories);
+    if (game.isNewGame()) {
+      const fileData = JSON.parse(data.file);
+      socket.room.questions = new QuestionSet(data.name, fileData.categories);
+    }
 
     socket.emit(Outgoing.SUCCESS);
   }
 
   async changeQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
+    const game = socket.room.game;
 
+    if (!game.isNewGame()) {
+      return socket.emit(Outgoing.FAIL, `Nie można zmienić zbioru pytań w trakcie gry.`);
+    }
     if (!questionSet) {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } nie istnieje.`);
     }

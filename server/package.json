@@ -12,7 +12,7 @@
     "build": "rimraf build/ && tsc",
     "prestart": "npm run build",
     "start": "node build/server.js",
-    "serve": "tsnd --rs --respawn src/server.ts",
+    "server": "tsnd --rs --respawn src/server.ts",
     "test": "mocha -r ts-node/register 'test/**/*.ts'",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
   },
