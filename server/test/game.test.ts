@@ -86,9 +86,6 @@ describe('Test game socket events', function () {
   it('Start second stage', function (done) {
     client.emit('resetGame');
     client.once('gameReset', () => {
-      client.emit('blueChangeAccountBalance', { newAccountBalance: 100 });
-      client.emit('greenChangeAccountBalance', { newAccountBalance: 100 });
-      client.emit('yellowChangeAccountBalance', { newAccountBalance: 100 });
       client.emit('startSecondStage');
       client.once('secondStageStarted', () => {
         client.emit('getGameState');

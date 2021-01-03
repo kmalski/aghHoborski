@@ -7,6 +7,7 @@ import { ClashServer } from '../src/server';
 
 should();
 
+const team = 'green';
 const questionSet = `
 {
   "categories": [
@@ -47,8 +48,8 @@ describe('Test hint socket events', function () {
             client.once('success', () => {
               client.emit('startAuction', { categoryName: 'Pilka nozna' });
               client.once('auctionStarted', () => {
-                client.emit('changeAuctionAmount', { teamName: 'green', newAuctionAmount: 1000 });
-                client.once('greenAuctionAmountChanged', () => {
+                client.emit('changeAuctionAmount', { teamName: team, newAuctionAmount: 1000 });
+                client.once(team + 'AuctionAmountChanged', () => {
                   client.emit('finishAuction');
                   client.once('auctionFinished', () => {
                     done();
@@ -68,7 +69,7 @@ describe('Test hint socket events', function () {
     await server.stop();
   });
 
-  it('Test discard hint amount', function (done) {
+  it('Discard hint amount', function (done) {
     client.emit('startHintAuction');
     client.once('hintAuctionStarted', (data: any) => {
       data.hintAmount.should.be.equal(0);
@@ -86,7 +87,7 @@ describe('Test hint socket events', function () {
     });
   });
 
-  it('Test accept hint amount and use hint', function (done) {
+  it('Accept hint amount and use bought hint', function (done) {
     client.emit('startHintAuction');
     client.once('hintAuctionStarted', (data: any) => {
       data.hintAmount.should.be.equal(0);
@@ -95,9 +96,9 @@ describe('Test hint socket events', function () {
         data.hintAmount.should.be.equal(400);
         client.emit('acceptHintAmount');
         client.once('hintAuctionFinished', () => {
-          client.once('greenHintsCountChanged', (data: any) => {
+          client.once(team + 'HintsCountChanged', (data: any) => {
             data.hintsCount.should.be.equal(1);
-            client.once('greenAccountBalanceChanged', (data: any) => {
+            client.once(team + 'AccountBalanceChanged', (data: any) => {
               data.accountBalance.should.be.equal(3600);
               client.once('hintAmountChanged', (data: any) => {
                 data.hintAmount.should.be.equal(0);
@@ -105,7 +106,7 @@ describe('Test hint socket events', function () {
                 client.emit('useHint');
                 client.once('hintUsed', (data: any) => {
                   data.hints.should.have.length(4);
-                  client.once('greenHintsCountChanged', (data: any) => {
+                  client.once(team + 'HintsCountChanged', (data: any) => {
                     data.hintsCount.should.be.equal(0);
                   });
                 });
