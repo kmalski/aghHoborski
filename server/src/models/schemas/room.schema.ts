@@ -11,9 +11,9 @@ class RoomSchema {
   public hash!: string;
 
   @prop({ ref: () => QuestionSetSchema })
-  public questions: Ref<QuestionSetSchema>;
+  public questionSet: Ref<QuestionSetSchema>;
 }
 
 const RoomModel = getModelForClass(RoomSchema, {
-  schemaOptions: { collection: 'rooms' }
+  schemaOptions: { collection: 'rooms', timestamps: true }
 });

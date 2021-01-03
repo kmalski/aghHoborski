@@ -88,7 +88,7 @@ class RoomService {
     }
 
     const name = data.name;
-    const dbRoom = await RoomModel.findOne({ name }).populate('questions');
+    const dbRoom = await RoomModel.findOne({ name }).populate('questionSet');
 
     if (!dbRoom || !bcrypt.compareSync(data.password, dbRoom.hash)) {
       return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
@@ -96,10 +96,10 @@ class RoomService {
 
     let room = RoomService.ACTIVE_ROOMS.find(e => e.name === name);
     if (!room) {
-      const questions = dbRoom.questions as QuestionSetSchema;
+      const questionSet = dbRoom.questionSet as QuestionSetSchema;
       room = new Room(name, dbRoom.hash);
-      if (questions) {
-        room.withQuestions(new QuestionSet(questions.name, questions.categories));
+      if (questionSet) {
+        room.withQuestions(new QuestionSet(questionSet.name, questionSet.categories));
       }
       RoomService.ACTIVE_ROOMS.push(room);
     }

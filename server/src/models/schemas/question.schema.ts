@@ -30,5 +30,5 @@ class QuestionSetSchema {
 }
 
 const QuestionSetModel = getModelForClass(QuestionSetSchema, {
-  schemaOptions: { collection: 'questions', timestamps: true }
+  schemaOptions: { collection: 'questionSets', timestamps: true }
 });

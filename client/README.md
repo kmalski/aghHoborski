@@ -2,7 +2,7 @@
 This directory contains the frontend of the *Awantura o Naukę*.
 
 ## Environment variables
-In the Vue app environment variables are checked and copied into the final build in the build stage. 
+In the Vue app environment variables are checked and copied into the final build during the build stage. 
 The preferred way for this purpose is to use `.env` files. This app uses two kind of them: `.env` for production settings and `.env.local` for dev settings.
 Because values stored in these variables should not be secret (they are present in public output files), the `.env` file is synchronized with repository for ease of build automation.
 More information can be found on the [Vue](https://cli.vuejs.org/guide/mode-and-env.html) and [.dotenv](https://github.com/motdotla/dotenv#rules) plugin sites.

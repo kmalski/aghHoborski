@@ -112,7 +112,7 @@ class QuestionService {
     }
 
     if (game.isNewGame()) {
-      await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questions: questionSetDb });
+      await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questionSet: questionSetDb });
       socket.room.questions = new QuestionSet(data.name, fileData.categories);
     }
 
