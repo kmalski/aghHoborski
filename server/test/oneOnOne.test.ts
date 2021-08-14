@@ -48,12 +48,13 @@ describe('Test one on one socket events', function () {
   let mongo: MongoMemoryServer;
 
   before(function (done) {
-    this.timeout(2000);
-    mongo = new MongoMemoryServer();
+    this.timeout(6000);
     server = new ClashServer();
-    mongo
-      .getUri()
-      .then(uri => server.connectMongo(uri))
+    MongoMemoryServer.create()
+      .then(mongod => {
+        mongo = mongod;
+        server.connectMongo(mongo.getUri());
+      })
       .then(() => server.start())
       .then(() => {
         client = SocketIOClient.connect('http://localhost:' + server.getPort(), options);

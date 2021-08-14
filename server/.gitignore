@@ -3,6 +3,8 @@ node_modules
 /build
 /dist
 /mongo
+/mongod
+/mongodb
 
 # local env files
 .env

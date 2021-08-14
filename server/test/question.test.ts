@@ -47,11 +47,12 @@ describe('Test question socket events', function () {
 
   before(function (done) {
     this.timeout(60000);
-    mongo = new MongoMemoryServer();
     server = new ClashServer();
-    mongo
-      .getUri()
-      .then(uri => server.connectMongo(uri))
+    MongoMemoryServer.create()
+      .then(mongod => {
+        mongo = mongod;
+        server.connectMongo(mongo.getUri());
+      })
       .then(() => server.start())
       .then(() => {
         client = SocketIOClient.connect('http://localhost:' + server.getPort(), options);

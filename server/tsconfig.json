@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "build",
-    "target": "es2019",
+    "target": "esnext",
     "module": "CommonJS",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "declaration": true,
     "declarationMap": true,
     "inlineSourceMap": true,
