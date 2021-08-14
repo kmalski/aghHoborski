@@ -17,9 +17,7 @@
         </ul>
       </li>
     </ul>
-    <b-button class="blue-shadow menu__btn" variant="primary" @click="logout">
-      Wyloguj
-    </b-button>
+    <b-button class="blue-shadow menu__btn" variant="primary" @click="logout"> Wyloguj </b-button>
     <app-game-settings :id="settingsId"></app-game-settings>
     <app-category-selector :id="categoryId"></app-category-selector>
     <app-question-set-editor :id="editorId"></app-question-set-editor>

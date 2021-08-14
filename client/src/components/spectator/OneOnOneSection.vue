@@ -37,7 +37,7 @@ export default {
       this.categories = data.categories;
     },
     categoryStateChanged(data) {
-      const category = this.categories.find(category => category.name === data.category);
+      const category = this.categories.find((category) => category.name === data.category);
       if (category) {
         category.enabled = data.enabled;
       }

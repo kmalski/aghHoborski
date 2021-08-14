@@ -11,7 +11,7 @@ export default {
   methods: {
     setHints(hintValues) {
       this.question.hints = [];
-      hintValues.forEach(value => {
+      hintValues.forEach((value) => {
         this.question.hints.push({ value, isAnswer: false });
       });
     },
@@ -21,7 +21,7 @@ export default {
   },
   sockets: {
     answer(data) {
-      const answer = this.question.hints.find(hint => hint.value === data.answer);
+      const answer = this.question.hints.find((hint) => hint.value === data.answer);
       answer.isAnswer = true;
     }
   }

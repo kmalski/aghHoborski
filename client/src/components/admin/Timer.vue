@@ -5,9 +5,7 @@
     <b-button class="default-btn blue-shadow" variant="primary" @click="startStopTime">
       {{ isTimePassing ? 'Stop' : 'Start' }}
     </b-button>
-    <b-button class="default-btn blue-shadow" variant="primary" @click="resetTime">
-      Reset
-    </b-button>
+    <b-button class="default-btn blue-shadow" variant="primary" @click="resetTime"> Reset </b-button>
   </div>
 </template>
 

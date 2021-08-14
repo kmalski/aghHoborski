@@ -5,12 +5,10 @@
       class="rectangle-input"
       v-model="moneyPool"
       @keydown.enter="changeMoneyPool"
-      @focus="event => event.target.select()"
+      @focus="(event) => event.target.select()"
       number
     />
-    <b-button class="blue-shadow rectangle-btn" variant="primary" @click="changeMoneyPool">
-      Zmień
-    </b-button>
+    <b-button class="blue-shadow rectangle-btn" variant="primary" @click="changeMoneyPool"> Zmień </b-button>
   </div>
 </template>
 

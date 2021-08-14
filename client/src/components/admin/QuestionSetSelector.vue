@@ -6,12 +6,8 @@
     <b-table :fields="fields" :items="questions" sticky-header small striped hover head-variant="light" sort-icon-left>
       <template #cell(actions)="row">
         <div class="centered-col">
-          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary">
-            Wybierz
-          </b-button>
-          <b-button size="sm" @click="downloadQuestionSet(row.index)" variant="primary">
-            Pobierz
-          </b-button>
+          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary"> Wybierz </b-button>
+          <b-button size="sm" @click="downloadQuestionSet(row.index)" variant="primary"> Pobierz </b-button>
         </div>
       </template>
     </b-table>
@@ -35,7 +31,7 @@ export default {
           label: 'Data utworzenia',
           sortable: true,
           sortDirection: 'desc',
-          formatter: value => {
+          formatter: (value) => {
             const date = new Date(value);
             return date.toLocaleString('pl-PL');
           }
@@ -46,7 +42,7 @@ export default {
     };
   },
   mounted() {
-    this.$root.$on('bv::modal::show', event => {
+    this.$root.$on('bv::modal::show', (event) => {
       if (event.componentId === this.id) {
         this.$socket.client.emit('getAllQuestionSets');
       }

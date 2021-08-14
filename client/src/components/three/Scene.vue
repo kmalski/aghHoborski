@@ -139,7 +139,7 @@ export default {
     },
     animate() {
       this.renderer.render(this.scene, this.camera);
-      this.characters.forEach(character => character.update(this.raycaster));
+      this.characters.forEach((character) => character.update(this.raycaster));
       if (this.isClicked) this.pickPlayer();
       requestAnimationFrame(this.animate);
     }

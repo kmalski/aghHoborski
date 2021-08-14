@@ -6,7 +6,7 @@
       :disabled="!isHintAuction"
       v-model="hintAmount"
       @keydown.enter="changeHintAmount"
-      @focus="event => event.target.select()"
+      @focus="(event) => event.target.select()"
       number
     />
     <div class="buttons">

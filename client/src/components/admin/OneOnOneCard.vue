@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     oneCategoryLeft() {
-      const enabled = this.categories.filter(category => category.enabled === true);
+      const enabled = this.categories.filter((category) => category.enabled === true);
       return enabled.length === 1;
     },
     isSelectedTeam() {
@@ -70,7 +70,7 @@ export default {
     },
     setTeams(teams) {
       this.teams = this.dumpTeams();
-      teams.forEach(team => this.teams.push({ value: team, text: this.translateTeamName(team) }));
+      teams.forEach((team) => this.teams.push({ value: team, text: this.translateTeamName(team) }));
     },
     dumpCategories() {
       const dumpCategories = [];
@@ -104,7 +104,7 @@ export default {
       this.setTeams(data.teams);
     },
     categoryStateChanged(data) {
-      const category = this.categories.find(category => category.name === data.category);
+      const category = this.categories.find((category) => category.name === data.category);
       if (category) {
         category.enabled = data.enabled;
       }

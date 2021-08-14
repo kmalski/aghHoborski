@@ -1,61 +1,72 @@
-import { MeshLambertMaterial, Mesh, BoxGeometry } from 'three';
+import { MeshPhongMaterial, Mesh, BoxGeometry } from 'three';
 import { Player } from './Player';
 
 export { Man };
 
-const skinMat = new MeshLambertMaterial({
+const skinMat = new MeshPhongMaterial({
   color: '#c09c83',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const blackMat = new MeshLambertMaterial({
+const blackMat = new MeshPhongMaterial({
   color: '#242626',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const whiteMat = new MeshLambertMaterial({
+const whiteMat = new MeshPhongMaterial({
   color: 'white',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const hairMat = new MeshLambertMaterial({
+const hairMat = new MeshPhongMaterial({
   color: '#513f2c',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const irisMat = new MeshLambertMaterial({
+const irisMat = new MeshPhongMaterial({
   color: '#1e4d7d',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const shirtMat = new MeshLambertMaterial({
+const shirtMat = new MeshPhongMaterial({
   color: '#a71930',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const beltMat = new MeshLambertMaterial({
+const beltMat = new MeshPhongMaterial({
   color: '#753a22',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const beltClipMat = new MeshLambertMaterial({
+const beltClipMat = new MeshPhongMaterial({
   color: '#cdbd51',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const legMat = new MeshLambertMaterial({
+const legMat = new MeshPhongMaterial({
   color: '#10202e',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const legsGapMat = new MeshLambertMaterial({
+const legsGapMat = new MeshPhongMaterial({
   color: '#0c1924',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const shoesMat = new MeshLambertMaterial({
+const shoesMat = new MeshPhongMaterial({
   color: '#332619',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
 // Head

@@ -12,7 +12,7 @@
         class="rectangle-input"
         :disabled="!isInGame || !isAuction || hasLost"
         v-shortkey.focus="['ctrl', shortcut]"
-        @focus="event => event.target.select()"
+        @focus="(event) => event.target.select()"
         @keyup.enter="emitAuctionAmountChange"
         v-model="auctionAmount"
         number
@@ -24,7 +24,7 @@
         class="rectangle-input"
         :disabled="!isInGame"
         @keyup.enter="emitAccountBalanceChange"
-        @focus="event => event.target.select()"
+        @focus="(event) => event.target.select()"
         v-model="accountBalance"
         number
       />
@@ -35,7 +35,7 @@
         class="rectangle-input"
         :disabled="!isInGame"
         @keyup.enter="emitHintsCountChange"
-        @focus="event => event.target.select()"
+        @focus="(event) => event.target.select()"
         v-model="hintsCount"
         number
       />

@@ -5,12 +5,10 @@
       class="rectangle-input"
       v-model="newAccountBalance"
       @keydown.enter="resetAmounts"
-      @focus="event => event.target.select()"
+      @focus="(event) => event.target.select()"
       number
     />
-    <b-button class="blue-shadow rectangle-btn" variant="primary" @click="resetAmounts">
-      Zresetuj
-    </b-button>
+    <b-button class="blue-shadow rectangle-btn" variant="primary" @click="resetAmounts"> Zresetuj </b-button>
   </div>
 </template>
 

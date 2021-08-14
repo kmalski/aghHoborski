@@ -1,51 +1,60 @@
-import { MeshLambertMaterial, Mesh, BoxGeometry } from 'three';
+import { MeshPhongMaterial, Mesh, BoxGeometry } from 'three';
 import { Player } from './Player';
 
 export { Woman };
 
-const blackMat = new MeshLambertMaterial({
+const blackMat = new MeshPhongMaterial({
   color: '#242626',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const whiteMat = new MeshLambertMaterial({
+const whiteMat = new MeshPhongMaterial({
   color: 'white',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const skinMat = new MeshLambertMaterial({
+const skinMat = new MeshPhongMaterial({
   color: '#e0bea5',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const hairMat = new MeshLambertMaterial({
+const hairMat = new MeshPhongMaterial({
   color: '#ecce94',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const irisMat = new MeshLambertMaterial({
+const irisMat = new MeshPhongMaterial({
   color: '#143822',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const shirtMat = new MeshLambertMaterial({
+const shirtMat = new MeshPhongMaterial({
   color: '#1e1e1e',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const skirtMat = new MeshLambertMaterial({
+const skirtMat = new MeshPhongMaterial({
   color: '#0275d8',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const beltMat = new MeshLambertMaterial({
+const beltMat = new MeshPhongMaterial({
   color: '#ecce94',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const hairbandMat = new MeshLambertMaterial({
+const hairbandMat = new MeshPhongMaterial({
   color: '#fb7c7c',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
 // Head

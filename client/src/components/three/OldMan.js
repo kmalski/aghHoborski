@@ -1,41 +1,48 @@
-import { MeshLambertMaterial, Mesh, BoxGeometry } from 'three';
+import { MeshPhongMaterial, Mesh, BoxGeometry } from 'three';
 import { Player } from './Player';
 
 export { OldMan };
 
-const blackMat = new MeshLambertMaterial({
+const blackMat = new MeshPhongMaterial({
   color: '#242626',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const skinMat = new MeshLambertMaterial({
+const skinMat = new MeshPhongMaterial({
   color: '#e0bea5',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const shirtMat = new MeshLambertMaterial({
+const shirtMat = new MeshPhongMaterial({
   color: '#00693c',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const whiteMat = new MeshLambertMaterial({
+const whiteMat = new MeshPhongMaterial({
   color: 'white',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const hairMat = new MeshLambertMaterial({
+const hairMat = new MeshPhongMaterial({
   color: '#7c7f80',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const legsGapMat = new MeshLambertMaterial({
+const legsGapMat = new MeshPhongMaterial({
   color: '#141414',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
-const shoesMat = new MeshLambertMaterial({
+const shoesMat = new MeshPhongMaterial({
   color: '#585858',
-  flatShading: true
+  flatShading: true,
+  shininess: 0
 });
 
 // Head

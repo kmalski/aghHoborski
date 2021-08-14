@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     readFile() {
-      this.reader.onload = event => (this.questionText = event.target.result);
+      this.reader.onload = (event) => (this.questionText = event.target.result);
       this.reader.readAsText(this.questionFile);
     },
     onSubmit() {
@@ -65,7 +65,7 @@ export default {
   filters: {
     transformErrors(errors) {
       let result = '';
-      errors.forEach(error => {
+      errors.forEach((error) => {
         result += `${error.dataPath} ${error.message}\n`;
       });
       return result;
