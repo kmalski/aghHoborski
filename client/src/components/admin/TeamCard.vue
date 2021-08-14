@@ -86,13 +86,10 @@ export default {
   },
   created() {
     this.$socket.client.emit('getTeamState', { teamName: this.variant });
-    this.$socket.client.on(this.variant + 'TeamState', this.fillData);
-    this.$socket.client.on(this.variant + 'TeamStatusChanged', this.changeInGame);
-    this.$socket.client.on(this.variant + 'AuctionAmountChanged', this.changeAuctionAmount);
-    this.$socket.client.on(this.variant + 'AccountBalanceChanged', this.changeAccountBalance);
-    this.$socket.client.on(this.variant + 'HintsCountChanged', this.changeHintsCount);
-    this.$socket.client.on(this.variant + 'BlackBoxChanged', this.changeBlackBox);
-    this.$socket.client.on(this.variant + 'HasLostChanged', this.changeHasLost);
+    this.toggleSubscription('on');
+  },
+  beforeDestroy() {
+    this.toggleSubscription('off');
   },
   computed: {
     buttonVariant() {
@@ -106,6 +103,15 @@ export default {
     }
   },
   methods: {
+    toggleSubscription(method) {
+      this.$socket.client[method](this.variant + 'TeamState', this.fillData);
+      this.$socket.client[method](this.variant + 'TeamStatusChanged', this.changeInGame);
+      this.$socket.client[method](this.variant + 'AuctionAmountChanged', this.changeAuctionAmount);
+      this.$socket.client[method](this.variant + 'AccountBalanceChanged', this.changeAccountBalance);
+      this.$socket.client[method](this.variant + 'HintsCountChanged', this.changeHintsCount);
+      this.$socket.client[method](this.variant + 'BlackBoxChanged', this.changeBlackBox);
+      this.$socket.client[method](this.variant + 'HasLostChanged', this.changeHasLost);
+    },
     fillData(data) {
       this.accountBalance = data.accountBalance;
       this.auctionAmount = data.auctionAmount;

@@ -55,7 +55,7 @@ export default {
   @extend .base-card;
 
   position: absolute;
-  top: 0px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

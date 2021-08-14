@@ -29,12 +29,18 @@ export default {
     };
   },
   created() {
+    this.toggleSubscription('on');
     this.$socket.client.emit('getTeamState', { teamName: this.variant });
-    this.$socket.client.on(this.variant + 'TeamState', this.fillData);
-    this.$socket.client.on(this.variant + 'TeamStatusChanged', this.changeInGame);
-    this.$socket.client.on(this.variant + 'AuctionAmountChanged', this.changeAuctionAmount);
+  },
+  beforeDestroy() {
+    this.toggleSubscription('off');
   },
   methods: {
+    toggleSubscription(method) {
+      this.$socket.client[method](this.variant + 'TeamState', this.fillData);
+      this.$socket.client[method](this.variant + 'TeamStatusChanged', this.changeInGame);
+      this.$socket.client[method](this.variant + 'AuctionAmountChanged', this.changeAuctionAmount);
+    },
     fillData(data) {
       this.auctionAmount = data.auctionAmount;
       this.isInGame = data.isInGame;
