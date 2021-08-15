@@ -16,7 +16,7 @@ describe('Test team socket events', function () {
   before(function (done) {
     this.timeout(60000);
     server = new ClashServer();
-    MongoMemoryServer.create()
+    MongoMemoryServer.create({ instance: { dbName: 'team.test' } })
       .then(mongod => {
         mongo = mongod;
         server.connectMongo(mongo.getUri());
@@ -35,11 +35,13 @@ describe('Test team socket events', function () {
       });
   });
 
-  after(async function () {
+  after(function (done) {
     client.disconnect();
-    await server.disconnectMongo();
-    await mongo.stop();
-    await server.stop();
+    server
+      .disconnectMongo()
+      .then(() => server.stop())
+      .then(() => mongo.stop(true))
+      .then(() => done());
   });
 
   it('Get state of active team', function (done) {

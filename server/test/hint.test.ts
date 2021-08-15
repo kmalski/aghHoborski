@@ -32,7 +32,7 @@ describe('Test hint socket events', function () {
   before(function (done) {
     this.timeout(60000);
     server = new ClashServer();
-    MongoMemoryServer.create()
+    MongoMemoryServer.create({ instance: { dbName: 'hint.test' } })
       .then(mongod => {
         mongo = mongod;
         server.connectMongo(mongo.getUri());
@@ -63,11 +63,13 @@ describe('Test hint socket events', function () {
       });
   });
 
-  after(async function () {
+  after(function (done) {
     client.disconnect();
-    await server.disconnectMongo();
-    await mongo.stop();
-    await server.stop();
+    server
+      .disconnectMongo()
+      .then(() => server.stop())
+      .then(() => mongo.stop(true))
+      .then(() => done());
   });
 
   it('Discard hint amount', function (done) {
