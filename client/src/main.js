@@ -8,6 +8,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 const serverAddress = process.env.VUE_APP_SERVER_ADDRESS;
 const io = socket(serverAddress, {
+  cors: ['*'],
   transports: ['polling', 'websocket'],
   allowUpgrades: true
 });

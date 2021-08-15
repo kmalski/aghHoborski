@@ -1,6 +1,6 @@
 import { should } from 'chai';
 import { describe, before, after, it } from 'mocha';
-import SocketIOClient from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
 import { ClashServer } from '../src/server';
@@ -10,7 +10,7 @@ should();
 describe('Test team socket events', function () {
   const options = { transports: ['websocket'] };
   let server: ClashServer;
-  let client: SocketIOClient.Socket;
+  let client: Socket;
   let mongo: MongoMemoryServer;
 
   before(function (done) {
@@ -23,7 +23,7 @@ describe('Test team socket events', function () {
       })
       .then(() => server.start())
       .then(() => {
-        client = SocketIOClient.connect('http://localhost:' + server.getPort(), options);
+        client = io('http://localhost:' + server.getPort(), options);
 
         client.emit('createRoom', { name: 'TeamTestName', password: 'TeamTestPassword' });
         client.once('roomCreated', (roomData: any) => {

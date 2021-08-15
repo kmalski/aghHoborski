@@ -24,14 +24,14 @@ class GameService {
     });
   }
 
-  getGameSettings(socket: ClashSocket, io: Server): void {
+  async getGameSettings(socket: ClashSocket, io: Server): Promise<void> {
     const roomName = socket.room.name;
-    const peopleInRoom = io.sockets.adapter.rooms[roomName].length;
+    const roomIds = await io.in(roomName).allSockets();
     const questionSetName = socket.room.questions ? socket.room.questions.name : 'Nie wybrano';
 
     socket.emit(Outgoing.GAME_SETTINGS, [
       { name: 'Nazwa pokoju', value: roomName },
-      { name: 'Ilość osób w pokoju', value: peopleInRoom },
+      { name: 'Ilość osób w pokoju', value: roomIds.size },
       { name: 'Nazwa puli pytań', value: questionSetName }
     ]);
   }

@@ -20,13 +20,17 @@ class ClashServer {
   private readonly app: express.Application;
   private readonly server: http.Server;
   private readonly io: SocketIO.Server;
+  private readonly corsOpts = {
+    origin: [/localhost:[0-9]{4}/, /127\.0\.0\.1:[0-9]{4}/, /\.malski\.pl$/],
+    methods: ['GET', 'POST']
+  };
   private port: number;
   private useDatabase = false;
 
   constructor() {
     this.app = express();
     this.server = http.createServer(this.app);
-    this.io = SocketIO(this.server, { serveClient: false });
+    this.io = new SocketIO.Server(this.server, { serveClient: false, cors: this.corsOpts });
   }
 
   async start(port?: number): Promise<void> {
@@ -39,7 +43,7 @@ class ClashServer {
       this.port = (this.server.address() as AddressInfo).port;
     }
     if (!this.useDatabase) Logger.info('Starting without MongoDB');
-    Logger.info(`Server listening at port ${this.port}`);
+    Logger.info(`Server listening at port ${ this.port }`);
   }
 
   async stop(): Promise<void> {
@@ -68,10 +72,10 @@ class ClashServer {
   private configure() {
     this.app.use(express.urlencoded({ extended: false }));
     this.app.use(express.json());
-    this.app.use(cors());
+    this.app.use(cors(this.corsOpts));
 
     this.io.on(Incoming.CONNECT, (socket: ClashSocket) => {
-      Logger.info(`New user connected: ${socket.id}`);
+      Logger.info(`New user connected: ${ socket.id }`);
 
       RoomListener.configure({ useDatabase: this.useDatabase });
       RoomListener.listen(this.io, socket);

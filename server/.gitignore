@@ -5,6 +5,7 @@ node_modules
 /mongo
 /mongod
 /mongodb
+/logs
 
 # local env files
 .env

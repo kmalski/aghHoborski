@@ -31,6 +31,6 @@ If one wants to run application without the database, for example when no intern
 1. Run application: `npm start`. One can use some external program like `pm2` to run it in the background.
 
 ## Logs
-The application writes to two log files:
+The application writes to two log files located in `logs` directory:
 - `combined.log` - with information of connected users, created rooms, configuration, etc.,
 - `exceptions.log` - with information about unhandled errors. This can be pretty useful when one wants to find reasons of unexpected crashes.

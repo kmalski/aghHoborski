@@ -11,12 +11,14 @@ const logger = winston.createLogger({
   level: 'info',
   transports: [
     new transports.File({
+      dirname: 'logs',
       filename: 'combined.log',
       format: fileFormatting
     }),
   ],
   exceptionHandlers: [
     new transports.File({
+      dirname: 'logs',
       filename: 'exceptions.log',
       format: fileFormatting
     })
