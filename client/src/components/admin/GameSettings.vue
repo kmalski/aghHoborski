@@ -23,7 +23,7 @@ export default {
       settings: []
     };
   },
-  mounted() {
+  created() {
     this.$root.$on('bv::modal::show', (event) => {
       if (event.componentId === this.id) {
         this.$socket.client.emit('getGameSettings');

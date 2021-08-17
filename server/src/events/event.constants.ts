@@ -24,6 +24,7 @@ enum Outgoing {
   CURRENT_QUESTION = 'currentQuestion',
   AVAILABLE_CATEGORIES = 'availableCategories',
   NEXT_QUESTION = 'nextQuestion',
+  VISIBILITY_CHANGED = 'visibilityChanged',
   ANSWER = 'answer',
 
   // team
@@ -88,6 +89,7 @@ enum Incoming {
   GET_AVAILABLE_CATEGORIES = 'getAvailableCategories',
   ADD_QUESTION_SET = 'addQuestionSet',
   CHANGE_QUESTION_SET = 'changeQuestionSet',
+  CHANGE_VISIBILITY = 'changeVisibility',
   SKIP_QUESTION = 'skipQuestion',
   GET_ANSWER = 'getAnswer',
 

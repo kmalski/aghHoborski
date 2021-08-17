@@ -3,7 +3,7 @@ import { Incoming } from '../event.constants';
 import { QuestionService, LocalQuestionService } from '../../services/question.service';
 import { ClashSocket } from '../../utils/socket.util';
 import { EventListener, Options } from './event.listener';
-import { Logger } from "../../utils/logger";
+import { Logger } from '../../utils/logger';
 
 export { QuestionListener };
 
@@ -36,5 +36,6 @@ class QuestionListener extends EventListener {
     socket.on(Incoming.GET_ALL_QUESTION_SETS, () => this.SERVICE.getAllQuestionSets(socket));
     socket.on(Incoming.SKIP_QUESTION, () => this.SERVICE.skipQuestion(socket, io));
     socket.on(Incoming.GET_ANSWER, () => this.SERVICE.getAnswer(socket));
+    socket.on(Incoming.CHANGE_VISIBILITY, questionData => this.SERVICE.changeVisibility(questionData, socket));
   }
 }

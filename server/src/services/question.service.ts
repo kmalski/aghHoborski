@@ -12,13 +12,16 @@ interface QuestionData {
   categoryName?: string;
   name?: string;
   file?: any;
+  isPrivate?: boolean;
 }
 
 class QuestionService {
   async getAllQuestionSets(socket: ClashSocket): Promise<void> {
-    const questionSetDb = await QuestionSetModel.find().select('name owner createdAt -_id');
+    const questionSetDbs = await QuestionSetModel.find().select('name owner isPrivate createdAt -_id');
+    const visbileQuestionSets = questionSetDbs
+      .filter(question => question.isPrivate === false || question.owner === socket.room.name);
 
-    socket.emit(Outgoing.ALL_QUESTION_SETS, questionSetDb);
+    socket.emit(Outgoing.ALL_QUESTION_SETS, { roomName: socket.room.name, questionSets: visbileQuestionSets });
   }
 
   getCurrentQuestion(socket: ClashSocket): void | boolean {
@@ -75,11 +78,12 @@ class QuestionService {
     }
 
     if (name) {
-      const questionSet = await QuestionSetModel.findOne({ name }).select('name owner categories -_id');
+      const questionSet = await QuestionSetModel.findOne({ name }).select('name owner isPrivate categories -_id');
 
       socket.emit(Outgoing.QUESTION_SET, {
         name,
         owner: questionSet.owner,
+        isPrivate: questionSet.isPrivate,
         questionSet: { categories: questionSet.categories }
       });
     } else {
@@ -106,6 +110,7 @@ class QuestionService {
       questionSetDb = await QuestionSetModel.create({
         name: data.name,
         owner: socket.room.name,
+        isPrivate: data.isPrivate ?? false,
         categories: fileData.categories
       });
       await questionSetDb.save();
@@ -164,19 +169,41 @@ class QuestionService {
       socket.emit(Outgoing.ANSWER, { answer: questions.current.question.answer });
     }
   }
+
+  async changeVisibility(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
+    const questionSetDb = await QuestionSetModel.findOne({ name: data.name });
+
+    if (questionSetDb && questionSetDb.owner !== socket.room.name) {
+      return socket.emit(Outgoing.FAIL, `Pokój ${ socket.room.name } nie jest właścicielem zestawu pytań ${ data.name }.`);
+    }
+
+    if (questionSetDb && questionSetDb.isPrivate !== data.isPrivate) {
+      questionSetDb.isPrivate = data.isPrivate;
+      await questionSetDb.save();
+    }
+
+    socket.emit(Outgoing.VISIBILITY_CHANGED, { name: questionSetDb.name, isPrivate: questionSetDb.isPrivate });
+  }
 }
 
 class LocalQuestionService extends QuestionService {
-  static QUESTION_SETS: { name: string; owner: string; strData: string; createdAt: Date }[] = [];
+  static QUESTION_SETS: { name: string; owner: string; isPrivate: boolean; strData: string; createdAt: Date }[] = [];
 
   async getAllQuestionSets(socket: ClashSocket): Promise<void> {
     const questionsPruned = [];
 
-    LocalQuestionService.QUESTION_SETS.forEach(question => {
-      questionsPruned.push({ name: question.name, owner: question.owner, createdAt: question.createdAt });
-    });
+    LocalQuestionService.QUESTION_SETS
+      .filter(question => question.isPrivate === false || question.owner === socket.room.name)
+      .forEach(question => {
+        questionsPruned.push({
+          name: question.name,
+          owner: question.owner,
+          isPrivate: question.isPrivate,
+          createdAt: question.createdAt
+        });
+      });
 
-    socket.emit(Outgoing.ALL_QUESTION_SETS, questionsPruned);
+    socket.emit(Outgoing.ALL_QUESTION_SETS, { roomName: socket.room.name, questionSets: questionsPruned });
   }
 
   async getQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void> {
@@ -213,6 +240,7 @@ class LocalQuestionService extends QuestionService {
       LocalQuestionService.QUESTION_SETS.push({
         name: data.name,
         owner: socket.room.name,
+        isPrivate: data.isPrivate ?? false,
         strData: data.file,
         createdAt: new Date()
       });
@@ -241,5 +269,19 @@ class LocalQuestionService extends QuestionService {
 
     socket.room.questions = new QuestionSet(questionSet.name, parsed.categories);
     socket.emit(Outgoing.SUCCESS);
+  }
+
+  async changeVisbility(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
+    const questionSetDb = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
+
+    if (questionSetDb && questionSetDb.owner !== socket.room.name) {
+      return socket.emit(Outgoing.FAIL, `Pokój ${ socket.room.name } nie jest właścicielem zestawu pytań ${ data.name }.`);
+    }
+
+    if (questionSetDb && questionSetDb.isPrivate !== data.isPrivate) {
+      questionSetDb.isPrivate = data.isPrivate;
+    }
+
+    socket.emit(Outgoing.VISIBILITY_CHANGED, { name: questionSetDb.name, isPrivate: questionSetDb.isPrivate });
   }
 }

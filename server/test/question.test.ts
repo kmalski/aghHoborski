@@ -104,16 +104,31 @@ describe('Test question socket events', function () {
     });
   });
 
-  // FIX: unstable test
-  // it('Get all question sets', function (done) {
-  //   client.emit('getAllQuestionSets');
-  //   client.once('allQuestionSets', (data: any) => {
-  //     data.should.have.length(2);
-  //     data[0].name.should.be.equal('testSet');
-  //     data[0].should.have.property('createdAt');
-  //     data[1].name.should.be.equal('testSet2');
-  //     data[1].should.have.property('createdAt');
-  //     done();
-  //   });
-  // });
+  it('Get question set', function (done) {
+    client.emit('getQuestionSet', { name: 'testSet2' });
+    client.once('questionSet', (data: any) => {
+      data.name.should.be.equal('testSet2');
+      data.owner.should.be.equal('QuestionTestName');
+      data.isPrivate.should.be.equal(false);
+      done();
+    });
+  });
+
+  it('Change visibility', function (done) {
+    client.emit('changeVisibility', { name: 'testSet2', isPrivate: true });
+    client.once('visibilityChanged', (data: any) => {
+      data.isPrivate.should.be.equal(true);
+      data.name.should.be.equal('testSet2');
+      done();
+    });
+  });
+
+  it('Get all visible question sets', function (done) {
+    client.emit('getAllQuestionSets');
+    client.once('allQuestionSets', (data: any) => {
+      data.roomName.should.be.equal('QuestionTestName');
+      data.questionSets.forEach(x => x.should.satisfy(q => q.isPrivate === false || q.owner === 'QuestionTestName'));
+      done();
+    });
+  });
 });

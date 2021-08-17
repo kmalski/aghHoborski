@@ -25,6 +25,9 @@ class QuestionSetSchema {
   @prop()
   public owner!: string;
 
+  @prop()
+  public isPrivate!: boolean;
+
   @prop({ type: () => [CategorySchema], _id: false })
   public categories!: CategorySchema[];
 }

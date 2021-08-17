@@ -6,8 +6,16 @@
     <b-table :fields="fields" :items="questions" sticky-header small striped hover head-variant="light" sort-icon-left>
       <template #cell(actions)="row">
         <div class="centered-col">
-          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary"> Wybierz </b-button>
-          <b-button size="sm" @click="downloadQuestionSet(row.index)" variant="primary"> Pobierz </b-button>
+          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary"> Wybierz</b-button>
+          <b-button size="sm" @click="downloadQuestionSet(row.index)" variant="primary"> Pobierz</b-button>
+          <b-button
+            v-if="questions[row.index].owner === roomName"
+            size="sm"
+            @click="toggleVisibility(row.index)"
+            variant="primary"
+          >
+            {{ questions[row.index].isPrivate ? 'Opublikuj' : 'Ukryj' }}
+          </b-button>
         </div>
       </template>
     </b-table>
@@ -23,6 +31,7 @@ export default {
   mixins: [ModalMixin, DownloadMixin],
   data() {
     return {
+      roomName: '',
       questions: [],
       fields: [
         { key: 'name', label: 'Nazwa', sortable: true, sortDirection: 'desc' },
@@ -41,10 +50,11 @@ export default {
       ]
     };
   },
-  mounted() {
+  created() {
     this.$root.$on('bv::modal::show', (event) => {
       if (event.componentId === this.id) {
         this.$socket.client.emit('getAllQuestionSets');
+        this.$socket.client.emit('getGameSettings');
       }
     });
   },
@@ -54,16 +64,26 @@ export default {
     },
     downloadQuestionSet(index) {
       this.$socket.client.emit('getQuestionSet', { name: this.questions[index].name });
+    },
+    toggleVisibility(index) {
+      const question = this.questions[index];
+      this.$socket.client.emit('changeVisibility', { name: question.name, isPrivate: !question.isPrivate });
     }
   },
   sockets: {
-    allQuestionSets(questionSets) {
-      this.questions = questionSets;
+    allQuestionSets(data) {
+      this.questions = data.questionSets;
+      this.roomName = data.roomName;
+      console.log(this.roomName);
     },
     questionSet(data) {
       if (this.visible && data.name) {
         this.download(JSON.stringify(data.questionSet, null, 2), data.name, 'text/plain');
       }
+    },
+    visibilityChanged(data) {
+      const question = this.questions.find((question) => question.name === data.name);
+      question.isPrivate = data.isPrivate;
     }
   }
 };
@@ -73,10 +93,14 @@ export default {
 .centered-col {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: left;
 
-  > :first-child {
-    margin-right: 1rem;
+  * {
+    margin-right: 0.5rem;
+  }
+
+  > :last-child {
+    margin-right: 0;
   }
 }
 </style>
