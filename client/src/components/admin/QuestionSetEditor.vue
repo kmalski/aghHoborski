@@ -20,6 +20,7 @@
           <p>Edycja możliwa jest jedynie w przypadku wybrania własnego (dodanego w danym pokoju) zestawu pytań.</p>
           <p>Pobierz wybraną pule pytań i dodaj jaką własną.</p>
         </div>
+        <div v-show="!notOwned">Poprawna odpowiedź musi być pierwszą ze wskazówek.</div>
         <div class="buttons-wrapper" v-show="!notOwned">
           <b-button class="dark-shadow" @click="$bvModal.hide(id)">Anuluj</b-button>
           <b-button class="blue-shadow" @click="saveChanges" :disabled="!jsonValid" type="submit" variant="primary"
