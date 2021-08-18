@@ -54,9 +54,11 @@ export default {
     this.$root.$on('bv::modal::show', (event) => {
       if (event.componentId === this.id) {
         this.$socket.client.emit('getAllQuestionSets');
-        this.$socket.client.emit('getGameSettings');
       }
     });
+  },
+  beforeDestroy() {
+    this.$root.$off('bv::modal::show');
   },
   methods: {
     changeQuestionSet(index) {
@@ -74,7 +76,6 @@ export default {
     allQuestionSets(data) {
       this.questions = data.questionSets;
       this.roomName = data.roomName;
-      console.log(this.roomName);
     },
     questionSet(data) {
       if (this.visible && data.name) {

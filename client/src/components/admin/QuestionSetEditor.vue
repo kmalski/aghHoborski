@@ -59,6 +59,9 @@ export default {
       }
     });
   },
+  beforeDestroy() {
+    this.$root.$off('bv::modal::show');
+  },
   methods: {
     onValidationError(errors) {
       this.jsonValid = errors.length === 0;

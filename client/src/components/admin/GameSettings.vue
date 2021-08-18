@@ -30,6 +30,9 @@ export default {
       }
     });
   },
+  beforeDestroy() {
+    this.$root.$off('bv::modal::show');
+  },
   sockets: {
     gameSettings(data) {
       this.settings = data;

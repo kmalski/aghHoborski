@@ -20,7 +20,6 @@ class QuestionService {
     const questionSetDbs = await QuestionSetModel.find().select('name owner isPrivate createdAt -_id');
     const visbileQuestionSets = questionSetDbs
       .filter(question => question.isPrivate === false || question.owner === socket.room.name);
-
     socket.emit(Outgoing.ALL_QUESTION_SETS, { roomName: socket.room.name, questionSets: visbileQuestionSets });
   }
 

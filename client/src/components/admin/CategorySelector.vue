@@ -30,6 +30,9 @@ export default {
       }
     });
   },
+  beforeDestroy() {
+    this.$root.$off('bv::modal::show');
+  },
   methods: {
     startAuction(categoryName) {
       this.$socket.client.emit('startAuction', { categoryName });

@@ -14,6 +14,7 @@ import { AuctionListener } from '../events/listeners/auction.listener';
 import { QuestionListener } from '../events/listeners/question.listener';
 import { OneOnOneListener } from '../events/listeners/oneOnOne.listener';
 import { Logger } from '../utils/logger';
+import { RoomListener } from '../events/listeners/room.listener';
 
 export { RoomData, RoomService, LocalRoomService };
 
@@ -49,8 +50,8 @@ class RoomService {
 
     Logger.info(`Created new room: ${ name }.`);
 
-    socket.room = room;
-    socket.join(socket.room.name);
+    this.socketJoin(socket, room);
+
     socket.emit(Outgoing.ROOM_CREATED, {
       msg: `Pokój o nazwie ${ name } został utworzony.`,
       name,
@@ -70,11 +71,13 @@ class RoomService {
       return socket.emit(Outgoing.WARNING, `Podany pokój nie istnieje lub gra nie jest aktywna.`);
     }
 
-    socket.room = room;
-    socket.join(socket.room.name);
+    this.socketJoin(socket, room);
+
     socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${ name }.`, name });
 
     // order is important
+    socket.removeAllListeners();
+    RoomListener.listen(io, socket);
     QuestionListener.configure({ useDatabase: this.useDatabase });
     QuestionListener.listen(io, socket);
     GameListener.listen(io, socket);
@@ -104,8 +107,8 @@ class RoomService {
       RoomService.ACTIVE_ROOMS.push(room);
     }
 
-    socket.room = room;
-    socket.join(socket.room.name);
+    this.socketJoin(socket, room);
+
     socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${ name }.`, name, token: room.token });
   }
 
@@ -124,11 +127,13 @@ class RoomService {
       return socket.emit(Outgoing.UNAUTHORIZED, `Brak uprawnień.`);
     }
 
-    socket.room = room;
-    socket.join(socket.room.name);
+    this.socketJoin(socket, room);
 
     // now we are sure that only authorized sockets will be able to emit game events
     // order is important
+    socket.removeAllListeners();
+    RoomListener.listen(io, socket);
+    RoomListener.listenAdmin(io, socket);
     QuestionListener.configure({ useDatabase: this.useDatabase });
     QuestionListener.listen(io, socket);
     QuestionListener.listenAdmin(io, socket);
@@ -143,6 +148,16 @@ class RoomService {
     AuctionListener.listenAdmin(io, socket);
 
     socket.emit(Outgoing.AUTHORIZED);
+  }
+
+  protected socketJoin(socket: ClashSocket, room: Room): void {
+    if (socket.room && socket.room.name !== room.name) {
+      socket.leave(socket.room.name);
+    }
+    if (!socket.room || socket.room.name !== room.name) {
+      socket.join(room.name);
+    }
+    socket.room = room;
   }
 }
 
@@ -166,8 +181,8 @@ class LocalRoomService extends RoomService {
 
     Logger.info(`Created new room: ${ name }.`);
 
-    socket.room = room;
-    socket.join(socket.room.name);
+    this.socketJoin(socket, room);
+
     socket.emit(Outgoing.ROOM_CREATED, {
       msg: `Pokój o nazwie ${ name } został utworzony.`,
       name,
@@ -187,8 +202,8 @@ class LocalRoomService extends RoomService {
       return socket.emit(Outgoing.UNAUTHORIZED, `Podany pokój nie istnieje lub hasło jest nieprawidłowe.`);
     }
 
-    socket.room = room;
-    socket.join(socket.room.name);
+    this.socketJoin(socket, room);
+
     socket.emit(Outgoing.ROOM_JOINED, { msg: `Dołączono do pokoju o nazwie ${ name }.`, name, token: room.token });
   }
 }
