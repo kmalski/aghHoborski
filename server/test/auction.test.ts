@@ -7,24 +7,23 @@ import { ClashServer } from '../src/server';
 
 const should = chai.should();
 
-const questionSet = `
-{
-  "categories": [
+const questionSet = {
+  'categories': [
     {
-      "name": "Pilka nozna",
-      "questions": [
+      'name': 'Pilka nozna',
+      'questions': [
         {
-          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?",
-          "hints": ["1972", "1960", "1952", "1976"]
+          'content': 'W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?',
+          'hints': ['1972', '1960', '1952', '1976']
         },
         {
-          "content": "Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?",
-          "hints": ["Jerzy Engel", "Janusz Wójcik", "Paweł Janas", "Zbigniew Boniek"]
+          'content': 'Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?',
+          'hints': ['Jerzy Engel', 'Janusz Wójcik', 'Paweł Janas', 'Zbigniew Boniek']
         }
       ]
     }
   ]
-}`;
+};
 
 describe('Test auction socket events', function () {
   const options = { transports: ['websocket'] };
@@ -48,7 +47,7 @@ describe('Test auction socket events', function () {
         client.once('roomCreated', (roomData: any) => {
           client.emit('authorize', { name: 'AuctionTestName', token: roomData.token });
           client.once('authorized', () => {
-            client.emit('addQuestionSet', { name: 'auctionTestSet', file: questionSet });
+            client.emit('addQuestionSet', { name: 'auctionTestSet', questionSet });
             client.once('success', () => done());
           });
         });

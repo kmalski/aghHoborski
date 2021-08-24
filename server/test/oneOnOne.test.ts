@@ -8,38 +8,37 @@ import { ClashServer } from '../src/server';
 const should = chai.should();
 
 const team = 'red';
-const questionSet = `
-{
-  "categories": [
+const questionSet = {
+  'categories': [
     {
-      "name": "Pilka nozna",
-      "questions": [
+      'name': 'Pilka nozna',
+      'questions': [
         {
-          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?",
-          "hints": ["1972", "1960", "1952", "1976"]
+          'content': 'W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?',
+          'hints': ['1972', '1960', '1952', '1976']
         }
       ]
     },
     {
-      "name": "Biologia",
-      "questions": [
+      'name': 'Biologia',
+      'questions': [
         {
-          "content": "W którym wieku została wymyślona nazwa dziedziny nauki \\"biologia\\"?",
-          "hints": ["XIX", "XV", "XIII", "XVII"]
+          'content': 'W którym wieku została wymyślona nazwa dziedziny nauki "biologia"?',
+          'hints': ['XIX', 'XV', 'XIII', 'XVII']
         }
       ]
     },
     {
-      "name": "Gramatyka i ortografia",
-      "questions": [
+      'name': 'Gramatyka i ortografia',
+      'questions': [
         {
-          "content": "Ile przypadków jest w języku polskim?",
-          "hints": ["7", "6", "5", "8"]
+          'content': 'Ile przypadków jest w języku polskim?',
+          'hints': ['7', '6', '5', '8']
         }
       ]
     }
   ]
-}`;
+};
 
 describe('Test one on one socket events', function () {
   const options = { transports: ['websocket'] };
@@ -63,7 +62,7 @@ describe('Test one on one socket events', function () {
         client.once('roomCreated', (roomData: any) => {
           client.emit('authorize', { name: 'OneOnOneTestName', token: roomData.token });
           client.once('authorized', () => {
-            client.emit('addQuestionSet', { name: 'oneOnOneTestSet', file: questionSet });
+            client.emit('addQuestionSet', { name: 'oneOnOneTestSet', questionSet });
             client.once('success', () => {
               client.emit('changeAccountBalance', { teamName: team, newAccountBalance: 6000 });
               client.once(team + 'AccountBalanceChanged', () => {

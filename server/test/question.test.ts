@@ -7,37 +7,36 @@ import { ClashServer } from '../src/server';
 
 should();
 
-const validQuestionSet = `
-{
-  "categories": [
+const validQuestionSet = {
+  'categories': [
     {
-      "name": "Pilka nozna",
-      "questions": [
+      'name': 'Pilka nozna',
+      'questions': [
         {
-          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?",
-          "hints": ["1972", "1960", "1952", "1976"]
+          'content': 'W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?',
+          'hints': ['1972', '1960', '1952', '1976']
         },
         {
-          "content": "Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?",
-          "hints": ["Jerzy Engel", "Janusz Wójcik", "Paweł Janas", "Zbigniew Boniek"]
+          'content': 'Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?',
+          'hints': ['Jerzy Engel', 'Janusz Wójcik', 'Paweł Janas', 'Zbigniew Boniek']
         }
       ]
     },
     {
-      "name": "Geografia",
-      "questions": [
+      'name': 'Geografia',
+      'questions': [
         {
-          "content": "Jakie jezioro jest największe na świecie?",
-          "hints": ["Morze Kaspijskie", "Jezioro Wiktorii", "Bajkał", "Jezioro Górne"]
+          'content': 'Jakie jezioro jest największe na świecie?',
+          'hints': ['Morze Kaspijskie', 'Jezioro Wiktorii', 'Bajkał', 'Jezioro Górne']
         },
         {
-          "content": "Ile łącznie szczytów liczy Korona Gór Polski?",
-          "hints": ["28", "22", "26", "30"]
+          'content': 'Ile łącznie szczytów liczy Korona Gór Polski?',
+          'hints': ['28', '22', '26', '30']
         }
       ]
     }
   ]
-}`;
+};
 
 describe('Test question socket events', function () {
   const options = { transports: ['websocket'] };
@@ -75,7 +74,7 @@ describe('Test question socket events', function () {
   });
 
   it('Add new question set', function (done) {
-    client.emit('addQuestionSet', { name: 'testSet', file: validQuestionSet });
+    client.emit('addQuestionSet', { name: 'testSet', questionSet: validQuestionSet });
     client.once('success', () => done());
   });
 
@@ -97,7 +96,7 @@ describe('Test question socket events', function () {
   });
 
   it('Change question set', function (done) {
-    client.emit('addQuestionSet', { name: 'testSet2', file: validQuestionSet });
+    client.emit('addQuestionSet', { name: 'testSet2', questionSet: validQuestionSet });
     client.once('success', () => {
       client.emit('changeQuestionSet', { name: 'testSet2' });
       client.once('success', () => done());
@@ -109,15 +108,15 @@ describe('Test question socket events', function () {
     client.once('questionSet', (data: any) => {
       data.name.should.be.equal('testSet2');
       data.owner.should.be.equal('QuestionTestName');
-      data.isPrivate.should.be.equal(false);
+      data.isPrivate.should.be.equal(true);
       done();
     });
   });
 
   it('Change visibility', function (done) {
-    client.emit('changeVisibility', { name: 'testSet2', isPrivate: true });
+    client.emit('changeVisibility', { name: 'testSet2', isPrivate: false });
     client.once('visibilityChanged', (data: any) => {
-      data.isPrivate.should.be.equal(true);
+      data.isPrivate.should.be.equal(false);
       data.name.should.be.equal('testSet2');
       done();
     });

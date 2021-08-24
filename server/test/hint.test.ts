@@ -8,20 +8,19 @@ import { ClashServer } from '../src/server';
 should();
 
 const team = 'green';
-const questionSet = `
-{
-  "categories": [
+const questionSet = {
+  'categories': [
     {
-      "name": "Pilka nozna",
-      "questions": [
+      'name': 'Pilka nozna',
+      'questions': [
         {
-          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?",
-          "hints": ["1972", "1960", "1952", "1976"]
+          'content': 'W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?',
+          'hints': ['1972', '1960', '1952', '1976']
         }
       ]
     }
   ]
-}`;
+};
 
 describe('Test hint socket events', function () {
   const options = { transports: ['websocket'] };
@@ -45,7 +44,7 @@ describe('Test hint socket events', function () {
         client.once('roomCreated', (roomData: any) => {
           client.emit('authorize', { name: 'HintTestName', token: roomData.token });
           client.once('authorized', () => {
-            client.emit('addQuestionSet', { name: 'auctionTestSet', file: questionSet });
+            client.emit('addQuestionSet', { name: 'auctionTestSet', questionSet });
             client.once('success', () => {
               client.emit('startAuction', { categoryName: 'Pilka nozna' });
               client.once('auctionStarted', () => {

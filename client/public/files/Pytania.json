@@ -1,0 +1,41 @@
+{
+  "categories": [
+    {
+      "name": "Pilka nozna",
+      "questions": [
+        {
+          "hints": [
+            "1972",
+            "1960",
+            "1952",
+            "1976"
+          ],
+          "content": "W którym roku Polska zdobyła mistrzostwo olimpijskie w piłce nożnej?"
+        },
+        {
+          "hints": [
+            "Jerzy Engel",
+            "Janusz Wójcik",
+            "Paweł Janas",
+            "Zbigniew Boniek"
+          ],
+          "content": "Kto był selekcjonerem reprezentacji Polski w piłce nożnej w latach 2000-2002?"
+        }
+      ]
+    },
+    {
+      "name": "Biologia",
+      "questions": [
+        {
+          "hints": [
+            "XIX",
+            "XV",
+            "XIII",
+            "XVII"
+          ],
+          "content": "W którym wieku została wymyślona nazwa dziedziny nauki \"biologia\"?"
+        }
+	  ]
+	}
+  ]
+}

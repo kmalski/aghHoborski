@@ -11,7 +11,7 @@ export { QuestionService, LocalQuestionService, QuestionData };
 interface QuestionData {
   categoryName?: string;
   name?: string;
-  file?: any;
+  questionSet?: any;
   isPrivate?: boolean;
 }
 
@@ -98,26 +98,25 @@ class QuestionService {
       return socket.emit(Outgoing.FAIL, `Zbiór pytań o nazwie ${ data.name } już istnieje.`);
     }
 
-    const fileData = JSON.parse(data.file);
     let questionSetDb;
 
     if (questionSet) {
-      questionSet.categories = fileData.categories;
+      questionSet.categories = data.questionSet.categories;
       await questionSet.save();
       questionSetDb = questionSet;
     } else {
       questionSetDb = await QuestionSetModel.create({
         name: data.name,
         owner: socket.room.name,
-        isPrivate: data.isPrivate ?? false,
-        categories: fileData.categories
+        isPrivate: data.isPrivate ?? true,
+        categories: data.questionSet.categories
       });
       await questionSetDb.save();
     }
 
     if (game.isNewGame()) {
       await RoomModel.findOneAndUpdate({ name: socket.room.name }, { questionSet: questionSetDb });
-      socket.room.questions = new QuestionSet(data.name, fileData.categories);
+      socket.room.questions = new QuestionSet(data.name, data.questionSet.categories);
     }
 
     socket.emit(Outgoing.SUCCESS);
@@ -234,20 +233,19 @@ class LocalQuestionService extends QuestionService {
     }
 
     if (questionSet) {
-      questionSet.strData = data.file;
+      questionSet.strData = JSON.stringify(data.questionSet);
     } else {
       LocalQuestionService.QUESTION_SETS.push({
         name: data.name,
         owner: socket.room.name,
-        isPrivate: data.isPrivate ?? false,
-        strData: data.file,
+        isPrivate: data.isPrivate ?? true,
+        strData: JSON.stringify(data.questionSet),
         createdAt: new Date()
       });
     }
 
     if (game.isNewGame()) {
-      const fileData = JSON.parse(data.file);
-      socket.room.questions = new QuestionSet(data.name, fileData.categories);
+      socket.room.questions = new QuestionSet(data.name, data.questionSet.categories);
     }
 
     socket.emit(Outgoing.SUCCESS);
