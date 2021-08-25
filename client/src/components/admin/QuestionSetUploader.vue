@@ -39,16 +39,16 @@
 </template>
 
 <script>
-import xlsx from 'xlsx';
 import Ajv from 'ajv';
 import ModalMixin from '@/mixins/ModalMixin';
 import questionSetSchema from '@/assets/questionSetSchema.json';
+import UploadMixin from '@/mixins/UploadMixin';
 
 const ajv = new Ajv();
 
 export default {
   name: 'QuestionSetUploader',
-  mixins: [ModalMixin],
+  mixins: [ModalMixin, UploadMixin],
   data() {
     return {
       validation: {
@@ -66,57 +66,21 @@ export default {
       const extension = this.file.name.split('.').pop();
       switch (extension) {
         case 'json':
-          this.readJSON();
+          this.readJSON(this.reader, this.file, this.validate);
           break;
         case 'xls':
-          this.readSheet();
+          this.readSheet(this.reader, this.file, this.validate);
           break;
         case 'xlsx':
-          this.readSheet();
+          this.readSheet(this.reader, this.file, this.validate);
           break;
         case 'odt':
-          this.readSheet();
+          this.readSheet(this.reader, this.file, this.validate);
           break;
         default:
           this.validation.state = false;
           this.validation.errors = ['Nieznany format danych'];
       }
-    },
-    readJSON() {
-      this.reader.onload = (event) => {
-        const parsedFile = JSON.parse(event.target.result);
-        this.validate(parsedFile);
-      };
-      this.reader.readAsText(this.file);
-    },
-    readSheet() {
-      this.reader.onload = (event) => {
-        let binary = '';
-        const bytes = new Uint8Array(event.target.result);
-        for (let i = 0; i < bytes.byteLength; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-
-        const wb = xlsx.read(binary, { type: 'binary' });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const sheet = xlsx.utils.sheet_to_json(ws, { header: 1 });
-
-        const categories = [];
-        for (let i = 1; i < sheet.length; ++i) {
-          const row = sheet[i];
-          const categoryName = row[0].trim();
-          const category = categories.find((category) => category.name === categoryName);
-          const question = { content: row[1].trim(), hints: row.slice(2).map((hint) => String(hint).trim()) };
-          if (category) {
-            category.questions.push(question);
-          } else {
-            categories.push({ name: categoryName, questions: [question] });
-          }
-        }
-        this.validate({ categories });
-      };
-      this.reader.readAsArrayBuffer(this.file);
     },
     validate(parsedFile) {
       if (!this.jsonValidator(parsedFile)) {
@@ -129,7 +93,9 @@ export default {
       }
     },
     onSubmit() {
-      this.$socket.client.emit('addQuestionSet', { name: this.file.name, questionSet: this.questionSet });
+      const fullFilename = this.file.name;
+      const name = fullFilename.substr(0, fullFilename.lastIndexOf('.')) || fullFilename;
+      this.$socket.client.emit('addQuestionSet', { name, questionSet: this.questionSet });
     }
   },
   filters: {

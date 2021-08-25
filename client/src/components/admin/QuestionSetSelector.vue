@@ -6,13 +6,14 @@
     <b-table :fields="fields" :items="questions" sticky-header small striped hover head-variant="light" sort-icon-left>
       <template #cell(actions)="row">
         <div class="centered-col">
-          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary"> Wybierz</b-button>
-          <b-button size="sm" @click="downloadQuestionSet(row.index)" variant="primary"> Pobierz</b-button>
+          <b-button size="sm" @click="changeQuestionSet(row.index)" variant="primary">Wybierz</b-button>
+          <b-button size="sm" @click="getQuestionSet(row.index, 'json')" variant="secondary">JSON</b-button>
+          <b-button size="sm" @click="getQuestionSet(row.index, 'xlsx')" variant="secondary">Excel</b-button>
           <b-button
             v-if="questions[row.index].owner === roomName"
             size="sm"
             @click="toggleVisibility(row.index)"
-            variant="primary"
+            variant="warning"
           >
             {{ questions[row.index].isPrivate ? 'Opublikuj' : 'Ukryj' }}
           </b-button>
@@ -31,6 +32,7 @@ export default {
   mixins: [ModalMixin, DownloadMixin],
   data() {
     return {
+      extension: null,
       roomName: '',
       questions: [],
       fields: [
@@ -64,7 +66,8 @@ export default {
     changeQuestionSet(index) {
       this.$socket.client.emit('changeQuestionSet', { name: this.questions[index].name });
     },
-    downloadQuestionSet(index) {
+    getQuestionSet(index, extension) {
+      this.extension = extension;
       this.$socket.client.emit('getQuestionSet', { name: this.questions[index].name });
     },
     toggleVisibility(index) {
@@ -78,8 +81,9 @@ export default {
       this.roomName = data.roomName;
     },
     questionSet(data) {
-      if (this.visible && data.name) {
-        this.download(JSON.stringify(data.questionSet, null, 2), data.name, 'text/plain');
+      if (this.visible && data.name && this.extension) {
+        if (this.extension === 'json') this.downloadJSON(data.questionSet, data.name);
+        if (this.extension === 'xlsx') this.downloadSheet(data.questionSet, data.name, 'xlsx');
       }
     },
     visibilityChanged(data) {
