@@ -1,7 +1,6 @@
 import { should } from 'chai';
 import { describe, before, after, it } from 'mocha';
 import { Socket, io } from 'socket.io-client';
-import { MongoMemoryServer } from 'mongodb-memory-server-core';
 
 import { ClashServer } from '../src/server';
 
@@ -11,17 +10,11 @@ describe('Test team socket events', function () {
   const options = { transports: ['websocket'] };
   let server: ClashServer;
   let client: Socket;
-  let mongo: MongoMemoryServer;
 
   before(function (done) {
     this.timeout(60000);
     server = new ClashServer();
-    MongoMemoryServer.create({ instance: { dbName: 'team.test' } })
-      .then(mongod => {
-        mongo = mongod;
-        return server.connectMongo(mongo.getUri());
-      })
-      .then(() => server.start())
+    server.start()
       .then(() => {
         client = io('http://localhost:' + server.getPort(), options);
 
@@ -38,9 +31,7 @@ describe('Test team socket events', function () {
   after(function (done) {
     client.disconnect();
     server
-      .disconnectMongo()
-      .then(() => server.stop())
-      .then(() => mongo.stop(true))
+      .stop()
       .then(() => done());
   });
 
