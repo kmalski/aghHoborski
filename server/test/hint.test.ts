@@ -44,7 +44,7 @@ describe('Test hint socket events', function () {
         client.once('roomCreated', (roomData: any) => {
           client.emit('authorize', { name: 'HintTestName', token: roomData.token });
           client.once('authorized', () => {
-            client.emit('addQuestionSet', { name: 'auctionTestSet', questionSet });
+            client.emit('addQuestionSet', { name: 'hintTestSet', questionSet });
             client.once('success', () => {
               client.emit('startAuction', { categoryName: 'Pilka nozna' });
               client.once('auctionStarted', () => {

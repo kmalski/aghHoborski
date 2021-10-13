@@ -164,7 +164,7 @@ class RoomService {
 class LocalRoomService extends RoomService {
   protected useDatabase = false;
 
-  async create(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
+  override async create(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
     if (!data || !data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }
@@ -190,7 +190,7 @@ class LocalRoomService extends RoomService {
     });
   }
 
-  async adminJoin(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
+  override async adminJoin(data: RoomData, socket: ClashSocket): Promise<void | boolean> {
     if (!data.name || !data.password) {
       return socket.emit(Outgoing.WARNING, `Błędne dane.`);
     }

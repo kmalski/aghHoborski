@@ -187,7 +187,7 @@ class QuestionService {
 class LocalQuestionService extends QuestionService {
   static QUESTION_SETS: { name: string; owner: string; isPrivate: boolean; strData: string; createdAt: Date }[] = [];
 
-  async getAllQuestionSets(socket: ClashSocket): Promise<void> {
+  override async getAllQuestionSets(socket: ClashSocket): Promise<void> {
     const questionsPruned = [];
 
     LocalQuestionService.QUESTION_SETS
@@ -204,7 +204,7 @@ class LocalQuestionService extends QuestionService {
     socket.emit(Outgoing.ALL_QUESTION_SETS, { roomName: socket.room.name, questionSets: questionsPruned });
   }
 
-  async getQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void> {
+  override async getQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void> {
     const questions = socket.room.questions;
     let name: string;
 
@@ -229,7 +229,7 @@ class LocalQuestionService extends QuestionService {
     }
   }
 
-  async addQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
+  override async addQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
     const game = socket.room.game;
 
@@ -256,7 +256,7 @@ class LocalQuestionService extends QuestionService {
     socket.emit(Outgoing.SUCCESS);
   }
 
-  async changeQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
+  override async changeQuestionSet(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
     const game = socket.room.game;
 
@@ -273,7 +273,7 @@ class LocalQuestionService extends QuestionService {
     socket.emit(Outgoing.SUCCESS);
   }
 
-  async changeVisbility(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
+  override async changeVisibility(data: QuestionData, socket: ClashSocket): Promise<void | boolean> {
     const questionSetDb = LocalQuestionService.QUESTION_SETS.find(q => q.name === data.name);
 
     if (questionSetDb && questionSetDb.owner !== socket.room.name) {
