@@ -41,7 +41,7 @@ jobs:
   tests:
     needs: [setup-workspace]
     runs-on: self-hosted
-    if: ${{ github.event.inputs.tests }}
+    if: github.event.inputs.tests == 'true'
     defaults:
       run:
         working-directory: server
