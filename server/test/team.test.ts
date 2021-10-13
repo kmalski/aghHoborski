@@ -19,7 +19,7 @@ describe('Test team socket events', function () {
     MongoMemoryServer.create({ instance: { dbName: 'team.test' } })
       .then(mongod => {
         mongo = mongod;
-        server.connectMongo(mongo.getUri());
+        return server.connectMongo(mongo.getUri());
       })
       .then(() => server.start())
       .then(() => {

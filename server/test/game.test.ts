@@ -37,7 +37,7 @@ describe('Test game socket events', function () {
     MongoMemoryServer.create({ instance: { dbName: 'game.test' } })
       .then(mongod => {
         mongo = mongod;
-        server.connectMongo(mongo.getUri());
+        return server.connectMongo(mongo.getUri());
       })
       .then(() => server.start())
       .then(() => {

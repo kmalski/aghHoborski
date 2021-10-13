@@ -50,7 +50,7 @@ describe('Test question socket events', function () {
     MongoMemoryServer.create({ instance: { dbName: 'question.test' } })
       .then(mongod => {
         mongo = mongod;
-        server.connectMongo(mongo.getUri());
+        return server.connectMongo(mongo.getUri());
       })
       .then(() => server.start())
       .then(() => {

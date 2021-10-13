@@ -34,7 +34,7 @@ describe('Test hint socket events', function () {
     MongoMemoryServer.create({ instance: { dbName: 'hint.test' } })
       .then(mongod => {
         mongo = mongod;
-        server.connectMongo(mongo.getUri());
+        return server.connectMongo(mongo.getUri());
       })
       .then(() => server.start())
       .then(() => {

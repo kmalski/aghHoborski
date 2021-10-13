@@ -218,7 +218,12 @@ class LocalQuestionService extends QuestionService {
       const questionSet = LocalQuestionService.QUESTION_SETS.find(q => q.name === name);
       const parsedData = JSON.parse(questionSet.strData);
 
-      socket.emit(Outgoing.QUESTION_SET, { name, owner: questionSet.owner, questionSet: parsedData });
+      socket.emit(Outgoing.QUESTION_SET, {
+        name,
+        owner: questionSet.owner,
+        questionSet: parsedData,
+        isPrivate: questionSet.isPrivate
+      });
     } else {
       socket.emit(Outgoing.QUESTION_SET, {});
     }

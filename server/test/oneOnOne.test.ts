@@ -52,7 +52,7 @@ describe('Test one on one socket events', function () {
     MongoMemoryServer.create({ instance: { dbName: 'oneOnOne.test' } })
       .then(mongod => {
         mongo = mongod;
-        server.connectMongo(mongo.getUri());
+        return server.connectMongo(mongo.getUri());
       })
       .then(() => server.start())
       .then(() => {
