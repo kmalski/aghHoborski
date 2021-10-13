@@ -51,12 +51,7 @@ class ClashServer {
   }
 
   async connectMongo(uri: string): Promise<void> {
-    await mongoose.connect(uri, {
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useFindAndModify: false
-    });
+    await mongoose.connect(uri);
     this.useDatabase = true;
     Logger.info('Connected to MongoDB');
   }
