@@ -19,14 +19,22 @@ export default {
       statusText: this.$socket.connected ? 'połączono' : 'rozłączono'
     };
   },
+  created() {
+    this.$socket.client.io.on('reconnect_attempt', this.reconnectAttempt);
+  },
+  beforeDestroy() {
+    this.$socket.client.io.off('reconnect_attempt', this.reconnectAttempt);
+  },
+  methods: {
+    reconnectAttempt() {
+      this.statusText = 'próba odnowienia';
+      this.reconnecting = true;
+    }
+  },
   sockets: {
     connect() {
       this.statusText = 'połączono';
       this.reconnecting = false;
-    },
-    reconnecting() {
-      this.statusText = 'próba odnowienia';
-      this.reconnecting = true;
     },
     disconnect() {
       this.statusText = 'rozłączono';
